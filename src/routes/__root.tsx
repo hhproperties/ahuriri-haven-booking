@@ -75,21 +75,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "The Vulcan, Ahuriri — Boutique 2-bedroom apartment in Napier" },
+      { title: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
       {
         name: "description",
         content:
-          "A private, self-contained 2-bedroom retreat in Ahuriri, Napier. Walk to the beach, waterfront restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
       },
       { name: "author", content: "H&H Property Group Limited" },
-      { property: "og:title", content: "The Vulcan, Ahuriri — Boutique Retreat in Napier" },
+      { property: "og:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
       {
         property: "og:description",
         content:
-          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment steps from the beach and Napier's best restaurants.",
+          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
+      { name: "twitter:description", content: "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de8fbaec-cec7-4ed5-a52e-fc7388465eaf/id-preview-be861ec2--a5055672-8964-4cc5-8b1d-cd80dc425ddb.lovable.app-1784265730770.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/de8fbaec-cec7-4ed5-a52e-fc7388465eaf/id-preview-be861ec2--a5055672-8964-4cc5-8b1d-cd80dc425ddb.lovable.app-1784265730770.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
