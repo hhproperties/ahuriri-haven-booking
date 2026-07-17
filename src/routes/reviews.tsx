@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { supabase } from "@/integrations/supabase/client";
+import { Testimonial } from "@/components/Testimonial";
 import heroImg from "@/assets/hero-exterior.jpg";
 
 export const Route = createFileRoute("/reviews")({
@@ -19,44 +18,80 @@ export const Route = createFileRoute("/reviews")({
   }),
 });
 
+/* ── Testimonials data ── */
+const testimonials = [
+  {
+    quote: "The kind of place where you actually want to come home to after a day out — clean, comfortable, and close enough to everything that we barely used the car after Leah showed us the walkway straight through to the beach.",
+    author: "Olivia K.",
+    accent: "home",
+  },
+  {
+    quote: "You genuinely don't need a car here — five minutes to the beach, five minutes the other way to dinner. The apartment was spotless when we walked in, not a thing out of place.",
+    author: "Hayley B.",
+    accent: "spotless",
+  },
+  {
+    quote: "We messaged Leah the morning of, asking if we could check in three hours early. She said yes without a second thought. That kind of flexibility is rare.",
+    author: "Ashleigh C.",
+    accent: "flexibility",
+  },
+  {
+    quote: "Walked to a different restaurant every night of our stay and never once needed to think about parking or a sober driver. The location is honestly the whole trip.",
+    author: "Grant H.",
+    accent: "location",
+  },
+  {
+    quote: "Came back from a long day at the beach expecting to tidy up before bed and there was nothing to do — the place was immaculate the whole stay, not just on arrival.",
+    author: "Michelle R.",
+    accent: "immaculate",
+  },
+  {
+    quote: "Wayne let us drop our bags off well before check-in when our flight landed early. Small thing, but it set the tone for the whole stay.",
+    author: "Daniel P.",
+    accent: "tone",
+  },
+  {
+    quote: "Cleanest self-contained unit we've stayed in, full stop. And you can see the beach from the end of the street — didn't expect to be that close.",
+    author: "Sarah M.",
+    accent: "Cleanest",
+  },
+  {
+    quote: "Booked with about two days' notice for a last-minute weekend away and Leah couldn't have made it easier. Everything was ready, spotless, exactly as described.",
+    author: "Marcus W.",
+    accent: "easier",
+  },
+];
+
 function ReviewsPage() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  /* Scroll-based offset for the two-column grid right column */
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("is-visible"); }),
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    const grid = gridRef.current;
+    if (!grid) return;
+    // On desktop, bump the right column down via CSS custom property
+    const mq = window.matchMedia("(min-width: 768px)");
+    const applyOffset = () => {
+      grid.style.setProperty("--col-offset", mq.matches ? "72px" : "0px");
+    };
+    applyOffset();
+    mq.addEventListener("change", applyOffset);
+    return () => mq.removeEventListener("change", applyOffset);
   }, []);
-
-  const { data: reviews = [] } = useQuery({
-    queryKey: ["reviews"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-      return data ?? [];
-    },
-  });
-
-  const avgRating = reviews.length > 0
-    ? (reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length).toFixed(1)
-    : "—";
 
   return (
     <div className="min-h-screen bg-[#EFE8DA]">
       <SiteNav />
 
-      {/* Hero */}
+      {/* ── Hero (matte band) ── */}
       <section className="relative h-[40vh] min-h-[320px] overflow-hidden bg-[#17181A]">
         <div className="absolute inset-0 ken-burns">
           <img src={heroImg} alt="The Vulcan, Ahuriri" className="h-full w-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/70 via-[#17181A]/20 to-transparent" />
         <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-14 lg:px-10">
-          <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">Reviews</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">In their words</p>
           <h1 className="mt-3 font-[Fraunces] text-[clamp(2.5rem,6vw,5rem)] leading-[0.95] text-[#EFE8DA] tracking-[-0.02em]">
             What guests{" "}
             <span className="word-wood-light">say.</span>
@@ -64,66 +99,63 @@ function ReviewsPage() {
         </div>
       </section>
 
-      {/* Cream band */}
-      <section className="bg-[#EFE8DA] px-6 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto max-w-5xl">
-          {/* Rating summary */}
-          <div className="flex flex-wrap items-baseline gap-6 mb-16">
-            <span className="font-[Fraunces] text-6xl font-[300] italic text-[#6B4630]">{avgRating}</span>
-            <div className="flex gap-1 text-[#6B4630] text-lg">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <span key={s}>{Math.round(Number(avgRating)) >= s ? "★" : "☆"}</span>
-              ))}
-            </div>
-            <span className="text-sm font-[Archivo] text-[#17181A]/50">{reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
-          </div>
+      {/* ── Hero pull-quote (cream band) ── */}
+      <section className="bg-[#EFE8DA] px-6 pt-28 pb-16 lg:px-10 lg:pt-36 lg:pb-20" ref={heroRef}>
+        <div className="mx-auto max-w-7xl flex justify-center">
+          <Testimonial
+            quote={testimonials[0].quote}
+            author={testimonials[0].author}
+            accent={testimonials[0].accent}
+            layout="hero"
+            delay={0}
+          />
+        </div>
+      </section>
 
-          <div className="wood-divider mb-16" />
+      {/* ── Wood divider ── */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="wood-divider" />
+      </div>
 
-          {/* Review cards */}
-          {reviews.length === 0 && (
-            <p className="text-sm font-[Archivo] text-[#17181A]/50 italic">Reviews loading from the database...</p>
-          )}
-          <div className="grid gap-8 md:grid-cols-2">
-            {reviews.map((r: any, i: number) => (
-              <figure key={r.id} className={`reveal-up reveal-stagger-${Math.min(i + 1, 4)} border border-[#6B4630]/10 bg-white/60 p-10 flex flex-col justify-between`}>
-                <div>
-                  <div className="flex gap-1 text-[#6B4630] text-sm mb-4">
-                    {Array.from({ length: r.rating }).map((_, k) => (
-                      <span key={k}>★</span>
-                    ))}
-                  </div>
-                  <blockquote className="font-[Fraunces] text-lg leading-snug text-[#17181A]">
-                    "{r.body}"
-                  </blockquote>
-                </div>
-                <figcaption className="mt-8 flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-[0.22em] font-[Archivo] text-[#6B4630]">
-                    — {r.author_name}
-                  </span>
-                  {r.stay_date && (
-                    <span className="text-[10px] font-[Archivo] text-[#17181A]/40">
-                      {new Date(r.stay_date).toLocaleDateString("en-NZ", { month: "short", year: "numeric" })}
-                    </span>
-                  )}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      {/* ── Editorial two-column grid (cream band) ── */}
+      <section className="bg-[#EFE8DA] px-6 pb-24 lg:px-10 lg:pb-36">
+        <div
+          ref={gridRef}
+          className="mx-auto max-w-7xl grid gap-x-16 gap-y-20 md:grid-cols-2"
+          style={{ gridAutoRows: "auto" }}
+        >
+          {testimonials.slice(1).map((t, i) => {
+            const isEven = i % 2 === 1;
+            return (
+              <div
+                key={t.author}
+                className={isEven ? "md:mt-[var(--col-offset,0px)]" : ""}
+              >
+                <Testimonial
+                  quote={t.quote}
+                  author={t.author}
+                  accent={t.accent}
+                  layout="column"
+                  delay={(i + 1) * 120}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-          {/* CTA */}
-          <div className="wood-divider my-20" />
-          <div className="text-center">
-            <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#6B4630]">Come see for yourself</p>
-            <h2 className="mt-4 font-[Fraunces] text-[clamp(2rem,4vw,3.5rem)] leading-[1.05] text-[#17181A] tracking-[-0.02em]">
-              Ready to{" "}
-              <span className="word-wood">experience</span> it?
-            </h2>
-            <div className="mt-8">
-              <Link to="/book" className="btn-outline text-xs group">
-                Check Availability <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
-              </Link>
-            </div>
+      {/* ── Matte CTA band ── */}
+      <section className="bg-[#17181A] px-6 py-24 lg:px-10 lg:py-32">
+        <div className="mx-auto max-w-7xl text-center">
+          <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">Come see for yourself</p>
+          <h2 className="mt-4 font-[Fraunces] text-[clamp(2rem,4vw,3.5rem)] leading-[1.05] text-[#EFE8DA] tracking-[-0.02em]">
+            Ready to{" "}
+            <span className="word-wood-light">experience</span> it?
+          </h2>
+          <div className="mt-10">
+            <Link to="/book" className="btn-outline-light text-xs group">
+              Check Availability <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
+            </Link>
           </div>
         </div>
       </section>
