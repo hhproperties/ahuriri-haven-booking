@@ -14,16 +14,312 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      airbnb_blocked_dates: {
+        Row: {
+          created_at: string
+          end_date: string
+          fetched_at: string
+          id: string
+          source: string
+          start_date: string
+          summary: string | null
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          fetched_at?: string
+          id?: string
+          source?: string
+          start_date: string
+          summary?: string | null
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          fetched_at?: string
+          id?: string
+          source?: string
+          start_date?: string
+          summary?: string | null
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          audience_tag: string | null
+          body: string
+          created_at: string
+          excerpt: string | null
+          hero_image: string | null
+          id: string
+          published: boolean
+          published_at: string | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience_tag?: string | null
+          body: string
+          created_at?: string
+          excerpt?: string | null
+          hero_image?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience_tag?: string | null
+          body?: string
+          created_at?: string
+          excerpt?: string | null
+          hero_image?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          bedrooms_booked: number
+          booking_reference: string
+          cancelled_at: string | null
+          check_in: string
+          check_out: string
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          guest_name: string
+          guests_count: number
+          id: string
+          notes: string | null
+          payment_hold_expires_at: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string | null
+          phone: string
+          refund_amount_cents: number | null
+          status: Database["public"]["Enums"]["booking_status"]
+          stripe_payment_intent_id: string | null
+          total_amount_cents: number
+          updated_at: string
+        }
+        Insert: {
+          bedrooms_booked: number
+          booking_reference: string
+          cancelled_at?: string | null
+          check_in: string
+          check_out: string
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          guest_name: string
+          guests_count: number
+          id?: string
+          notes?: string | null
+          payment_hold_expires_at?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string | null
+          phone: string
+          refund_amount_cents?: number | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          stripe_payment_intent_id?: string | null
+          total_amount_cents: number
+          updated_at?: string
+        }
+        Update: {
+          bedrooms_booked?: number
+          booking_reference?: string
+          cancelled_at?: string | null
+          check_in?: string
+          check_out?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          guest_name?: string
+          guests_count?: number
+          id?: string
+          notes?: string | null
+          payment_hold_expires_at?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string | null
+          phone?: string
+          refund_amount_cents?: number | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          stripe_payment_intent_id?: string | null
+          total_amount_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_log: {
+        Row: {
+          booking_id: string | null
+          id: string
+          recipient: string
+          sent_at: string
+          template: string
+        }
+        Insert: {
+          booking_id?: string | null
+          id?: string
+          recipient: string
+          sent_at?: string
+          template: string
+        }
+        Update: {
+          booking_id?: string | null
+          id?: string
+          recipient?: string
+          sent_at?: string
+          template?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_settings: {
+        Row: {
+          airbnb_ical_url: string | null
+          bank_account_name: string
+          bank_account_number: string
+          base_rate_cents: number
+          id: number
+          particulars_format: string
+          payment_mode: Database["public"]["Enums"]["payment_method"]
+          second_bedroom_rate_cents: number
+          updated_at: string
+        }
+        Insert: {
+          airbnb_ical_url?: string | null
+          bank_account_name?: string
+          bank_account_number?: string
+          base_rate_cents?: number
+          id?: number
+          particulars_format?: string
+          payment_mode?: Database["public"]["Enums"]["payment_method"]
+          second_bedroom_rate_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          airbnb_ical_url?: string | null
+          bank_account_name?: string
+          bank_account_number?: string
+          base_rate_cents?: number
+          id?: number
+          particulars_format?: string
+          payment_mode?: Database["public"]["Enums"]["payment_method"]
+          second_bedroom_rate_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          published: boolean
+          rating: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          author_name: string
+          body: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          rating: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          rating?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      booking_availability: {
+        Row: {
+          check_in: string | null
+          check_out: string | null
+          status: Database["public"]["Enums"]["booking_status"] | null
+        }
+        Insert: {
+          check_in?: string | null
+          check_out?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+        }
+        Update: {
+          check_in?: string | null
+          check_out?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
+      booking_status: "pending_payment" | "confirmed" | "cancelled" | "refunded"
+      payment_method: "bank_transfer" | "stripe"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +446,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+      booking_status: ["pending_payment", "confirmed", "cancelled", "refunded"],
+      payment_method: ["bank_transfer", "stripe"],
+    },
   },
 } as const
