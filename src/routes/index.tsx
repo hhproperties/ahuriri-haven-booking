@@ -333,13 +333,13 @@ function Hosts() {
           <div className="relative aspect-[3/4] overflow-hidden">
             <img
               src={cowImg}
-              alt="Highland cow portrait — a signature piece from Leah & Wayne's collection"
+              alt="Leah and Wayne — your hosts at The Vulcan, Ahuriri"
               loading="lazy"
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-x-0 bottom-0 bg-cream/95 px-5 py-3">
               <span className="text-[10px] uppercase tracking-[0.24em] text-ink">
-                From Leah & Wayne's collection
+                Leah & Wayne · Your Hosts
               </span>
             </div>
           </div>
