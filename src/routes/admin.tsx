@@ -299,6 +299,33 @@ function BookingsTab() {
     },
   });
 
+  const [emailMsg, setEmailMsg] = useState<{ id: string; text: string } | null>(null);
+
+  const sendEmailFn = useMutation({
+    mutationFn: async ({ id, fn }: { id: string; fn: string }) => {
+      const { error } = await supabase.functions.invoke(fn, {
+        body: { bookingId: id },
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_data, vars) => {
+      setEmailMsg({ id: vars.id, text: 'Email sent.' });
+      setTimeout(() => setEmailMsg(null), 3000);
+    },
+    onError: (_err, vars) => {
+      setEmailMsg({ id: vars.id, text: 'Email failed — deploy edge functions first.' });
+      setTimeout(() => setEmailMsg(null), 5000);
+    },
+  });
+
+  const [emailLogs] = useQuery({
+    queryKey: ["email_log"],
+    queryFn: async () => {
+      const { data } = await supabase.from("email_log").select("*").order("sent_at", { ascending: false }).limit(50);
+      return (data ?? []) as { id: string; booking_id: string; template: string; recipient: string; sent_at: string }[];
+    },
+  });
+
   const filtered = filter === "all" ? bookings : bookings.filter((b) => b.status === filter);
 
   const stats = {
@@ -406,6 +433,25 @@ function BookingsTab() {
                             Cancel
                           </button>
                         )}
+                        {b.status === "pending_payment" && (
+                          <button
+                            onClick={() => sendEmailFn.mutate({ id: b.id, fn: "booking-received" })}
+                            className="text-[10px] text-saddle hover:underline"
+                          >
+                            📧 Payment
+                          </button>
+                        )}
+                        {b.status === "confirmed" && (
+                          <button
+                            onClick={() => sendEmailFn.mutate({ id: b.id, fn: "pre-arrival" })}
+                            className="text-[10px] text-saddle hover:underline"
+                          >
+                            📧 Arrival
+                          </button>
+                        )}
+                        {emailMsg?.id === b.id && (
+                          <span className="text-[10px] text-emerald-600">{emailMsg.text}</span>
+                        )}
                         {b.notes || editing === b.id ? (
                           editing === b.id ? (
                             <div className="flex items-center gap-1">
@@ -454,6 +500,37 @@ function BookingsTab() {
           </table>
         </div>
       )}
+
+      {/* Email log */}
+      <details className="mt-12 group">
+        <summary className="cursor-pointer text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-ink transition-colors">
+          Recent email log ({emailLogs?.length ?? 0})
+        </summary>
+        <div className="mt-4 max-h-60 overflow-y-auto">
+          {emailLogs && emailLogs.length > 0 ? (
+            <table className="w-full text-left text-[11px]">
+              <thead>
+                <tr className="border-b border-border text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  <th className="pb-2 pr-3 font-normal">Template</th>
+                  <th className="pb-2 pr-3 font-normal">Recipient</th>
+                  <th className="pb-2 pr-3 font-normal">Sent</th>
+                </tr>
+              </thead>
+              <tbody>
+                {emailLogs.map((l) => (
+                  <tr key={l.id} className="border-b border-border/30">
+                    <td className="py-1.5 pr-3 text-ink">{l.template}</td>
+                    <td className="py-1.5 pr-3 text-muted-foreground">{l.recipient}</td>
+                    <td className="py-1.5 pr-3 text-muted-foreground">{toLocalDateTime(l.sent_at)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-sm text-muted-foreground">No emails sent yet.</p>
+          )}
+        </div>
+      </details>
     </div>
   );
 }
