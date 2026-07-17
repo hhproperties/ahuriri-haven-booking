@@ -33,9 +33,10 @@ export function SiteNav() {
           <img
             src={logoImg}
             alt="The Vulcan, Ahuriri"
-            className="h-11 w-auto"
-            width={120}
-            height={44}
+            className="h-16 w-auto mix-blend-multiply"
+            width={140}
+            height={64}
+            style={{ filter: 'contrast(1.1) brightness(1.1)' }}
           />
         </Link>
 
