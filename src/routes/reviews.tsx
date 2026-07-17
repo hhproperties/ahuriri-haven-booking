@@ -86,12 +86,13 @@ function ReviewsPage() {
       {/* ── Hero (matte band) ── */}
       <section className="relative min-h-[30vh] min-h-half-screen-safe overflow-hidden bg-[#17181A]">
         <div className="absolute inset-0 ken-burns">
-          <img src={heroImg} alt="The Vulcan, Ahuriri" className="h-full w-full object-cover" />
+          <img src={heroImg} alt="The Vulcan, Ahuriri" className="h-full w-full object-cover hero-image-grade" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/70 via-[#17181A]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/80 via-[#17181A]/30 to-transparent" />
+        <div className="absolute inset-0 warm-veil" />
         <div className="relative z-10 mx-auto flex h-full min-h-[30vh] min-h-half-screen-safe max-w-7xl flex-col justify-end px-5 pb-10 sm:px-8 sm:pb-14 lg:px-10">
           <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">In their words</p>
-          <h1 className="mt-2 sm:mt-3 font-[Fraunces] text-[clamp(2rem,6vw,5rem)] leading-[0.95] text-[#EFE8DA] tracking-[-0.02em]">
+          <h1 className="mt-2 sm:mt-3 font-[Fraunces] text-[clamp(2rem,6vw,5rem)] leading-[0.95] text-[#EFE8DA] tracking-[-0.02em] text-shadow-overlay">
             What guests{" "}
             <span className="word-wood-light">say.</span>
           </h1>

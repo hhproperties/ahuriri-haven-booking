@@ -94,9 +94,12 @@ export function BlogHeader({ src, alt, eyebrow, title, credit }: BlogHeaderProps
           <div
             className="pointer-events-none absolute inset-0"
             style={{
-              background: "linear-gradient(to top, rgba(23,24,26,0.55), transparent 55%)",
+              background: "linear-gradient(to top, rgba(23,24,26,0.65), transparent 55%)",
             }}
           />
+
+          {/* Warm veil */}
+          <div className="pointer-events-none absolute inset-0 warm-veil" />
 
           {/* Bottom-left content area */}
           <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 md:p-12 lg:p-16">

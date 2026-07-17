@@ -70,7 +70,7 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
-            <Link to="/book" className="btn-outline text-[11px] tap-target inline-flex items-center">
+            <Link to="/book" className="btn-primary text-[11px] tap-target inline-flex items-center">
               Book Now
             </Link>
           </nav>
@@ -144,7 +144,7 @@ export function SiteNav() {
             <Link
               to="/book"
               onClick={() => setOpen(false)}
-              className="mt-8 w-full btn-outline text-center text-sm tap-target"
+              className="mt-8 w-full btn-primary text-center text-sm tap-target"
             >
               Book Now
             </Link>

@@ -94,12 +94,15 @@ function Hero() {
         <img
           src={heroImg}
           alt="The Vulcan, Ahuriri"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover hero-image-grade"
           width={1920}
           height={1280}
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/80 via-[#17181A]/30 to-[#17181A]/50" />
+      {/* Directional gradient scrim (bottom-heavy) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/80 via-[#17181A]/35 to-transparent" />
+      {/* Warm veil — wood/cream wash */}
+      <div className="absolute inset-0 warm-veil" />
       <div className="grain absolute inset-0" />
 
       <div className="relative z-10 mx-auto flex h-full min-h-[85vh] min-h-screen-safe max-w-7xl flex-col justify-end px-5 pb-16 sm:px-8 sm:pb-20 lg:px-10 lg:pb-32">
@@ -112,7 +115,7 @@ function Hero() {
         </p>
 
         {/* Spectacle headline */}
-        <h1 className="mt-4 sm:mt-6 max-w-5xl font-[Fraunces] font-optical-sizing-auto leading-[0.92] text-[#EFE8DA] text-[clamp(2.8rem,10vw,9rem)] tracking-[-0.02em] text-balance">
+        <h1 className="mt-4 sm:mt-6 max-w-5xl font-[Fraunces] font-optical-sizing-auto leading-[0.92] text-[#EFE8DA] text-[clamp(2.8rem,10vw,9rem)] tracking-[-0.02em] text-balance text-shadow-overlay">
           {words.map((w, i) => (
             <span
               key={i}
@@ -285,7 +288,7 @@ function ApartmentGallery() {
                 alt={it.label}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out hover:scale-105"
+                className="h-full w-full object-cover hero-image-grade transition-transform duration-[1200ms] ease-out hover:scale-105"
               />
               <figcaption className="absolute bottom-0 left-0 right-0 flex items-center gap-3 bg-[#EFE8DA] px-4 py-2.5 sm:px-5 sm:py-3">
                 <span className="h-px w-6 sm:w-8 bg-[#6B4630]" />
