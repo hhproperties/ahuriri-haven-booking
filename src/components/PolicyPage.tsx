@@ -50,13 +50,13 @@ function renderBlock(b: Block, i: number) {
   switch (b.type) {
     case "paragraph":
       return (
-        <p key={i} className="my-6 font-sans text-[1.0625rem] leading-[1.75] text-[#17181A]/92"
+        <p key={i} className="my-4 sm:my-6 font-sans text-[0.9375rem] sm:text-[1.0625rem] leading-[1.6] sm:leading-[1.75] text-[#17181A]/92"
           dangerouslySetInnerHTML={{ __html: b.text }}
         />
       );
     case "subheading":
       return (
-        <h3 key={i} className="mt-10 mb-3 font-sans text-[1.125rem] font-semibold tracking-[0.02em] text-[#17181A]"
+        <h3 key={i} className="mt-6 sm:mt-10 mb-2 sm:mb-3 font-sans text-[1rem] sm:text-[1.125rem] font-semibold tracking-[0.02em] text-[#17181A]"
           dangerouslySetInnerHTML={{ __html: b.text }}
         />
       );
@@ -83,7 +83,7 @@ function renderBlock(b: Block, i: number) {
       );
     case "callout":
       return (
-        <blockquote key={i} className="my-10 border-l-[3px] border-[#6B4630] bg-[#EFE8DA] px-6 py-6 font-[Fraunces] text-lg italic leading-relaxed text-[#6B4630]">
+        <blockquote key={i} className="my-6 sm:my-10 border-l-[3px] border-[#6B4630] bg-[#EFE8DA] px-4 sm:px-6 py-4 sm:py-6 font-[Fraunces] text-base sm:text-lg italic leading-relaxed text-[#6B4630]">
           {b.text}
         </blockquote>
       );
@@ -272,11 +272,11 @@ export function PolicyPage({
       />
 
       {/* ── Editorial Header Band ── */}
-      <section className="relative min-h-[42vh] bg-[#17181A] flex flex-col justify-end px-6 pb-12 pt-32 lg:px-10 lg:pb-14">
+      <section className="relative min-h-[35vh] min-h-half-screen-safe bg-[#17181A] flex flex-col justify-end px-5 pb-8 pt-24 sm:px-8 sm:pb-10 sm:pt-28 lg:px-10 lg:pb-14 lg:pt-32">
         <div className="mx-auto w-full max-w-7xl">
           <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">{eyebrow}</p>
 
-          <h1 className="mt-4 font-[Fraunces] text-[clamp(2.8rem,6vw,5rem)] leading-[0.95] text-[#EFE8DA] tracking-[-0.02em] max-w-[14ch]">
+          <h1 className="mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2rem,6vw,5rem)] leading-[0.95] text-[#EFE8DA] tracking-[-0.02em] max-w-[14ch]">
             {hlParts.map((p, i) =>
               typeof p === "string" ? (
                 <span key={i}>{p}</span>
@@ -286,23 +286,23 @@ export function PolicyPage({
             )}
           </h1>
 
-          <p className="mt-5 max-w-[60ch] font-[Archivo] text-base leading-relaxed text-[#EFE8DA]/70">
+          <p className="mt-4 sm:mt-5 max-w-[60ch] font-[Archivo] text-sm sm:text-base leading-relaxed text-[#EFE8DA]/70">
             {standfirst}
           </p>
 
-          <p className="mt-8 text-[10px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">
+          <p className="mt-5 sm:mt-8 text-[10px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">
             Last updated · {lastUpdated}
           </p>
         </div>
       </section>
 
       {/* ── Summary Card ── */}
-      <section className="bg-[#EFE8DA] px-6 pt-12 pb-4 lg:px-10">
+      <section className="bg-[#EFE8DA] px-5 pt-8 pb-3 sm:px-8 sm:pt-12 sm:pb-4 lg:px-10">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="border border-[#6B4630]/20 bg-[#EFE8DA] p-8 md:p-10">
-            <ul className="space-y-3">
+          <div className="border border-[#6B4630]/20 bg-[#EFE8DA] p-5 sm:p-8 md:p-10">
+            <ul className="space-y-2 sm:space-y-3">
               {summaryBullets.map((bullet, i) => (
-                <li key={i} className="font-[Fraunces] text-lg italic leading-snug text-[#6B4630]" style={{ listStyle: "none" }}>
+                <li key={i} className="font-[Fraunces] text-sm sm:text-lg italic leading-snug text-[#6B4630]" style={{ listStyle: "none" }}>
                   <span className="mr-3 text-[#6B4630] opacity-50">—</span>
                   {bullet}
                 </li>
@@ -314,7 +314,7 @@ export function PolicyPage({
 
       {/* ── Timeline (cancellation only) ── */}
       {timeline && timeline.length > 0 && (
-        <section className="bg-[#EFE8DA] px-6 lg:px-10">
+        <section className="bg-[#EFE8DA] px-5 sm:px-8 lg:px-10">
           <div className="mx-auto w-full max-w-7xl">
             <CancellationTimeline nodes={timeline} />
           </div>
@@ -322,7 +322,7 @@ export function PolicyPage({
       )}
 
       {/* ── Two-Column Reading Layout ── */}
-      <section className="bg-[#EFE8DA] px-6 pb-24 lg:pb-32 lg:px-10">
+      <section className="bg-[#EFE8DA] px-5 pb-16 sm:px-8 sm:pb-20 lg:pb-32 lg:px-10">
         <div className="mx-auto w-full max-w-7xl flex flex-col md:flex-row md:gap-16 lg:gap-24">
 
           {/* ─── Left: Sticky TOC (desktop) ─── */}
@@ -345,9 +345,9 @@ export function PolicyPage({
           </aside>
 
           {/* ─── Right: Reading Column ─── */}
-          <div className="mt-10 md:mt-0 md:w-[60%] md:max-w-[68ch]">
+          <div className="mt-6 sm:mt-10 md:mt-0 md:w-[60%] md:max-w-[68ch]">
             {/* Mobile: horizontal chip scroller */}
-            <div className="md:hidden overflow-x-auto pb-4 -mx-6 px-6 mb-8" style={{ scrollbarWidth: "none" }}>
+            <div className="md:hidden overflow-x-auto pb-4 -mx-5 px-5 mb-6" style={{ scrollbarWidth: "none" }}>
               <div className="flex gap-2 min-w-max">
                 {sections.map((s, i) => (
                   <a
@@ -375,7 +375,7 @@ export function PolicyPage({
                 key={s.number}
                 id={`section-${s.number}`}
                 ref={(el) => { sectionRefs.current[i] = el; }}
-                className={`policy-reveal ${i > 0 ? "mt-20 md:mt-24" : ""}`}
+                className={`policy-reveal ${i > 0 ? "mt-14 md:mt-20 lg:mt-24" : ""}`}
                 style={{
                   opacity: reduceMotion ? 1 : 0,
                   transform: reduceMotion ? "none" : "translateY(24px)",
@@ -384,23 +384,23 @@ export function PolicyPage({
                 }}
               >
                 {/* Section heading with numeral */}
-                <div className="flex items-baseline gap-3">
-                  <span className="font-[Fraunces] text-[2rem] tabular-nums text-[#6B4630] font-[350] hidden md:inline" style={{ minWidth: "3ch" }}>
+                <div className="flex items-baseline gap-2 sm:gap-3">
+                  <span className="font-[Fraunces] text-[clamp(1.5rem,4vw,2rem)] tabular-nums text-[#6B4630] font-[350] hidden md:inline" style={{ minWidth: "3ch" }}>
                     {s.number} —
                   </span>
-                  <span className="font-[Fraunces] text-[2rem] tabular-nums text-[#6B4630] font-[350] md:hidden">{s.number}</span>
-                  <h2 className="font-[Fraunces] text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.1] text-[#17181A] tracking-[-0.01em]">
+                  <span className="font-[Fraunces] text-[clamp(1.5rem,4vw,2rem)] tabular-nums text-[#6B4630] font-[350] md:hidden">{s.number}</span>
+                  <h2 className="font-[Fraunces] text-[clamp(1.4rem,3vw,2.5rem)] leading-[1.1] text-[#17181A] tracking-[-0.01em]">
                     {s.title}
                   </h2>
                 </div>
 
                 {/* Lead paragraph */}
-                <p className="mt-6 font-[Fraunces] text-[1.25rem] italic leading-snug text-[#6B4630]">
+                <p className="mt-4 sm:mt-6 font-[Fraunces] text-[clamp(1rem,2vw,1.25rem)] italic leading-snug text-[#6B4630]">
                   {s.lead}
                 </p>
 
                 {/* Body blocks */}
-                <div className="mt-6">
+                <div className="mt-4 sm:mt-6">
                   {s.body.map((b, bi) => renderBlock(b, bi))}
                 </div>
               </section>
@@ -410,10 +410,10 @@ export function PolicyPage({
       </section>
 
       {/* ── Closing Band ── */}
-      <section className="bg-[#EFE8DA] px-6 lg:px-10">
+      <section className="bg-[#EFE8DA] px-5 sm:px-8 lg:px-10">
         <div className="mx-auto w-full max-w-7xl">
           <div className="wood-divider" />
-          <div className="pt-16 pb-24 lg:pb-32">
+          <div className="pt-10 pb-14 sm:pt-16 sm:pb-20 lg:pb-32">
             <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#6B4630]">Questions?</p>
             <p className="mt-4 font-[Fraunces] text-[clamp(1.5rem,3vw,2.2rem)] leading-[1.1] text-[#17181A] max-w-[30ch]">
               Email us at{" "}

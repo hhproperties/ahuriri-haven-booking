@@ -46,9 +46,9 @@ export function BlogHeader({ src, alt, eyebrow, title, credit }: BlogHeaderProps
       <div
         className="relative mx-auto overflow-hidden"
         style={{
-          minHeight: "78vh",
-          padding: "24px",
-          paddingTop: "calc(56px + 24px)", // account for fixed nav
+          minHeight: "78svh",
+          padding: "clamp(12px, 2vw, 24px)",
+          paddingTop: "calc(56px + clamp(12px, 2vw, 24px))",
         }}
       >
         {/* Image container with wood hairline */}
@@ -99,7 +99,7 @@ export function BlogHeader({ src, alt, eyebrow, title, credit }: BlogHeaderProps
           />
 
           {/* Bottom-left content area */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 lg:p-16">
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 md:p-12 lg:p-16">
             {/* Eyebrow */}
             <p
               className="eyebrow text-cream/90"
@@ -126,8 +126,8 @@ export function BlogHeader({ src, alt, eyebrow, title, credit }: BlogHeaderProps
             />
 
             {/* Title word-by-word reveal */}
-            <div ref={titleRef} className="mt-4 max-w-3xl">
-              <h1 className="font-display font-semibold leading-[1.1] text-cream" style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}>
+            <div ref={titleRef} className="mt-3 sm:mt-4 max-w-3xl">
+              <h1 className="font-display font-semibold leading-[1.1] text-cream" style={{ fontSize: "clamp(2.2rem, 7vw, 6rem)" }}>
                 {titleWords.map((word, i) => (
                   <span
                     key={i}

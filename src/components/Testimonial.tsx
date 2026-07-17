@@ -194,7 +194,7 @@ export function Testimonial({
         transform: visible ? "translateY(0)" : "translateY(16px)",
         transition: `opacity 0.85s cubic-bezier(0.22,1,0.36,1), transform 0.85s cubic-bezier(0.22,1,0.36,1)`,
         transitionDelay: `${delay}ms`,
-        minWidth: "32rem",
+        minWidth: "clamp(18rem, 50vw, 32rem)",
       }}
     >
       <span className="block text-[2.5rem] leading-none text-[#6B4630] opacity-25 select-none mb-2">"</span>

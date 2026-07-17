@@ -239,6 +239,52 @@
   border-color: #BD8A5E;
 }
 
+/* ── Fluid typography system (responsive) ──────────────────────────────────── */
+
+@utility text-display {
+  font-size: clamp(2.5rem, 8vw, 6.5rem);
+  text-wrap: balance;
+}
+@utility text-section {
+  font-size: clamp(2rem, 5vw, 4rem);
+  text-wrap: balance;
+}
+@utility text-card {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  text-wrap: balance;
+}
+@utility text-body {
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+}
+@utility text-eyebrow {
+  font-size: 0.68rem;
+}
+
+/* ── Responsive spacing scale ──────────────────────────────────────────── */
+
+@utility section-padding {
+  padding-top: clamp(3.5rem, 8vw, 8rem);
+  padding-bottom: clamp(3.5rem, 8vw, 8rem);
+}
+@utility section-padding-lg {
+  padding-top: clamp(3.5rem, 10vw, 10rem);
+  padding-bottom: clamp(3.5rem, 10vw, 10rem);
+}
+@utility gutter {
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+/* ── Safari-safe full-height ──────────────────────────────────────────── */
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.min-h-half-screen-safe {
+  min-height: 50vh;
+  min-height: 50svh;
+}
+
 /* ── Animations & interactions ───────────────────────────────────────── */
 
 @layer utilities {
@@ -268,13 +314,22 @@
     transform: scaleX(1);
   }
 
-  /* Ken Burns — slow cinematic drift */
+  /* Ken Burns — slow cinematic drift (reduced zoom on mobile for CPU) */
   .ken-burns {
     animation: ken-burns 20s ease-in-out infinite alternate;
   }
   @keyframes ken-burns {
     from { transform: scale(1) translate(0, 0); }
     to   { transform: scale(1.06) translate(-0.5%, -0.5%); }
+  }
+  @media (max-width: 767px) {
+    .ken-burns {
+      animation: ken-burns-mobile 20s ease-in-out infinite alternate;
+    }
+    @keyframes ken-burns-mobile {
+      from { transform: scale(1) translate(0, 0); }
+      to   { transform: scale(1.03) translate(-0.3%, -0.3%); }
+    }
   }
 
   /* Scroll reveals — one-shot */
@@ -318,6 +373,23 @@
   .arch-frame:hover + .arch-accent,
   .arch-frame-group:hover .arch-accent {
     transform: translate(8px, 8px);
+  }
+
+  /* ── Touch interaction guards ────────────────────────────── */
+  
+  /* Only apply hover-based effects on devices that support hover */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-only\:scale-105:hover { transform: scale(1.05); }
+    .hover-only\:opacity-100:hover { opacity: 1; }
+    .hover-only\:text-wood:hover { color: #6B4630; }
+    .hover-only\:border-wood:hover { border-color: #6B4630; }
+  }
+  
+  /* Minimum tap target (Apple HIG) */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
   }
 
   /* Wood divider (1px with sheen gradient) */
@@ -410,9 +482,18 @@
     filter: saturate(0.92) contrast(1.05) sepia(0.08) brightness(0.96);
   }
 
+  /* ── Touch: remove hover-only reveals ────────────────────── */
+  @media (hover: none) and (pointer: coarse) {
+    .hover\:scale-105 { transform: none !important; }
+    .group:hover .group-hover\:scale-105 { transform: none !important; }
+    .hover\:translate-x-1 { transform: none !important; }
+    .arch-frame:hover { transform: none; }
+  }
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .ken-burns { animation: none; }
+    .ken-burns-mobile { animation: none; }
     .reveal-up { opacity: 1; transform: none; transition: none; }
     .marquee-scroll { animation: none; }
     .wood-underline::after { display: none; }

@@ -107,7 +107,7 @@ function BlogPost() {
   const credit = creditMap[slug];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#EFE8DA]">
       <SiteNav />
 
       {/* Editorial header */}
@@ -120,10 +120,10 @@ function BlogPost() {
       />
 
       {/* Body */}
-      <article className="bg-cream pb-24 pt-20">
-        <div className="mx-auto max-w-3xl px-6 lg:px-10">
+      <article className="bg-[#EFE8DA] pb-16 pt-14 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
+        <div className="mx-auto max-w-3xl px-5 sm:px-6 lg:px-10">
           {/* Back link */}
-          <Link to="/blog" className="eyebrow wood-underline text-saddle">
+          <Link to="/blog" className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630] wood-underline inline-flex items-center tap-target">
             ← Back to Blog
           </Link>
 
@@ -131,45 +131,49 @@ function BlogPost() {
             <>
               {/* Excerpt as pull quote */}
               {post.excerpt && (
-                <p className="mt-10 border-l-2 border-gold pl-6 font-display text-xl italic leading-snug text-saddle md:text-2xl">
+                <p className="mt-6 sm:mt-10 border-l-2 border-[#6B4630] pl-4 sm:pl-6 font-[Fraunces] text-lg sm:text-xl lg:text-2xl italic leading-snug text-[#6B4630]">
                   {post.excerpt}
                 </p>
               )}
 
               {/* Body content */}
-              <div className="prose mt-12 max-w-none font-sans text-base leading-[1.8] text-ink">
+              <div className="mt-8 sm:mt-12 font-[Archivo] text-sm sm:text-base leading-relaxed sm:leading-[1.8] text-[#17181A] space-y-5 sm:space-y-6">
                 {post.body.split("\n\n").map((para, i) => {
-                  if (para.startsWith("## ")) return <h2 key={i} className="mt-12 font-display text-3xl text-ink">{para.slice(3)}</h2>;
-                  if (para.startsWith("### ")) return <h3 key={i} className="mt-10 font-display text-2xl text-ink">{para.slice(4)}</h3>;
+                  if (para.startsWith("## ")) return <h2 key={i} className="mt-8 sm:mt-12 font-[Fraunces] text-xl sm:text-2xl lg:text-3xl text-[#17181A] tracking-[-0.02em]">{para.slice(3)}</h2>;
+                  if (para.startsWith("### ")) return <h3 key={i} className="mt-6 sm:mt-10 font-[Fraunces] text-lg sm:text-xl lg:text-2xl text-[#17181A] tracking-[-0.02em]">{para.slice(4)}</h3>;
                   if (para.startsWith("- ") || para.startsWith("* ")) {
                     return (
-                      <ul key={i} className="my-6 space-y-2 pl-5 list-disc marker:text-gold">
+                      <ul key={i} className="my-4 sm:my-6 space-y-1.5 sm:space-y-2 pl-4 sm:pl-5 list-disc">
                         {para.split("\n").map((li, k) => (
-                          <li key={k}>{li.replace(/^[-*]\s*/, "").replace(/\*\*(.+?)\*\*/g, "$1")}</li>
+                          <li key={k} className="text-[#6B4630] marker:text-[#6B4630]">{li.replace(/^[-*]\s*/, "").replace(/\*\*(.+?)\*\*/g, "$1")}</li>
                         ))}
                       </ul>
                     );
                   }
                   if (/^\d+\./.test(para)) {
                     return (
-                      <ol key={i} className="my-6 space-y-2 pl-5 list-decimal marker:text-gold">
+                      <ol key={i} className="my-4 sm:my-6 space-y-1.5 sm:space-y-2 pl-4 sm:pl-5 list-decimal">
                         {para.split("\n").map((li, k) => (
                           <li key={k}>{li.replace(/^\d+\.\s*/, "")}</li>
                         ))}
                       </ol>
                     );
                   }
-                  return <p key={i} className="my-6">{para}</p>;
+                  return <p key={i} className="my-4 sm:my-6">{para}</p>;
                 })}
               </div>
 
               {/* CTA */}
-              <div className="mt-20 border-t border-border pt-10">
-                <p className="eyebrow">Stay with us</p>
-                <p className="mt-4 font-display text-3xl text-ink">Book The Vulcan, Ahuriri.</p>
+              <div className="mt-14 sm:mt-20 border-t border-[#6B4630]/20 pt-8 sm:pt-10">
+                <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
+                  Stay with us
+                </p>
+                <p className="mt-3 sm:mt-4 font-[Fraunces] text-xl sm:text-2xl lg:text-3xl text-[#17181A] tracking-[-0.02em]">
+                  Book The Vulcan, Ahuriri.
+                </p>
                 <Link
                   to="/book"
-                  className="mt-6 inline-flex border border-ink bg-ink px-8 py-4 text-xs uppercase tracking-[0.24em] text-cream hover:bg-saddle"
+                  className="mt-5 sm:mt-6 inline-flex items-center border border-[#17181A] bg-[#17181A] px-6 sm:px-8 py-3 sm:py-4 text-[10px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.24em] text-[#EFE8DA] hover:bg-[#6B4630] hover:border-[#6B4630] transition-colors duration-400 tap-target"
                 >
                   Check availability →
                 </Link>
