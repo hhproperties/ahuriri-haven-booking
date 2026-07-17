@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import logoImg from "@/assets/vulcan-retreat-logo-dark.png";
-import hhLogoImg from "@/assets/hh-logo-v2.png";
+import hhLogoImg from "@/assets/hh-logo-dark.png";
 
 export function SiteFooter() {
   return (
