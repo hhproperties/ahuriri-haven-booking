@@ -390,6 +390,26 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
+  /* Ken Burns slow zoom */
+  @keyframes ken-burns {
+    0%   { transform: translateY(0px) scale(1); }
+    50%  { transform: translateY(-0.4%) scale(1.06); }
+    100% { transform: translateY(0px) scale(1); }
+  }
+
+  /* Editorial title accent — word-level gold gradient */
+  .word-accent {
+    background: linear-gradient(135deg, #B9985A 0%, #D4AF37 40%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Blog header image color grade */
+  .blog-header-grade {
+    filter: saturate(0.92) contrast(1.05) sepia(0.08) brightness(0.96);
+  }
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .ken-burns { animation: none; }

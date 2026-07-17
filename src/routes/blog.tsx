@@ -5,6 +5,31 @@ import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { supabase } from "@/integrations/supabase/client";
 
+// Per-slug thumbnail mapping
+import thumbRestaurant from "@/assets/blog-restaurant.jpg";
+import thumbWeekend from "@/assets/blog-weekend.jpg";
+import thumbFamily from "@/assets/blog-family.jpg";
+import thumbGirls from "@/assets/blog-girls.jpg";
+import thumbArtDeco from "@/assets/blog-art-deco.jpg";
+import thumbKids from "@/assets/blog-kids.jpg";
+import thumbCoffee from "@/assets/blog-coffee.jpg";
+import thumbCycling from "@/assets/blog-cycling.jpg";
+import thumbWine from "@/assets/blog-wine.jpg";
+
+const thumbnails: Record<string, string> = {
+  "where-to-eat-in-ahuriri": thumbRestaurant,
+  "weekend-in-hawkes-bay": thumbWeekend,
+  "family-friendly-hawkes-bay": thumbFamily,
+  "girls-getaway-ahuriri": thumbGirls,
+  "art-deco-napier-walking-tour": thumbArtDeco,
+  "what-to-do-with-kids-hawkes-bay": thumbKids,
+  "best-coffee-in-ahuriri": thumbCoffee,
+  "cycling-hawkes-bay-trails": thumbCycling,
+  "hawkes-bay-wine-country-guide": thumbWine,
+};
+
+const fallbackThumb = thumbRestaurant;
+
 export const Route = createFileRoute("/blog")({
   component: BlogIndex,
   head: () => ({
@@ -54,9 +79,14 @@ function BlogIndex() {
               <Reveal key={p.id} delay={i * 60}>
                 <Link to="/blog/$slug" params={{ slug: p.slug }} className="group block">
                   <div className="aspect-[4/5] w-full overflow-hidden bg-putty">
-                    <div className="grid h-full w-full place-items-center bg-gradient-to-br from-putty via-cream to-putty/60 transition-transform duration-700 group-hover:scale-105">
-                      <span className="font-display text-6xl italic text-saddle/40">VL</span>
-                    </div>
+                    <img
+                      src={thumbnails[p.slug] ?? fallbackThumb}
+                      alt={p.title}
+                      className="h-full w-full object-cover transition-all duration-700 group-hover:scale-105"
+                      style={{
+                        filter: "saturate(0.92) contrast(1.05) sepia(0.08) brightness(0.96)",
+                      }}
+                    />
                   </div>
                   <div className="mt-6">
                     {p.audience_tag && (
@@ -72,7 +102,7 @@ function BlogIndex() {
                         {p.excerpt}
                       </p>
                     )}
-                    <span className="mt-4 inline-block gold-underline text-xs uppercase tracking-[0.22em] text-ink">
+                    <span className="mt-4 inline-block wood-underline text-xs uppercase tracking-[0.22em] text-ink">
                       Read →
                     </span>
                   </div>
