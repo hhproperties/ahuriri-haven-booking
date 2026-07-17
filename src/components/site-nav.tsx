@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import logoImg from "@/assets/vulcan-logo.jpg";
+import logoImg from "@/assets/vulcan-logo.png";
 
 const links = [
   { to: "/apartment", label: "Apartment" },
@@ -33,10 +33,9 @@ export function SiteNav() {
             <img
               src={logoImg}
               alt="The Vulcan, Ahuriri"
-              className="h-11 w-auto lg:h-14 mix-blend-multiply"
+              className="h-11 w-auto lg:h-14"
               width={120}
               height={56}
-              style={{ filter: "contrast(1.1) brightness(1.1)" }}
             />
           </Link>
 

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import logoImg from "@/assets/vulcan-logo.jpg";
-import hhLogoImg from "@/assets/hh-logo.jpg";
+import logoImg from "@/assets/vulcan-logo-dark.png";
+import hhLogoImg from "@/assets/hh-logo-dark.png";
 
 export function SiteFooter() {
   return (
@@ -12,7 +12,7 @@ export function SiteFooter() {
             <img
               src={logoImg}
               alt="The Vulcan, Ahuriri"
-              className="h-13 w-auto opacity-80"
+              className="h-13 w-auto opacity-90"
               width={140}
               height={52}
             />
@@ -69,7 +69,7 @@ export function SiteFooter() {
             <img
               src={hhLogoImg}
               alt="H&H Property Group Limited"
-              className="h-7 w-auto opacity-40 grayscale"
+              className="h-7 w-auto opacity-70"
               width={70}
               height={28}
             />
