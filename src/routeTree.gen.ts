@@ -9,9 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LocationRouteImport } from './routes/location'
 import { Route as HostsRouteImport } from './routes/hosts'
+import { Route as CancellationRouteImport } from './routes/cancellation'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ApartmentRouteImport } from './routes/apartment'
@@ -20,9 +23,19 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationRoute = LocationRouteImport.update({
@@ -33,6 +46,11 @@ const LocationRoute = LocationRouteImport.update({
 const HostsRoute = HostsRouteImport.update({
   id: '/hosts',
   path: '/hosts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CancellationRoute = CancellationRouteImport.update({
+  id: '/cancellation',
+  path: '/cancellation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookRoute = BookRouteImport.update({
@@ -78,9 +96,12 @@ export interface FileRoutesByFullPath {
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
+  '/privacy': typeof PrivacyRoute
   '/reviews': typeof ReviewsRoute
+  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesByTo {
@@ -90,9 +111,12 @@ export interface FileRoutesByTo {
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
+  '/privacy': typeof PrivacyRoute
   '/reviews': typeof ReviewsRoute
+  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesById {
@@ -103,9 +127,12 @@ export interface FileRoutesById {
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
+  '/privacy': typeof PrivacyRoute
   '/reviews': typeof ReviewsRoute
+  '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRouteTypes {
@@ -117,9 +144,12 @@ export interface FileRouteTypes {
     | '/apartment'
     | '/blog'
     | '/book'
+    | '/cancellation'
     | '/hosts'
     | '/location'
+    | '/privacy'
     | '/reviews'
+    | '/terms'
     | '/blog/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -129,9 +159,12 @@ export interface FileRouteTypes {
     | '/apartment'
     | '/blog'
     | '/book'
+    | '/cancellation'
     | '/hosts'
     | '/location'
+    | '/privacy'
     | '/reviews'
+    | '/terms'
     | '/blog/$slug'
   id:
     | '__root__'
@@ -141,9 +174,12 @@ export interface FileRouteTypes {
     | '/apartment'
     | '/blog'
     | '/book'
+    | '/cancellation'
     | '/hosts'
     | '/location'
+    | '/privacy'
     | '/reviews'
+    | '/terms'
     | '/blog/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -154,18 +190,35 @@ export interface RootRouteChildren {
   ApartmentRoute: typeof ApartmentRoute
   BlogRoute: typeof BlogRouteWithChildren
   BookRoute: typeof BookRoute
+  CancellationRoute: typeof CancellationRoute
   HostsRoute: typeof HostsRoute
   LocationRoute: typeof LocationRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReviewsRoute: typeof ReviewsRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reviews': {
       id: '/reviews'
       path: '/reviews'
       fullPath: '/reviews'
       preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/location': {
@@ -180,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/hosts'
       fullPath: '/hosts'
       preLoaderRoute: typeof HostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cancellation': {
+      id: '/cancellation'
+      path: '/cancellation'
+      fullPath: '/cancellation'
+      preLoaderRoute: typeof CancellationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book': {
@@ -251,9 +311,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApartmentRoute: ApartmentRoute,
   BlogRoute: BlogRouteWithChildren,
   BookRoute: BookRoute,
+  CancellationRoute: CancellationRoute,
   HostsRoute: HostsRoute,
   LocationRoute: LocationRoute,
+  PrivacyRoute: PrivacyRoute,
   ReviewsRoute: ReviewsRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

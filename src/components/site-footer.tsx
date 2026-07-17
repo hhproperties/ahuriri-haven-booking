@@ -81,7 +81,7 @@ export function SiteFooter() {
           <div className="flex gap-6">
             <Link to="/terms" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Terms</Link>
             <Link to="/privacy" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Privacy</Link>
-            <Link to="/cancellation-policy" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Cancellation</Link>
+            <Link to="/cancellation" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Cancellation</Link>
           </div>
         </div>
       </div>
