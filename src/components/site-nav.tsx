@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import logoImg from "@/assets/vulcan-logo.jpg";
 
 const links = [
   { to: "/#apartment", label: "The Apartment" },
@@ -29,13 +30,13 @@ export function SiteNav() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
         <Link to="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-full border border-gold text-ink font-display text-lg tracking-tight">
-            VL
-          </span>
-          <span className="hidden flex-col leading-tight sm:flex">
-            <span className="font-display text-lg text-ink">The Vulcan</span>
-            <span className="text-[10px] uppercase tracking-[0.28em] text-gold">Retreat · Ahuriri</span>
-          </span>
+          <img
+            src={logoImg}
+            alt="The Vulcan, Ahuriri"
+            className="h-11 w-auto"
+            width={120}
+            height={44}
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
