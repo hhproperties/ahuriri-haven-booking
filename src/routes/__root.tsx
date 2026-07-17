@@ -113,11 +113,48 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const ldJson = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "The Vulcan, Ahuriri",
+  "description": "A self-contained 2-bedroom boutique apartment in Ahuriri, Napier — walking distance to the beach, restaurants, and the Art Deco quarter.",
+  "url": "https://ahuriri-haven-booking.vercel.app",
+  "telephone": "+64-6-000-0000",
+  "email": "stay@hhproperties.co.nz",
+  "image": heroImg,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1 Vulcan Lane",
+    "addressLocality": "Ahuriri, Napier",
+    "addressRegion": "Hawke's Bay",
+    "addressCountry": "NZ"
+  },
+  "priceRange": "NZ$220 - NZ$400/night",
+  "numberOfBedrooms": 2,
+  "numberOfBathroomsTotal": 1,
+  "maximumAttendeeCapacity": 4,
+  "amenityFeature": [
+    "Free parking",
+    "Wifi",
+    "Smart TV",
+    "Kitchen",
+    "Contactless entry"
+  ],
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "H&H Property Group Limited"
+  }
+};
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
       </head>
       <body>
         {children}
