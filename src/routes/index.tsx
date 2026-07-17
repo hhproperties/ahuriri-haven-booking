@@ -206,7 +206,7 @@ function CountingMoment() {
             { target: "2", label: "Bedrooms" },
             { target: "4", label: "Guests" },
             { target: "5", label: "Min walk to beach" },
-            { target: "98", label: "% five-star stays" },
+            { target: "100", label: "5-Star Reviews" },
           ].map((s, i) => (
             <div key={s.label} className={`reveal-up reveal-stagger-${i + 1} text-center`}>
               <p className="font-[Fraunces] text-5xl md:text-6xl font-[300] italic text-[#6B4630] counter-num">
@@ -214,9 +214,9 @@ function CountingMoment() {
                 {s.label.includes("Min") || s.label.includes("%") ? "" : ""}
               </p>
               {s.label.includes("Min") && <span className="font-[Fraunces] text-2xl font-[300] italic text-[#6B4630] counter-num"> min</span>}
-              {s.label.includes("%") && <span className="font-[Fraunces] text-2xl font-[300] italic text-[#6B4630] counter-num">%</span>}
+              {s.label.includes("%") || s.label === "5-Star Reviews" ? <span className="font-[Fraunces] text-2xl font-[300] italic text-[#6B4630] counter-num">%</span> : null}
               <p className="mt-2 text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
-                {s.label.replace("Min walk to beach", "").replace("% five-star stays", "").replace("Bedrooms", "").replace("Guests", "").trim() || s.label}
+                {s.label.replace("Min walk to beach", "").replace("5-Star Reviews", "").replace("Bedrooms", "").replace("Guests", "").trim() || s.label}
               </p>
             </div>
           ))}

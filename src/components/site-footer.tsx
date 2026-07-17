@@ -55,7 +55,8 @@ export function SiteFooter() {
             </p>
             <address className="not-italic space-y-2">
               <p className="text-sm opacity-70 font-[Archivo]">1 Vulcan Lane, Ahuriri, Napier</p>
-              <p><a href="mailto:stay@hhproperties.co.nz" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">stay@hhproperties.co.nz</a></p>
+              <p><a href="mailto:bookings@hhproperties.co.nz" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">bookings@hhproperties.co.nz</a></p>
+              <p className="text-sm opacity-70 font-[Archivo]">027 583 9279</p>
             </address>
           </div>
         </div>

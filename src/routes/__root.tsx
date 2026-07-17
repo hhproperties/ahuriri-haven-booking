@@ -120,7 +120,7 @@ const ldJson = {
   "description": "A self-contained 2-bedroom boutique apartment in Ahuriri, Napier — walking distance to the beach, restaurants, and the Art Deco quarter.",
   "url": "https://ahuriri-haven-booking.vercel.app",
   "telephone": "+64-6-000-0000",
-  "email": "stay@hhproperties.co.nz",
+  "email": "bookings@hhproperties.co.nz",
   "image": heroImg,
   "address": {
     "@type": "PostalAddress",
