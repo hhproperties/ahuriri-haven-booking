@@ -78,8 +78,10 @@ function BookingForm() {
         supabase.from("airbnb_blocked_dates").select("start_date, end_date"),
       ]);
       const ranges: { start: string; end: string }[] = [];
-      av.data?.forEach((r: { check_in: string; check_out: string }) => ranges.push({ start: r.check_in, end: r.check_out }));
-      ab.data?.forEach((r: { start_date: string; end_date: string }) => ranges.push({ start: r.start_date, end: r.end_date }));
+      av.data?.forEach((r) => {
+        if (r.check_in && r.check_out) ranges.push({ start: r.check_in, end: r.check_out });
+      });
+      ab.data?.forEach((r) => ranges.push({ start: r.start_date, end: r.end_date }));
       return ranges;
     },
   });
