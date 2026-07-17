@@ -1,25 +1,21 @@
 -- ============================================================================
 -- Email Triggers & Cron Jobs for The Vulcan, Ahuriri Booking Site
 -- ============================================================================
--- This migration sets up:
--- 1. Database triggers → Edge Functions (email on booking events)
--- 2. Cron schedules for periodic tasks (hold-expiry, pre-arrival, post-stay, iCal)
--- ============================================================================
--- After running this, deploy the edge functions:
---   npx supabase functions deploy booking-received payment-confirmed pre-arrival post-stay hold-expiry ical-fetch
--- Then set the Resend secret:
---   npx supabase secrets set RESEND_API_KEY=re_xxxx
+-- Run this AFTER enabling pg_cron in Supabase Dashboard:
+--   1. Go to Database → Extensions
+--   2. Enable "pg_cron" (schema: extensions)
+--   3. Also ensure "pg_net" is enabled (schema: extensions)
 -- ============================================================================
 
 -- Ensure pg_net extension is available (required for HTTP requests from triggers)
 CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
 
--- ── Config ────────────────────────────────────────────────────────────────
+-- Ensure pg_cron extension is available (required for cron scheduling)
+CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
 
--- Store the functions base URL so triggers can call edge functions
--- (Supabase provides SUPABASE_FUNCTIONS_URL via supabase_functions schema)
--- We use a custom PostgreSQL setting passed via context.
+-- ── Functions Base URL ────────────────────────────────────────────────────
 
+-- Store via a custom setting so triggers can call edge functions
 DO $$
 BEGIN
   PERFORM set_config('app.settings.functions_url',
@@ -69,7 +65,7 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  -- Fire-and-forget: call the edge function (no await — runs asynchronously)
+  -- Fire-and-forget: call the edge function (runs asynchronously via pg_net)
   PERFORM public.invoke_edge_function('booking-received', jsonb_build_object('bookingId', NEW.id));
   RETURN NEW;
 END;
@@ -106,47 +102,44 @@ CREATE TRIGGER booking_confirmed_trigger
 -- ── Cron: Hold Expiry ─────────────────────────────────────────────────────
 
 -- Every 10 minutes, cancel bookings with expired payment holds
-
 SELECT cron.schedule(
   'hold-expiry',
-  '*/10 * * * *',  -- every 10 minutes
+  '*/10 * * * *',
   $$
-  SELECT extensions.http_post(
-    'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/hold-expiry',
-    '{}'::text,
-    'application/json'
+  SELECT net.http_post(
+    url := 'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/hold-expiry',
+    headers := jsonb_build_object('Content-Type', 'application/json'),
+    body := '{}'
   );
   $$
 );
 
 -- ── Cron: Pre-Arrival Email ───────────────────────────────────────────────
 
--- Every day at 9 AM NZT, send pre-arrival emails to guests checking in tomorrow
-
+-- Every day at 9 AM NZT, send pre-arrival email to guests checking in that day
 SELECT cron.schedule(
   'pre-arrival-email',
-  '0 9 * * *',  -- 9 AM daily
+  '0 9 * * *',
   $$
-  SELECT extensions.http_post(
-    'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/pre-arrival',
-    '{}'::text,
-    'application/json'
+  SELECT net.http_post(
+    url := 'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/pre-arrival',
+    headers := jsonb_build_object('Content-Type', 'application/json'),
+    body := '{}'
   );
   $$
 );
 
 -- ── Cron: Post-Stay Email ─────────────────────────────────────────────────
 
--- Every day at 10 AM NZT, send post-stay thank-you + review request
-
+-- Every day at 10 AM NZT, send post-stay review request
 SELECT cron.schedule(
   'post-stay-email',
-  '0 10 * * *',  -- 10 AM daily
+  '0 10 * * *',
   $$
-  SELECT extensions.http_post(
-    'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/post-stay',
-    '{}'::text,
-    'application/json'
+  SELECT net.http_post(
+    url := 'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/post-stay',
+    headers := jsonb_build_object('Content-Type', 'application/json'),
+    body := '{}'
   );
   $$
 );
@@ -154,20 +147,17 @@ SELECT cron.schedule(
 -- ── Cron: iCal Sync ───────────────────────────────────────────────────────
 
 -- Every 4 hours, fetch Airbnb iCal and update blocked dates
-
 SELECT cron.schedule(
   'ical-fetch',
-  '0 */4 * * *',  -- every 4 hours
+  '0 */4 * * *',
   $$
-  SELECT extensions.http_post(
-    'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/ical-fetch',
-    '{}'::text,
-    'application/json'
+  SELECT net.http_post(
+    url := 'https://izqfnrqyggahqmfhbmye.supabase.co/functions/v1/ical-fetch',
+    headers := jsonb_build_object('Content-Type', 'application/json'),
+    body := '{}'
   );
   $$
 );
 
--- ── Status helper: Check schedule ─────────────────────────────────────────
-
--- Run this to see all scheduled cron jobs:
--- SELECT * FROM cron.job ORDER BY jobid;
+-- ── Check scheduled jobs (run after migration) ────────────────────────────
+-- SELECT jobid, schedule, command, database, username FROM cron.job ORDER BY jobid;

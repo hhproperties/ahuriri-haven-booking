@@ -4,76 +4,83 @@ import hhLogoImg from "@/assets/hh-logo.jpg";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-ink text-cream">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-4">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3">
-              <img
-                src={logoImg}
-                alt="The Vulcan, Ahuriri"
-                className="h-13 w-auto"
-                width={140}
-                height={52}
-              />
-            </div>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-cream/70">
-              A private, self-contained 2-bedroom retreat beneath our own home in Ahuriri —
-              walking distance to the beach, the waterfront restaurants, and Napier's Art
-              Deco heart.
+    <footer className="bg-[#17181A] text-[#EFE8DA]">
+      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+        <div className="grid gap-16 lg:grid-cols-3">
+          {/* Brand column */}
+          <div className="lg:col-span-1">
+            <img
+              src={logoImg}
+              alt="The Vulcan, Ahuriri"
+              className="h-13 w-auto opacity-80"
+              width={140}
+              height={52}
+            />
+            <p className="mt-6 max-w-xs text-sm leading-relaxed opacity-60 font-[Archivo]">
+              A private, self-contained 2-bedroom retreat in Ahuriri,
+              walking distance to the beach, waterfront restaurants, and
+              Napier's Art Deco heart.
             </p>
           </div>
 
-          <div>
-            <p className="eyebrow text-gold">Visit</p>
-            <address className="mt-4 not-italic text-sm leading-relaxed text-cream/80">
-              1 Vulcan Lane<br />
-              Ahuriri, Napier<br />
-              Hawke's Bay, New Zealand
-            </address>
+          {/* Navigation */}
+          <div className="flex flex-wrap gap-10 lg:gap-16">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E] mb-4">
+                Stay
+              </p>
+              <ul className="space-y-2.5">
+                <li><Link to="/apartment" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Apartment</Link></li>
+                <li><Link to="/amenities" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Amenities</Link></li>
+                <li><Link to="/location" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Location</Link></li>
+                <li><Link to="/book" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Book</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E] mb-4">
+                About
+              </p>
+              <ul className="space-y-2.5">
+                <li><Link to="/hosts" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Hosts</Link></li>
+                <li><Link to="/reviews" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Reviews</Link></li>
+                <li><Link to="/journal" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Journal</Link></li>
+              </ul>
+            </div>
           </div>
 
+          {/* Contact */}
           <div>
-            <p className="eyebrow text-gold">Contact</p>
-            <ul className="mt-4 space-y-2 text-sm text-cream/80">
-              <li>
-                <a href="mailto:stay@hhproperties.co.nz" className="hover:text-gold">
-                  stay@hhproperties.co.nz
-                </a>
-              </li>
-              <li>
-                <Link to="/book" className="hover:text-gold">
-                  Check availability
-                </Link>
-              </li>
-              <li>
-                <Link to="/journal" className="hover:text-gold">
-                  Journal
-                </Link>
-              </li>
-            </ul>
+            <p className="text-[10px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E] mb-4">
+              Contact
+            </p>
+            <address className="not-italic space-y-2">
+              <p className="text-sm opacity-70 font-[Archivo]">1 Vulcan Lane, Ahuriri, Napier</p>
+              <p><a href="mailto:stay@hhproperties.co.nz" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">stay@hhproperties.co.nz</a></p>
+            </address>
           </div>
         </div>
 
-        <div className="mt-16 border-t border-cream/10 pt-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src={hhLogoImg}
-                alt="H&amp;H Property Group Limited"
-                className="h-8 w-auto opacity-60 grayscale"
-                width={80}
-                height={32}
-              />
-              <span className="text-xs text-cream/50">
-                © {new Date().getFullYear()} H&H Property Group Limited. All rights reserved.
-              </span>
-            </div>
-            <div className="flex gap-6">
-              <Link to="/terms" className="text-xs text-cream/50 hover:text-gold">Terms</Link>
-              <Link to="/privacy" className="text-xs text-cream/50 hover:text-gold">Privacy</Link>
-              <Link to="/cancellation-policy" className="text-xs text-cream/50 hover:text-gold">Cancellation</Link>
-            </div>
+        {/* Wood divider */}
+        <div className="wood-divider my-16" />
+
+        {/* Bottom bar */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <img
+              src={hhLogoImg}
+              alt="H&H Property Group Limited"
+              className="h-7 w-auto opacity-40 grayscale"
+              width={70}
+              height={28}
+            />
+            <span className="text-[11px] opacity-40 font-[Archivo]">
+              © {new Date().getFullYear()} H&H Property Group Limited
+            </span>
+          </div>
+          <div className="flex gap-6">
+            <Link to="/terms" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Terms</Link>
+            <Link to="/privacy" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Privacy</Link>
+            <Link to="/cancellation-policy" className="text-[11px] opacity-40 hover:opacity-70 transition-opacity font-[Archivo]">Cancellation</Link>
           </div>
         </div>
       </div>

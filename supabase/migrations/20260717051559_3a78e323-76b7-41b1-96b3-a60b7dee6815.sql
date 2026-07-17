@@ -1,8 +1,19 @@
 
 -- Enums
-CREATE TYPE public.booking_status AS ENUM ('pending_payment', 'confirmed', 'cancelled', 'refunded');
-CREATE TYPE public.payment_method AS ENUM ('bank_transfer', 'stripe');
-CREATE TYPE public.app_role AS ENUM ('admin');
+DO $$ BEGIN
+  CREATE TYPE public.booking_status AS ENUM ('pending_payment', 'confirmed', 'cancelled', 'refunded');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE public.payment_method AS ENUM ('bank_transfer', 'stripe');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE public.app_role AS ENUM ('admin');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- updated_at trigger fn
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()

@@ -9,20 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as LocationRouteImport } from './routes/location'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as HostsRouteImport } from './routes/hosts'
 import { Route as BookRouteImport } from './routes/book'
+import { Route as ApartmentRouteImport } from './routes/apartment'
+import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationRoute = LocationRouteImport.update({
+  id: '/location',
+  path: '/location',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JournalRoute = JournalRouteImport.update({
   id: '/journal',
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HostsRoute = HostsRouteImport.update({
+  id: '/hosts',
+  path: '/hosts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BookRoute = BookRouteImport.update({
   id: '/book',
   path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApartmentRoute = ApartmentRouteImport.update({
+  id: '/apartment',
+  path: '/apartment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AmenitiesRoute = AmenitiesRouteImport.update({
+  id: '/amenities',
+  path: '/amenities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -44,42 +74,107 @@ const JournalSlugRoute = JournalSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/amenities': typeof AmenitiesRoute
+  '/apartment': typeof ApartmentRoute
   '/book': typeof BookRoute
+  '/hosts': typeof HostsRoute
   '/journal': typeof JournalRouteWithChildren
+  '/location': typeof LocationRoute
+  '/reviews': typeof ReviewsRoute
   '/journal/$slug': typeof JournalSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/amenities': typeof AmenitiesRoute
+  '/apartment': typeof ApartmentRoute
   '/book': typeof BookRoute
+  '/hosts': typeof HostsRoute
   '/journal': typeof JournalRouteWithChildren
+  '/location': typeof LocationRoute
+  '/reviews': typeof ReviewsRoute
   '/journal/$slug': typeof JournalSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/amenities': typeof AmenitiesRoute
+  '/apartment': typeof ApartmentRoute
   '/book': typeof BookRoute
+  '/hosts': typeof HostsRoute
   '/journal': typeof JournalRouteWithChildren
+  '/location': typeof LocationRoute
+  '/reviews': typeof ReviewsRoute
   '/journal/$slug': typeof JournalSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/book' | '/journal' | '/journal/$slug'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/amenities'
+    | '/apartment'
+    | '/book'
+    | '/hosts'
+    | '/journal'
+    | '/location'
+    | '/reviews'
+    | '/journal/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/book' | '/journal' | '/journal/$slug'
-  id: '__root__' | '/' | '/admin' | '/book' | '/journal' | '/journal/$slug'
+  to:
+    | '/'
+    | '/admin'
+    | '/amenities'
+    | '/apartment'
+    | '/book'
+    | '/hosts'
+    | '/journal'
+    | '/location'
+    | '/reviews'
+    | '/journal/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/amenities'
+    | '/apartment'
+    | '/book'
+    | '/hosts'
+    | '/journal'
+    | '/location'
+    | '/reviews'
+    | '/journal/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  AmenitiesRoute: typeof AmenitiesRoute
+  ApartmentRoute: typeof ApartmentRoute
   BookRoute: typeof BookRoute
+  HostsRoute: typeof HostsRoute
   JournalRoute: typeof JournalRouteWithChildren
+  LocationRoute: typeof LocationRoute
+  ReviewsRoute: typeof ReviewsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/location': {
+      id: '/location'
+      path: '/location'
+      fullPath: '/location'
+      preLoaderRoute: typeof LocationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journal': {
       id: '/journal'
       path: '/journal'
@@ -87,11 +182,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hosts': {
+      id: '/hosts'
+      path: '/hosts'
+      fullPath: '/hosts'
+      preLoaderRoute: typeof HostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/book': {
       id: '/book'
       path: '/book'
       fullPath: '/book'
       preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apartment': {
+      id: '/apartment'
+      path: '/apartment'
+      fullPath: '/apartment'
+      preLoaderRoute: typeof ApartmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/amenities': {
+      id: '/amenities'
+      path: '/amenities'
+      fullPath: '/amenities'
+      preLoaderRoute: typeof AmenitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -132,8 +248,13 @@ const JournalRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  AmenitiesRoute: AmenitiesRoute,
+  ApartmentRoute: ApartmentRoute,
   BookRoute: BookRoute,
+  HostsRoute: HostsRoute,
   JournalRoute: JournalRouteWithChildren,
+  LocationRoute: LocationRoute,
+  ReviewsRoute: ReviewsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

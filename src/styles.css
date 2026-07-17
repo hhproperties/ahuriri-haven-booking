@@ -5,24 +5,27 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * The Vulcan, Ahuriri — brand design system
- * Operated by H&H Property Group Limited
+ * The Vulcan, Ahuriri — rebranded design system
+ * "Premium natural goods" editorial aesthetic
  *
- * Palette:
- *   Ink Charcoal   #17181A  — text, nav, buttons
- *   Vulcan Gold    #B9985A  — accent (underlines, active, badge ring)
- *   Saddle Brown   #5C3A2E  — secondary accent
- *   Retreat Cream  #F5F0E6  — background
- *   Garden Sage    #7C8567  — tertiary accent
- *   Putty Grey     #D8D2C4  — muted
+ * Palette (locked semantic tokens — never hardcode hex):
+ *   Cream  #EFE8DA  — primary page background, body copy on dark bands
+ *   Wood   #6B4630  — accent (underlines, dividers, hover states, colour inside words)
+ *   Wood-light #BD8A5E — lighter keyword highlight on dark bands
+ *   Matte  #17181A  — primary text, buttons, dark section backgrounds
+ *   Gloss  #0A0A0A  — rare premium hover fills, deepest contrast
  *
- * Fonts: Cormorant Garamond (display serif) + Inter (sans),
- * loaded via <link> in src/routes/__root.tsx.
+ * Typography:
+ *   Display  — Fraunces (variable, opsz 9–144, wght 300–900, italics)
+ *   Body     — Archivo (wght 400–700)
+ *
+ * Rule: cream sections ↔ matte sections alternate.
+ * Wood is never a background — always an accent.
  */
 
 @theme inline {
-  --font-display: "Cormorant Garamond", "Freight Display", "Tiempos Headline", ui-serif, Georgia, serif;
-  --font-sans: "Inter", "General Sans", "Söhne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Georgia", ui-serif, serif;
+  --font-sans: "Archivo", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -30,85 +33,136 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  /* Brand tokens */
-  --color-ink: var(--ink);
-  --color-cream: var(--cream);
-  --color-gold: var(--gold);
-  --color-saddle: var(--saddle);
-  --color-sage: var(--sage);
-  --color-putty: var(--putty);
+  --color-background: var(--cream);
+  --color-foreground: var(--matte);
+  --color-card: oklch(0.98 0.005 72);
+  --color-card-foreground: var(--matte);
+  --color-popover: var(--cream);
+  --color-popover-foreground: var(--matte);
+  --color-primary: var(--matte);
+  --color-primary-foreground: var(--cream);
+  --color-secondary: oklch(0.92 0.01 72);
+  --color-secondary-foreground: var(--matte);
+  --color-muted: oklch(0.93 0.008 72);
+  --color-muted-foreground: oklch(0.35 0.01 260);
+  --color-accent: var(--wood);
+  --color-accent-foreground: var(--cream);
+  --color-destructive: oklch(0.55 0.2 25);
+  --color-destructive-foreground: var(--cream);
+  --color-border: oklch(0.84 0.012 72);
+  --color-input: oklch(0.88 0.01 72);
+  --color-ring: var(--wood);
 }
 
 :root {
   --radius: 0.25rem;
 
-  --ink: oklch(0.19 0.005 260);       /* #17181A */
-  --cream: oklch(0.955 0.015 82);     /* #F5F0E6 */
-  --gold: oklch(0.68 0.08 75);        /* #B9985A */
-  --saddle: oklch(0.36 0.055 45);     /* #5C3A2E */
-  --sage: oklch(0.56 0.03 130);       /* #7C8567 */
-  --putty: oklch(0.86 0.012 82);      /* #D8D2C4 */
-
-  --background: var(--cream);
-  --foreground: var(--ink);
-  --card: oklch(0.98 0.008 82);
-  --card-foreground: var(--ink);
-  --popover: var(--cream);
-  --popover-foreground: var(--ink);
-  --primary: var(--ink);
-  --primary-foreground: var(--cream);
-  --secondary: var(--putty);
-  --secondary-foreground: var(--ink);
-  --muted: var(--putty);
-  --muted-foreground: oklch(0.38 0.01 260);
-  --accent: var(--gold);
-  --accent-foreground: var(--ink);
-  --destructive: oklch(0.55 0.2 25);
-  --destructive-foreground: var(--cream);
-  --border: oklch(0.82 0.015 82);
-  --input: oklch(0.90 0.01 82);
-  --ring: var(--gold);
+  --cream: oklch(0.94 0.01 72);        /* #EFE8DA */
+  --wood: oklch(0.42 0.045 55);        /* #6B4630 */
+  --wood-light: oklch(0.65 0.055 60);  /* #BD8A5E */
+  --matte: oklch(0.19 0.005 260);      /* #17181A */
+  --gloss: oklch(0.12 0.003 260);      /* #0A0A0A */
 }
 
-.dark {
-  --background: var(--ink);
-  --foreground: var(--cream);
-  --card: oklch(0.22 0.005 260);
-  --card-foreground: var(--cream);
-  --popover: oklch(0.22 0.005 260);
-  --popover-foreground: var(--cream);
-  --primary: var(--cream);
-  --primary-foreground: var(--ink);
-  --secondary: oklch(0.28 0.005 260);
-  --secondary-foreground: var(--cream);
-  --muted: oklch(0.28 0.005 260);
-  --muted-foreground: oklch(0.72 0.01 260);
-  --accent: var(--gold);
-  --accent-foreground: var(--ink);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: var(--gold);
+/* ── Brand utilities ─────────────────────────────────────────────────── */
+
+@utility text-cream {
+  color: #EFE8DA;
 }
+@utility text-wood {
+  color: #6B4630;
+}
+@utility text-wood-light {
+  color: #BD8A5E;
+}
+@utility text-matte {
+  color: #17181A;
+}
+@utility bg-cream {
+  background-color: #EFE8DA;
+}
+@utility bg-wood {
+  background-color: #6B4630;
+}
+@utility bg-matte {
+  background-color: #17181A;
+}
+@utility bg-gloss {
+  background-color: #0A0A0A;
+}
+@utility border-wood {
+  border-color: #6B4630;
+}
+
+/* ── Backward-compatible aliases ─────────────────────────────────────── */
+/* Keep old classes working for admin/book pages until they're rewritten */
+@utility bg-ink { background-color: #17181A; }
+@utility text-ink { color: #17181A; }
+@utility text-gold { color: #6B4630; }
+@utility text-saddle { color: #6B4630; }
+@utility bg-putty { background-color: #E8E0D0; }
+@utility bg-gold { background-color: #6B4630; }
+@utility border-gold { border-color: #6B4630; }
+
+/* Wood-grain gradient clipped into italic display text */
+@utility word-wood {
+  background-image: linear-gradient(
+    100deg,
+    #7a5236 0%,
+    #6b4630 28%,
+    #4c3120 52%,
+    #8a5c3c 78%,
+    #6b4630 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+}
+
+/* Lighter caramel version for dark bands */
+@utility word-wood-light {
+  background-image: linear-gradient(
+    100deg,
+    #bd8a5e 0%,
+    #a6724a 30%,
+    #c9986a 60%,
+    #bd8a5e 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+}
+
+/* Gilded champagne spectacle gradient (one per page, oversized) */
+@utility word-champagne {
+  background-image: linear-gradient(
+    120deg,
+    #e7c79a 0%,
+    #cf9f65 25%,
+    #f3ddb5 50%,
+    #c68f52 75%,
+    #e7c79a 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 12px rgba(23, 24, 26, 0.25);
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* Wood-textured underline (nav links) */
+.wood-underline {
+  position: relative;
+  display: inline-block;
+}
+.wood-underline-active {
+  position: relative;
+}
+
+/* ── Base layer ──────────────────────────────────────────────────────── */
 
 @layer base {
   * {
@@ -120,87 +174,229 @@
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
+    background-color: #EFE8DA;
+    color: #17181A;
+    font-family: "Archivo", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-family: "Fraunces", "Georgia", ui-serif, serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    text-wrap: balance;
   }
 }
 
+/* ── Utility classes ─────────────────────────────────────────────────── */
+
 @utility eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-family: "Archivo", sans-serif;
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: #6B4630;
 }
 
-@utility gold-underline {
-  position: relative;
-  display: inline-block;
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid #17181A;
+  color: #17181A;
+  background: transparent;
+  transition: color 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              background 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-@utility gold-underline-active {
-  position: relative;
+.btn-outline:hover {
+  color: #6B4630;
+  border-color: #6B4630;
 }
+
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid #EFE8DA;
+  color: #EFE8DA;
+  background: transparent;
+  transition: color 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              background 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-outline-light:hover {
+  color: #BD8A5E;
+  border-color: #BD8A5E;
+}
+
+/* ── Animations & interactions ───────────────────────────────────────── */
 
 @layer utilities {
-  .gold-underline::after {
+  /* Wood-grain underline reveal */
+  .wood-underline::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -4px;
-    height: 1.5px;
-    background: var(--color-gold);
+    bottom: -3px;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      #6b4630 0%,
+      #8a5c3c 30%,
+      #6b4630 60%,
+      #a6724a 85%,
+      #6b4630 100%
+    );
+    border-radius: 1px;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .gold-underline:hover::after,
-  .gold-underline.is-active::after {
+  .wood-underline:hover::after,
+  .wood-underline.is-active::after {
     transform: scaleX(1);
   }
 
+  /* Ken Burns — slow cinematic drift */
   .ken-burns {
     animation: ken-burns 20s ease-in-out infinite alternate;
   }
-
   @keyframes ken-burns {
     from { transform: scale(1) translate(0, 0); }
-    to   { transform: scale(1.08) translate(-1%, -1%); }
+    to   { transform: scale(1.06) translate(-0.5%, -0.5%); }
   }
 
+  /* Scroll reveals — one-shot */
   .reveal-up {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .reveal-up.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
 
+  /* Staggered reveal delays */
+  .reveal-stagger-1 { transition-delay: 100ms; }
+  .reveal-stagger-2 { transition-delay: 200ms; }
+  .reveal-stagger-3 { transition-delay: 300ms; }
+  .reveal-stagger-4 { transition-delay: 400ms; }
+
+  /* Arched portrait frames */
+  .arch-frame {
+    border-radius: 50% 50% 8px 8px / 40% 40% 4px 4px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .arch-frame:hover {
+    transform: scale(1.03);
+  }
+
+  /* Wood-accent offset behind arch frames */
+  .arch-accent {
+    position: absolute;
+    inset: 6px;
+    border-radius: 50% 50% 8px 8px / 40% 40% 4px 4px;
+    background: #6B4630;
+    z-index: -1;
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .arch-frame:hover + .arch-accent,
+  .arch-frame-group:hover .arch-accent {
+    transform: translate(8px, 8px);
+  }
+
+  /* Wood divider (1px with sheen gradient) */
+  .wood-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(107, 70, 48, 0.3) 20%,
+      rgba(107, 70, 48, 0.5) 50%,
+      rgba(107, 70, 48, 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  /* Wood-texture background (grain pattern) */
+  .wood-texture {
+    background-color: #6B4630;
+    background-image:
+      repeating-linear-gradient(
+        1deg,
+        transparent,
+        transparent 1px,
+        rgba(0,0,0,0.03) 1px,
+        rgba(0,0,0,0.03) 2px
+      ),
+      repeating-linear-gradient(
+        91deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.015) 2px,
+        rgba(255,255,255,0.015) 3px
+      );
+  }
+
+  /* Marquee ticker band */
+  .marquee-track {
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+  .marquee-scroll {
+    display: inline-flex;
+    gap: 3rem;
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+  }
+  .marquee-track:hover .marquee-scroll {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Animated counter (old-style tabular nums) */
+  .counter-num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Scrolling grain texture */
   .grain::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.06;
+    opacity: 0.04;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
+  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .ken-burns { animation: none; }
     .reveal-up { opacity: 1; transform: none; transition: none; }
+    .marquee-scroll { animation: none; }
+    .wood-underline::after { display: none; }
+    .arch-frame:hover { transform: none; }
     html { scroll-behavior: auto; }
   }
 }

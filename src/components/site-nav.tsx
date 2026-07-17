@@ -1,97 +1,138 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logoImg from "@/assets/vulcan-logo.jpg";
 
 const links = [
-  { to: "/#apartment", label: "The Apartment" },
-  { to: "/#amenities", label: "Amenities" },
-  { to: "/#location", label: "Location" },
-  { to: "/#hosts", label: "Meet Your Hosts" },
-  { to: "/#reviews", label: "Reviews" },
+  { to: "/apartment", label: "Apartment" },
+  { to: "/amenities", label: "Amenities" },
+  { to: "/location", label: "Location" },
+  { to: "/hosts", label: "Hosts" },
+  { to: "/reviews", label: "Reviews" },
   { to: "/journal", label: "Journal" },
 ];
 
 export function SiteNav() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
+  // Close mobile sheet on route change
+  useEffect(() => { setOpen(false); }, [location.pathname]);
+
+  // Lock body scroll when mobile sheet is open
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-cream/95 backdrop-blur-sm shadow-[0_1px_0_0_var(--color-border)]" : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src={logoImg}
-            alt="The Vulcan, Ahuriri"
-            className="h-16 w-auto mix-blend-multiply"
-            width={140}
-            height={64}
-            style={{ filter: 'contrast(1.1) brightness(1.1)' }}
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-8 lg:flex">
-          {links.map((l) => (
-            <a
-              key={l.to}
-              href={l.to}
-              className="gold-underline text-xs uppercase tracking-[0.22em] text-ink transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
-          <Link
-            to="/book"
-            className="inline-flex items-center border border-ink bg-ink px-5 py-2.5 text-xs uppercase tracking-[0.22em] text-cream transition-all hover:bg-saddle"
-          >
-            Book Now
+    <>
+      {/* ── Fixed cream header ── */}
+      <header className="fixed inset-x-0 top-0 z-50 bg-[#EFE8DA]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-10">
+          <Link to="/" className="flex items-center gap-3 shrink-0">
+            <img
+              src={logoImg}
+              alt="The Vulcan, Ahuriri"
+              className="h-11 w-auto lg:h-14 mix-blend-multiply"
+              width={120}
+              height={56}
+              style={{ filter: "contrast(1.1) brightness(1.1)" }}
+            />
           </Link>
-        </nav>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="lg:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Menu"
-        >
-          <span className={`h-px w-6 bg-ink transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
-          <span className={`h-px w-6 bg-ink transition-opacity ${open ? "opacity-0" : ""}`} />
-          <span className={`h-px w-6 bg-ink transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-        </button>
-      </div>
-
-      {open && (
-        <div className="lg:hidden border-t border-border bg-cream">
-          <nav className="flex flex-col gap-1 px-6 py-6">
+          <nav className="hidden items-center gap-8 lg:flex">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.to}
-                href={l.to}
-                onClick={() => setOpen(false)}
-                className="py-2 text-sm uppercase tracking-[0.22em] text-ink"
+                to={l.to}
+                className={`wood-underline text-[11px] uppercase tracking-[0.24em] text-[#17181A] transition-colors hover:text-[#6B4630] ${
+                  location.pathname === l.to || (l.to !== "/" && location.pathname.startsWith(l.to))
+                    ? "is-active"
+                    : ""
+                }`}
               >
                 {l.label}
-              </a>
+              </Link>
+            ))}
+            <Link to="/book" className="btn-outline text-[11px]">
+              Book Now
+            </Link>
+          </nav>
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="relative z-50 flex flex-col gap-1.5 p-2 lg:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+          >
+            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "opacity-0" : ""}`} />
+            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          </button>
+        </div>
+      </header>
+
+      {/* ── Wood-textured marquee ticker ── */}
+      <div className="fixed inset-x-0 z-40" style={{ top: "60px" }}>
+        <div className="marquee-track wood-texture h-8">
+          <div className="marquee-scroll items-center gap-12 px-6">
+            {[...Array(6)].map((_, i) => (
+              <span key={i} className="flex items-center gap-12">
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-80">
+                  The Vulcan, Ahuriri — Napier
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-50">
+                  ✦
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-80">
+                  Boutique harbourside retreat
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-50">
+                  ✦
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-80">
+                  2 bedrooms · 1 bathroom
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-[#EFE8DA] opacity-50">
+                  ✦
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Full-screen mobile nav sheet ── */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#EFE8DA] lg:hidden"
+          style={{ paddingTop: "80px" }}
+        >
+          <nav className="flex flex-col items-center gap-2 px-6">
+            {links.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={() => setOpen(false)}
+                className={`py-3 text-lg uppercase tracking-[0.24em] text-[#17181A] transition-colors hover:text-[#6B4630] ${
+                  location.pathname === l.to ? "italic opacity-60" : ""
+                }`}
+              >
+                {l.label}
+              </Link>
             ))}
             <Link
               to="/book"
               onClick={() => setOpen(false)}
-              className="mt-4 inline-flex justify-center border border-ink bg-ink px-5 py-3 text-xs uppercase tracking-[0.22em] text-cream"
+              className="mt-8 btn-outline text-sm"
             >
               Book Now
             </Link>
           </nav>
         </div>
       )}
-    </header>
+
+      {/* Spacer to push content below fixed header + ticker */}
+      <div className="h-[88px]" />
+    </>
   );
 }
