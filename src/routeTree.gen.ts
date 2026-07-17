@@ -11,14 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as LocationRouteImport } from './routes/location'
-import { Route as JournalRouteImport } from './routes/journal'
 import { Route as HostsRouteImport } from './routes/hosts'
 import { Route as BookRouteImport } from './routes/book'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ApartmentRouteImport } from './routes/apartment'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
@@ -30,11 +30,6 @@ const LocationRoute = LocationRouteImport.update({
   path: '/location',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JournalRoute = JournalRouteImport.update({
-  id: '/journal',
-  path: '/journal',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HostsRoute = HostsRouteImport.update({
   id: '/hosts',
   path: '/hosts',
@@ -43,6 +38,11 @@ const HostsRoute = HostsRouteImport.update({
 const BookRoute = BookRouteImport.update({
   id: '/book',
   path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApartmentRoute = ApartmentRouteImport.update({
@@ -65,10 +65,10 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JournalSlugRoute = JournalSlugRouteImport.update({
+const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => JournalRoute,
+  getParentRoute: () => BlogRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -76,24 +76,24 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
+  '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/hosts': typeof HostsRoute
-  '/journal': typeof JournalRouteWithChildren
   '/location': typeof LocationRoute
   '/reviews': typeof ReviewsRoute
-  '/journal/$slug': typeof JournalSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
+  '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/hosts': typeof HostsRoute
-  '/journal': typeof JournalRouteWithChildren
   '/location': typeof LocationRoute
   '/reviews': typeof ReviewsRoute
-  '/journal/$slug': typeof JournalSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,12 +101,12 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
+  '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/hosts': typeof HostsRoute
-  '/journal': typeof JournalRouteWithChildren
   '/location': typeof LocationRoute
   '/reviews': typeof ReviewsRoute
-  '/journal/$slug': typeof JournalSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -115,36 +115,36 @@ export interface FileRouteTypes {
     | '/admin'
     | '/amenities'
     | '/apartment'
+    | '/blog'
     | '/book'
     | '/hosts'
-    | '/journal'
     | '/location'
     | '/reviews'
-    | '/journal/$slug'
+    | '/blog/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/amenities'
     | '/apartment'
+    | '/blog'
     | '/book'
     | '/hosts'
-    | '/journal'
     | '/location'
     | '/reviews'
-    | '/journal/$slug'
+    | '/blog/$slug'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/amenities'
     | '/apartment'
+    | '/blog'
     | '/book'
     | '/hosts'
-    | '/journal'
     | '/location'
     | '/reviews'
-    | '/journal/$slug'
+    | '/blog/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -152,9 +152,9 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AmenitiesRoute: typeof AmenitiesRoute
   ApartmentRoute: typeof ApartmentRoute
+  BlogRoute: typeof BlogRouteWithChildren
   BookRoute: typeof BookRoute
   HostsRoute: typeof HostsRoute
-  JournalRoute: typeof JournalRouteWithChildren
   LocationRoute: typeof LocationRoute
   ReviewsRoute: typeof ReviewsRoute
 }
@@ -175,13 +175,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/journal': {
-      id: '/journal'
-      path: '/journal'
-      fullPath: '/journal'
-      preLoaderRoute: typeof JournalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/hosts': {
       id: '/hosts'
       path: '/hosts'
@@ -194,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/book'
       fullPath: '/book'
       preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/apartment': {
@@ -224,35 +224,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/journal/$slug': {
-      id: '/journal/$slug'
+    '/blog/$slug': {
+      id: '/blog/$slug'
       path: '/$slug'
-      fullPath: '/journal/$slug'
-      preLoaderRoute: typeof JournalSlugRouteImport
-      parentRoute: typeof JournalRoute
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
   }
 }
 
-interface JournalRouteChildren {
-  JournalSlugRoute: typeof JournalSlugRoute
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
 }
 
-const JournalRouteChildren: JournalRouteChildren = {
-  JournalSlugRoute: JournalSlugRoute,
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
 }
 
-const JournalRouteWithChildren =
-  JournalRoute._addFileChildren(JournalRouteChildren)
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AmenitiesRoute: AmenitiesRoute,
   ApartmentRoute: ApartmentRoute,
+  BlogRoute: BlogRouteWithChildren,
   BookRoute: BookRoute,
   HostsRoute: HostsRoute,
-  JournalRoute: JournalRouteWithChildren,
   LocationRoute: LocationRoute,
   ReviewsRoute: ReviewsRoute,
 }

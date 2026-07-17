@@ -8,7 +8,7 @@ const links = [
   { to: "/location", label: "Location" },
   { to: "/hosts", label: "Hosts" },
   { to: "/reviews", label: "Reviews" },
-  { to: "/journal", label: "Journal" },
+  { to: "/blog", label: "Blog" },
 ];
 
 export function SiteNav() {

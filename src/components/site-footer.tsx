@@ -43,7 +43,7 @@ export function SiteFooter() {
               <ul className="space-y-2.5">
                 <li><Link to="/hosts" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Hosts</Link></li>
                 <li><Link to="/reviews" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Reviews</Link></li>
-                <li><Link to="/journal" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Journal</Link></li>
+                <li><Link to="/blog" className="text-sm opacity-70 hover:opacity-100 transition-opacity font-[Archivo]">Blog</Link></li>
               </ul>
             </div>
           </div>

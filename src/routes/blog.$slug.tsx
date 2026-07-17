@@ -4,11 +4,11 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/journal/$slug")({
-  component: JournalPost,
+export const Route = createFileRoute("/blog/$slug")({
+  component: BlogPost,
 });
 
-function JournalPost() {
+function BlogPost() {
   const { slug } = Route.useParams();
   const { data: post, isLoading } = useQuery({
     queryKey: ["blog_post", slug],
@@ -30,7 +30,7 @@ function JournalPost() {
       <SiteNav />
       <article className="pt-32 pb-24 px-6 lg:px-10">
         <div className="mx-auto max-w-3xl">
-          <Link to="/journal" className="eyebrow gold-underline">← Journal</Link>
+          <Link to="/blog" className="eyebrow gold-underline">← Blog</Link>
           {post && (
             <>
               {post.audience_tag && (

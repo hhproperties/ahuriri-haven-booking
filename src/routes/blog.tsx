@@ -5,11 +5,11 @@ import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/journal")({
-  component: JournalIndex,
+export const Route = createFileRoute("/blog")({
+  component: BlogIndex,
   head: () => ({
     meta: [
-      { title: "Journal — The Vulcan, Ahuriri" },
+      { title: "Blog — The Vulcan, Ahuriri" },
       {
         name: "description",
         content:
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/journal")({
   }),
 });
 
-function JournalIndex() {
+function BlogIndex() {
   const { data: posts = [] } = useQuery({
     queryKey: ["blog_posts"],
     queryFn: async () => {
@@ -38,7 +38,7 @@ function JournalIndex() {
       <div className="pt-32 pb-24 px-6 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <Reveal>
-            <p className="eyebrow">Journal</p>
+            <p className="eyebrow">Blog</p>
             <h1 className="mt-4 font-display text-5xl text-ink md:text-6xl">
               Ahuriri, on foot.
             </h1>
@@ -52,7 +52,7 @@ function JournalIndex() {
           <div className="mt-20 grid gap-x-10 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((p, i) => (
               <Reveal key={p.id} delay={i * 60}>
-                <Link to="/journal/$slug" params={{ slug: p.slug }} className="group block">
+                <Link to="/blog/$slug" params={{ slug: p.slug }} className="group block">
                   <div className="aspect-[4/5] w-full overflow-hidden bg-putty">
                     <div className="grid h-full w-full place-items-center bg-gradient-to-br from-putty via-cream to-putty/60 transition-transform duration-700 group-hover:scale-105">
                       <span className="font-display text-6xl italic text-saddle/40">VL</span>
