@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import livingImg from "@/assets/living-room.jpg";
-import gardenImg from "@/assets/garden-courtyard.jpg";
+import gardenImg from "@/assets/garden_courtyard.jpg";
+import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/amenities")({
   component: AmenitiesPage,
@@ -13,7 +13,8 @@ export const Route = createFileRoute("/amenities")({
       { name: "description", content: "Everything you need for a relaxed stay — two queen bedrooms, kitchenette, free parking, wifi, smart TV, courtyard garden, digital entry." },
       { property: "og:title", content: "Amenities — The Vulcan, Ahuriri" },
       { property: "og:description", content: "Two queen bedrooms, kitchenette, free off-street parking, wifi, smart TV, and a private courtyard garden." },
-      { property: "og:image", content: livingImg },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
 });

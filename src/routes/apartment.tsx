@@ -3,10 +3,14 @@ import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import livingImg from "@/assets/living-room.jpg";
-import bedroomOne from "@/assets/bedroom-one.jpg";
-import bedroomTwo from "@/assets/bedroom-two.jpg";
-import gardenImg from "@/assets/garden-courtyard.jpg";
+import bedroomOne from "@/assets/bedroom1.jpg";
+import bedroomTwo from "@/assets/bedroom2.jpg";
+import gardenImg from "@/assets/garden_courtyard.jpg";
+import bathroomImg from "@/assets/bathroom.jpg";
+import patioImg from "@/assets/outdoorpatio2.jpg";
+import pathwayImg from "@/assets/pathway.jpg";
 import heroImg from "@/assets/hero-exterior.jpg";
+import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/apartment")({
   component: ApartmentPage,
@@ -16,7 +20,8 @@ export const Route = createFileRoute("/apartment")({
       { name: "description", content: "A self-contained 2-bedroom apartment beneath our home in Ahuriri, Napier. Two queen bedrooms, one bathroom, kitchenette, courtyard — sleeping four." },
       { property: "og:title", content: "The Apartment — The Vulcan, Ahuriri" },
       { property: "og:description", content: "Two queen bedrooms, one bathroom, private courtyard — a boutique harbourside retreat in Ahuriri, Napier." },
-      { property: "og:image", content: heroImg },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
 });
@@ -81,7 +86,10 @@ function ApartmentPage() {
               { img: bedroomOne, label: "Bedroom One", desc: "Cream tufted queen bed with velvet headboard. Plenty of built-in storage, reading lamps, and a window that catches the morning sun through the garden foliage." },
               { img: bedroomTwo, label: "Bedroom Two", desc: "Navy velvet queen bed with matching linens. A quiet room tucked at the back of the apartment — dark, cool, and perfectly still for a good night's sleep." },
               { img: livingImg, label: "Living & Kitchen", desc: "Open-plan living with a boucle sofa, smart TV, and a kitchenette with microwave, two-hob cooktop, fridge, and everything you need for a relaxed self-catered stay." },
+              { img: bathroomImg, label: "Bathroom", desc: "A bright, tiled bathroom with a corner glass shower, vanity storage, and frosted window light. Fresh towels and toiletries are laid out for your arrival." },
               { img: gardenImg, label: "Courtyard Garden", desc: "A private, sun-dappled courtyard with tropical plantings — the perfect spot for an afternoon read or a glass of Hawke's Bay Syrah before heading out for dinner." },
+              { img: patioImg, label: "Outdoor Patio", desc: "A sheltered patio off the living room with a solid timber table, bench seating, and the barbecue — long summer dinners without leaving home." },
+              { img: pathwayImg, label: "Garden Pathway", desc: "Pavers and river stone wind past the palms to your own entrance, with a bench tucked at the end to catch the last of the evening sun." },
             ].map((room, i) => (
               <div key={room.label} className={`reveal-up reveal-stagger-${i + 1} grid gap-6 sm:gap-8 lg:grid-cols-2 lg:items-center`}>
                 {/* Image always first on mobile, alternates on desktop */}

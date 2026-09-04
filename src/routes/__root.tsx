@@ -11,6 +11,13 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import {
+  SITE_URL,
+  OG_IMAGE,
+  OG_IMAGE_WIDTH,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_ALT,
+} from "../lib/site";
 import heroImg from "../assets/hero-exterior.jpg";
 
 function NotFoundComponent() {
@@ -93,12 +100,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
       { name: "twitter:description", content: "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter." },
-      { property: "og:image", content: heroImg },
-      { name: "twitter:image", content: heroImg },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: OG_IMAGE_WIDTH },
+      { property: "og:image:height", content: OG_IMAGE_HEIGHT },
+      { property: "og:image:alt", content: OG_IMAGE_ALT },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:site_name", content: "The Vulcan, Ahuriri" },
+      { name: "twitter:image", content: OG_IMAGE },
+      { name: "twitter:image:alt", content: OG_IMAGE_ALT },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { rel: "icon", href: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { rel: "icon", href: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -118,10 +134,10 @@ const ldJson = {
   "@type": "LodgingBusiness",
   "name": "The Vulcan, Ahuriri",
   "description": "A self-contained 2-bedroom boutique apartment in Ahuriri, Napier — walking distance to the beach, restaurants, and the Art Deco quarter.",
-  "url": "https://ahuriri-haven-booking.vercel.app",
+  "url": SITE_URL,
   "telephone": "+64-6-000-0000",
   "email": "bookings@hhproperties.co.nz",
-  "image": heroImg,
+  "image": `${SITE_URL}${heroImg}`,
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "1 Vulcan Lane",
