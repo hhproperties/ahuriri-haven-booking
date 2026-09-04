@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRevealSection as useReveal } from "@/hooks/use-reveal";
 import { DayAtTheVulcan } from "@/components/DayAtTheVulcan";
 import { PropertyGallery } from "@/components/PropertyGallery";
+import { StickyBookingBar } from "@/components/StickyBookingBar";
 import heroImg from "@/assets/hero-exterior.jpg";
 import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
@@ -59,7 +60,7 @@ const nearby = [
 
 function Index() {
   return (
-    <div className="min-h-screen bg-[#EFE8DA]">
+    <div className="min-h-screen bg-[#EFE8DA] pb-[76px] md:pb-0">
       <SiteNav />
       <Hero />
       <CountingMoment />
@@ -72,6 +73,7 @@ function Index() {
       <ReviewsSection />
       <SpectacleBookingCTA />
       <SiteFooter />
+      <StickyBookingBar />
     </div>
   );
 }
