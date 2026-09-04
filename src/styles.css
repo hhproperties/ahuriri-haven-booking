@@ -669,3 +669,43 @@
    enhancements — the layout must hold where they are unsupported. */
 .display-balance { text-wrap: balance; }
 .body-pretty { text-wrap: pretty; }
+
+/* ── Hero scrim ──────────────────────────────────────────────────────────────
+   Two different problems at two different crops, so two different scrims.
+
+   Below md the text runs the full width of a narrow viewport, so a
+   left-to-right gradient leaves the right end of every line sitting on bright
+   sky. There the scrim is bottom-up and covers more height.
+
+   At md+ the text occupies the left half, so the scrim is directional: strong
+   at the left edge, gone by 74%, which leaves the sunset — the reason this
+   photograph works — untouched on the right. */
+.hero-scrim {
+  background: linear-gradient(
+    0deg,
+    rgba(26, 22, 20, 0.92) 0%,
+    rgba(26, 22, 20, 0.82) 34%,
+    rgba(26, 22, 20, 0.55) 58%,
+    rgba(26, 22, 20, 0.12) 82%,
+    rgba(26, 22, 20, 0) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-scrim {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(26, 22, 20, 0.86) 0%,
+        rgba(26, 22, 20, 0.78) 38%,
+        rgba(26, 22, 20, 0.45) 58%,
+        rgba(26, 22, 20, 0) 74%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(26, 22, 20, 0.8) 0%,
+        rgba(26, 22, 20, 0.42) 32%,
+        rgba(26, 22, 20, 0) 60%
+      );
+  }
+}

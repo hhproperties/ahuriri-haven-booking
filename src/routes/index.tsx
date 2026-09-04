@@ -115,28 +115,13 @@ function Hero() {
           left edge, gone by 65% width, which leaves the sunset — the reason this
           photo works — untouched on the right. The second gradient lifts the
           bottom for the CTA row. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(26,22,20,0.72) 0%, rgba(26,22,20,0.55) 35%, rgba(26,22,20,0) 65%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(0deg, rgba(26,22,20,0.72) 0%, rgba(26,22,20,0.28) 28%, rgba(26,22,20,0) 55%)",
-        }}
-      />
+      <div aria-hidden="true" className="hero-scrim absolute inset-0" />
       {/* Warm veil — wood/cream wash */}
       <div className="absolute inset-0 warm-veil" />
       <div className="grain absolute inset-0" />
 
       <div className="relative z-10 mx-auto flex h-full min-h-[85vh] min-h-screen-safe max-w-7xl flex-col justify-end px-5 pb-16 sm:px-8 sm:pb-20 lg:px-10 lg:pb-32">
-        <p className="font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#E8D5BC]">
+        <p className="font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#F4E7D6]">
           The Vulcan · Ahuriri
         </p>
 
