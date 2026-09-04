@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useRevealSection as useReveal } from "@/hooks/use-reveal";
+import { DayAtTheVulcan } from "@/components/DayAtTheVulcan";
 import heroImg from "@/assets/hero-exterior.jpg";
 import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
@@ -63,6 +64,7 @@ function Index() {
       <CountingMoment />
       <IntroSection />
       <ApartmentGallery />
+      <DayAtTheVulcan />
       <DarkAmenities />
       <CreamLocation />
       <DarkHosts />
