@@ -62,6 +62,15 @@
   --wood-light: oklch(0.65 0.055 60);  /* #BD8A5E */
   --matte: oklch(0.19 0.005 260);      /* #17181A */
   --gloss: oklch(0.12 0.003 260);      /* #0A0A0A */
+
+  /* Motion tokens — mirrored in src/lib/motion.ts. Nothing in the critical
+     path may exceed --motion-slow. See design-system/the-vulcan/MASTER.md. */
+  --motion-fast: 180ms;   /* hover, focus, button press */
+  --motion-base: 320ms;   /* reveals, fades, card lifts */
+  --motion-slow: 480ms;   /* hero, section transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --reveal-distance: 16px;
 }
 
 /* ── Brand utilities ─────────────────────────────────────────────────── */
@@ -566,5 +575,48 @@
     .wood-underline::after { display: none; }
     .arch-frame:hover { transform: none; }
     html { scroll-behavior: auto; }
+  }
+}
+
+/* ── Motion primitives ───────────────────────────────────────────────────
+   Used by <ScrollReveal>. Tokens live in :root; timings mirror src/lib/motion.ts.
+   Travel is --reveal-distance (16px), deliberately short — long travel distances
+   read as "template" and cost frame budget on the mid-range Android that makes up
+   most of this site's traffic. */
+
+.sr-reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition:
+    opacity var(--motion-base) var(--ease-out),
+    transform var(--motion-base) var(--ease-out);
+  transition-delay: var(--sr-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.sr-reveal[data-in-view="true"] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* ── Reduced-motion safety net ───────────────────────────────────────────
+   Backstop for any component that forgets to call usePrefersReducedMotion().
+   Kept outside @layer so it wins on specificity regardless of layer order. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Content must still land in its final state, never trapped mid-reveal. */
+  .sr-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition-delay: 0ms !important;
   }
 }
