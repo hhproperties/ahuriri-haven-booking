@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import heroImg from "@/assets/hero-exterior.jpg";
+import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/location")({
   component: LocationPage,
@@ -12,7 +13,8 @@ export const Route = createFileRoute("/location")({
       { name: "description", content: "1 Vulcan Lane, Ahuriri — a quiet harbourside street walking distance from Napier's beaches, restaurants, and Art Deco quarter." },
       { property: "og:title", content: "Location — The Vulcan, Ahuriri" },
       { property: "og:description", content: "A quiet lane in Ahuriri, Napier — five minutes from the beach, walking distance to waterfront restaurants and the Art Deco quarter." },
-      { property: "og:image", content: heroImg },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
 });

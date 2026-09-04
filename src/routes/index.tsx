@@ -5,11 +5,13 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-exterior.jpg";
-import gardenImg from "@/assets/garden-courtyard.jpg";
+import gardenImg from "@/assets/garden_courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
-import bedroomOne from "@/assets/bedroom-one.jpg";
-import bedroomTwo from "@/assets/bedroom-two.jpg";
-import cowImg from "@/assets/highland-cow.jpg";
+import bedroomOne from "@/assets/bedroom1.jpg";
+import bedroomTwo from "@/assets/bedroom2.jpg";
+import hostsImg from "@/assets/leahandwayne.jpg";
+import bathroomImg from "@/assets/bathroom.jpg";
+import patioImg from "@/assets/outdoorpatio1.jpg";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -265,7 +267,9 @@ function ApartmentGallery() {
     { src: bedroomOne, label: "Queen Bedroom One" },
     { src: bedroomTwo, label: "Queen Bedroom Two" },
     { src: livingImg, label: "Living & Kitchen" },
+    { src: bathroomImg, label: "Bathroom" },
     { src: gardenImg, label: "Garden Courtyard" },
+    { src: patioImg, label: "Outdoor Patio" },
   ];
 
   return (
@@ -407,7 +411,7 @@ function DarkHosts() {
             <div className="arch-accent" />
             <div className="arch-frame max-w-[280px] sm:max-w-full mx-auto">
               <img
-                src={cowImg}
+                src={hostsImg}
                 alt="Leah and Wayne — your hosts"
                 loading="lazy"
                 decoding="async"

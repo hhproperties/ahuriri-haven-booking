@@ -412,6 +412,9 @@
   .reveal-stagger-2 { transition-delay: 200ms; }
   .reveal-stagger-3 { transition-delay: 300ms; }
   .reveal-stagger-4 { transition-delay: 400ms; }
+  .reveal-stagger-5 { transition-delay: 500ms; }
+  .reveal-stagger-6 { transition-delay: 600ms; }
+  .reveal-stagger-7 { transition-delay: 700ms; }
 
   /* Arched portrait frames */
   .arch-frame {

@@ -4,6 +4,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { Testimonial } from "@/components/Testimonial";
 import heroImg from "@/assets/hero-exterior.jpg";
+import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/reviews")({
   component: ReviewsPage,
@@ -13,7 +14,8 @@ export const Route = createFileRoute("/reviews")({
       { name: "description", content: "Read what guests say about their stay at The Vulcan, Ahuriri — a boutique 2-bedroom retreat in Napier's harbourside village." },
       { property: "og:title", content: "Guest Reviews — The Vulcan, Ahuriri" },
       { property: "og:description", content: "Read genuine guest reviews of The Vulcan, Ahuriri — a 2-bedroom boutique retreat in Ahuriri, Napier." },
-      { property: "og:image", content: heroImg },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
 });

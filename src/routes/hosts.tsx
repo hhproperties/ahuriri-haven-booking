@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import cowImg from "@/assets/highland-cow.jpg";
+import hostsImg from "@/assets/leahandwayne.jpg";
 import heroImg from "@/assets/hero-exterior.jpg";
+import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/hosts")({
   component: HostsPage,
@@ -13,7 +14,8 @@ export const Route = createFileRoute("/hosts")({
       { name: "description", content: "Meet Leah and Wayne — your hosts at The Vulcan, Ahuriri. A quiet, warm welcome to our harbourside home in Napier." },
       { property: "og:title", content: "Meet Your Hosts — The Vulcan, Ahuriri" },
       { property: "og:description", content: "Leah and Wayne welcome you to The Vulcan — their private retreat in Ahuriri, Napier." },
-      { property: "og:image", content: cowImg },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
 });
@@ -58,7 +60,7 @@ function HostsPage() {
               <div className="arch-frame-group relative inline-block mx-auto">
                 <div className="arch-accent" />
                 <div className="arch-frame max-w-[280px] mx-auto lg:max-w-full">
-                  <img src={cowImg} alt="Leah and Wayne" loading="lazy" decoding="async" className="h-full w-full object-cover" width={800} height={1067} />
+                  <img src={hostsImg} alt="Leah and Wayne" loading="lazy" decoding="async" className="h-full w-full object-cover" width={800} height={1067} />
                 </div>
               </div>
             </div>
