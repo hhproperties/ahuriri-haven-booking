@@ -91,3 +91,51 @@ it needs a human eye on a real screen, not a computed ratio.
 - LCP, INP (cannot be measured in this container — see above)
 - 200% browser zoom reflow
 - Real-device touch drag on the carousel
+
+---
+
+# Visual refinement pass — measurements (2026-09-04)
+
+## Contrast
+
+Hero text over photography, measured by screenshotting with the text hidden and
+sampling the lightest pixel inside each string's **glyph bounds** (Range rects),
+not its element box — the h1's box is `max-w-5xl` and extends well past the text,
+which made an earlier attempt at this measurement read as failing when it wasn't.
+
+|  | 375 | 768 | 1024 | 1440 |
+|---|---|---|---|---|
+| eyebrow | 5.29 | 9.40 | 9.12 | 9.65 |
+| headline | 5.69 | 8.18 | 6.50 | 4.88 |
+| paragraph | 10.30 | 5.09 | 7.33 | 10.18 |
+| CTAs | 11.44+ | 10.81+ | 11.93+ | 12.86+ |
+
+All ≥4.5:1. Full-page audit across `/`, `/location`, `/apartment`, `/amenities`
+at 375 and 1440: **117 combinations, 0 failures.**
+
+## Other gates
+
+| Check | Result |
+|---|---|
+| Horizontal scroll at 375/768/1024/1440, home + location | None |
+| CLS at 375px | 0.0000 (unchanged) |
+| Keyboard path | logo → 6 nav links → Book Now → hero CTAs → gallery tiles. Intact. |
+| Reduced motion after the nav change | 0 elements stuck below full opacity; marquee animation `none`; hero CTA opacity 1 |
+
+## JS budget — now ~8KB over
+
+| | bytes gzipped |
+|---|---|
+| Pre-motion baseline | 173,932 |
+| After motion pass | 220,855 |
+| After this pass | 223,217 |
+| Budget | 40,960 over baseline |
+| **Over by** | **~8,325** |
+
+This pass added 2,362 bytes: the twelve lucide amenity icons. They are cheap
+because `createLucideIcon` was already loaded for the carousel and dialog.
+
+## Not measured
+
+LCP and INP still cannot be measured in this container — see the section above.
+They need a Vercel preview deploy.
