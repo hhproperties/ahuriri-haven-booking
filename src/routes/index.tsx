@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useRevealSection as useReveal } from "@/hooks/use-reveal";
 import { DayAtTheVulcan } from "@/components/DayAtTheVulcan";
+import { PropertyGallery } from "@/components/PropertyGallery";
 import heroImg from "@/assets/hero-exterior.jpg";
 import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
@@ -250,28 +251,7 @@ function ApartmentGallery() {
             Every corner, <span className="word-wood">considered.</span>
           </h2>
         </div>
-        <div className="mt-10 sm:mt-16 grid gap-4 sm:gap-6 md:grid-cols-2">
-          {items.map((it, i) => (
-            <figure
-              key={it.label}
-              className={`reveal-up reveal-stagger-${i + 1} group relative aspect-[4/5] overflow-hidden`}
-            >
-              <img
-                src={it.src}
-                alt={it.label}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover hero-image-grade transition-transform duration-[1200ms] ease-out hover:scale-105"
-              />
-              <figcaption className="absolute bottom-0 left-0 right-0 flex items-center gap-3 bg-[#EFE8DA] px-4 py-2.5 sm:px-5 sm:py-3">
-                <span className="h-px w-6 sm:w-8 bg-[#6B4630]" />
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]">
-                  {it.label}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <PropertyGallery items={items} className="mt-10 sm:mt-16" />
       </div>
     </section>
   );
