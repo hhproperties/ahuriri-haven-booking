@@ -98,15 +98,21 @@ function BookingForm() {
   const { data: blocked = [] } = useQuery({
     queryKey: ["availability"],
     queryFn: async () => {
-      const [av, ab] = await Promise.all([
+      const [av, ab, gc] = await Promise.all([
         supabase.from("booking_availability").select("check_in, check_out"),
         supabase.from("airbnb_blocked_dates").select("start_date, end_date"),
+        supabase
+          .from("google_calendar_events" as unknown as Parameters<typeof supabase.from>[0])
+          .select("start_date, end_date"),
       ]);
       const ranges: { start: string; end: string }[] = [];
       av.data?.forEach((r) => {
         if (r.check_in && r.check_out) ranges.push({ start: r.check_in, end: r.check_out });
       });
       ab.data?.forEach((r) => ranges.push({ start: r.start_date, end: r.end_date }));
+      (gc.data as unknown as { start_date: string; end_date: string }[] | null)?.forEach((r) =>
+        ranges.push({ start: r.start_date, end: r.end_date })
+      );
       return ranges;
     },
   });
@@ -158,7 +164,7 @@ function BookingForm() {
     try {
       const ref = `VULCAN-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
       const hold = new Date(Date.now() + 48 * 3600 * 1000).toISOString();
-      const { error: insErr } = await supabase.from("bookings").insert({
+      const { data: inserted, error: insErr } = await supabase.from("bookings").insert({
         booking_reference: ref,
         guest_name: name.trim(),
         email: email.trim(),
@@ -171,8 +177,21 @@ function BookingForm() {
         payment_method: settings?.payment_mode ?? "bank_transfer",
         status: "pending_payment",
         payment_hold_expires_at: hold,
-      });
-      if (insErr) throw insErr;
+      }).select("id").single();
+      if (insErr || !inserted) throw insErr ?? new Error("Booking insert failed");
+
+      if (settings?.payment_mode === "stripe") {
+        const { data: sessionData, error: fnErr } = await supabase.functions.invoke("create-checkout-session", {
+          body: { bookingId: inserted.id },
+        });
+        if (fnErr) throw fnErr;
+        if (sessionData?.url) {
+          window.location.href = sessionData.url;
+          return;
+        }
+        throw new Error("No checkout URL returned");
+      }
+
       setResult({
         reference: ref,
         total,
