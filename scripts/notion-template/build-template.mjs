@@ -21,10 +21,12 @@
 //   node build-template.mjs --parent <page_id>  # build under an existing page
 // -----------------------------------------------------------------------------
 
-const __dirname = new URL('.', import.meta.url).pathname;
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Allow top-level await for the guarded dynamic import of the SDK.
 let Client = null;
