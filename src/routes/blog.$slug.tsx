@@ -1,7 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { SiteNav } from "@/components/site-nav";
-import { SiteFooter } from "@/components/site-footer";
 import { BlogHeader } from "@/components/blog-header";
 import { BlogBody, ImageHeader } from "@/components/blog/content";
 import { Reveal, WoodDivider } from "@/components/blog/motion";
@@ -107,9 +105,7 @@ function BlogPost() {
   const accentWord = accentWordMap[slug] ?? "";
 
   return (
-    <div className="min-h-screen bg-[#EFE8DA]">
-      <SiteNav />
-
+    <>
       {/* ── Header per variant ── */}
 
       {/* Variant 9 — Statement Opener: no image, full-viewport matte band */}
@@ -317,7 +313,6 @@ function BlogPost() {
         </>
       )}
 
-      <SiteFooter />
-    </div>
+    </>
   );
 }

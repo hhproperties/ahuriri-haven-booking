@@ -22,6 +22,7 @@ import { Route as ApartmentRouteImport } from './routes/apartment'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BookSuccessRouteImport } from './routes/book.success'
 import { Route as BookCancelRouteImport } from './routes/book.cancel'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -91,6 +92,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
 const BookSuccessRoute = BookSuccessRouteImport.update({
   id: '/success',
   path: '/success',
@@ -124,13 +130,13 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/book/cancel': typeof BookCancelRoute
   '/book/success': typeof BookSuccessRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
-  '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRouteWithChildren
   '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
@@ -142,6 +148,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/book/cancel': typeof BookCancelRoute
   '/book/success': typeof BookSuccessRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,6 +168,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/book/cancel': typeof BookCancelRoute
   '/book/success': typeof BookSuccessRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,13 +189,13 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/book/cancel'
     | '/book/success'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/amenities'
     | '/apartment'
-    | '/blog'
     | '/book'
     | '/cancellation'
     | '/hosts'
@@ -199,6 +207,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/book/cancel'
     | '/book/success'
+    | '/blog'
   id:
     | '__root__'
     | '/'
@@ -217,6 +226,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/book/cancel'
     | '/book/success'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -328,6 +338,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/book/success': {
       id: '/book/success'
       path: '/success'
@@ -354,10 +371,12 @@ declare module '@tanstack/react-router' {
 
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
