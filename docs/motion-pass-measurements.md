@@ -68,3 +68,26 @@ currently pays for three icons. It is not worth removing: feature 6 (amenity
 tiles) needs lucide by name in the brief, so it would come straight back. The
 honest position is that this pass is 5.8KB over and feature 6 will need a real
 budget conversation, not that the budget was met.
+
+## Accessibility gate
+
+Measured on the homepage in Chromium.
+
+| Check | Result |
+|---|---|
+| Text contrast | **Pass.** 23 distinct colour/size/background combinations, 0 failures. Tightest is 5.89:1 against a 4.5 requirement. |
+| Keyboard path | **Pass.** Tab order runs logo → menu → hero CTAs → gallery tiles → carousel dots, with no focus trap and a visible ring at every stop. Lightbox: Enter opens, arrows move, Escape closes, focus returns to the tile that opened it. |
+| Images have alt | **Pass.** 0 images without an alt attribute. Sticky scrollytelling images carry empty alt inside an aria-hidden column. |
+| Horizontal scroll at 375px | **Pass.** None. |
+| Reduced motion | **Pass.** Verified the hero CTA is at opacity 1 with `reducedMotion: "reduce"`; ScrollReveal renders a plain element and the CSS safety net zeroes any remaining transition. |
+| Emoji as icons | **One pre-existing instance.** `✦` (U+2726) is used as a separator in the marquee ticker. Decorative, not an icon, and not introduced by this pass — but it is in the dingbats block and the checklist forbids it, so it is worth replacing when the marquee is touched in the shell work. |
+
+Not machine-checked: text set over photography (the hero) has no opaque ancestor
+to measure against. It carries a bottom-heavy gradient scrim plus a text shadow;
+it needs a human eye on a real screen, not a computed ratio.
+
+## Still to verify on a preview deploy
+
+- LCP, INP (cannot be measured in this container — see above)
+- 200% browser zoom reflow
+- Real-device touch drag on the carousel
