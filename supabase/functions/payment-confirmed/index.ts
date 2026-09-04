@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 import { corsHeaders, handleCors } from "../_shared/cors.ts";
-import { sendEmail, emailLayout } from "../_shared/resend.ts";
+import { sendEmail, emailLayout, sendAdminNotification } from "../_shared/resend.ts";
 
 serve(async (req: Request) => {
   const cors = handleCors(req);
@@ -71,6 +71,9 @@ serve(async (req: Request) => {
     `);
 
     const result = await sendEmail({ to: booking.email, subject: `Booking confirmed — ${reference}`, html });
+
+    // Internal owner notification
+    await sendAdminNotification(booking, "confirmed");
 
     await supabase.from("email_log").insert({
       booking_id: bookingId,
