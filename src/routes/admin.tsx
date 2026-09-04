@@ -2,7 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -43,6 +45,10 @@ type BookingRow = {
   status: string;
   payment_method: string;
   payment_reference: string | null;
+  stripe_session_id?: string | null;
+  stripe_payment_status?: string | null;
+  sync_status?: string | null;
+  google_calendar_event_id?: string | null;
   confirmed_at: string | null;
   cancelled_at: string | null;
   payment_hold_expires_at: string | null;
@@ -81,6 +87,8 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [resetMsg, setResetMsg] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,6 +101,25 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
       return;
     }
     onLogin();
+  }
+
+  async function handleForgotPassword() {
+    setError(null);
+    setResetMsg(null);
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Enter your email address first.");
+      return;
+    }
+    setResetting(true);
+    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${SITE_URL}/reset-password`,
+    });
+    setResetting(false);
+    if (resetErr) {
+      setError(resetErr.message);
+    } else {
+      setResetMsg("Password reset email sent — check your inbox.");
+    }
   }
 
   return (
@@ -134,6 +161,15 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            disabled={resetting}
+            className="w-full text-center text-[11px] uppercase tracking-[0.18em] text-saddle underline-offset-4 hover:underline disabled:opacity-50"
+          >
+            {resetting ? "Sending…" : "Forgot password?"}
+          </button>
+          {resetMsg && <p className="text-sm text-emerald-600">{resetMsg}</p>}
         </form>
       </div>
     </div>
@@ -409,6 +445,11 @@ function BookingsTab() {
                     <td className="py-3 pr-4 font-display text-base text-ink">{formatNZD(b.total_amount_cents)}</td>
                     <td className="py-3 pr-4">
                       <StatusPill status={b.status} />
+                      {b.payment_method === "stripe" && b.stripe_payment_status && (
+                        <div className="mt-1 text-[10px] text-muted-foreground">
+                          Stripe: {b.stripe_payment_status}
+                        </div>
+                      )}
                     </td>
                     <td className="py-3 pr-4 text-[11px] text-muted-foreground">{toLocalDateTime(b.created_at)}</td>
                     <td className="py-3 pr-4">
@@ -642,6 +683,7 @@ function SettingsTab() {
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ["payment_settings"],
@@ -655,6 +697,9 @@ function SettingsTab() {
         particulars_format: string;
         payment_mode: "bank_transfer" | "stripe";
         airbnb_ical_url: string | null;
+        google_calendar_ical_url: string | null;
+        google_calendar_id: string | null;
+        combined_ical_export_enabled: boolean;
       } | null;
     },
   });
@@ -667,6 +712,9 @@ function SettingsTab() {
     particulars_format: "",
     payment_mode: "bank_transfer" as "bank_transfer" | "stripe",
     airbnb_ical_url: "",
+    google_calendar_ical_url: "",
+    google_calendar_id: "",
+    combined_ical_export_enabled: false,
   });
 
   useEffect(() => {
@@ -679,6 +727,9 @@ function SettingsTab() {
         particulars_format: settings.particulars_format,
         payment_mode: settings.payment_mode,
         airbnb_ical_url: settings.airbnb_ical_url ?? "",
+        google_calendar_ical_url: settings.google_calendar_ical_url ?? "",
+        google_calendar_id: settings.google_calendar_id ?? "",
+        combined_ical_export_enabled: settings.combined_ical_export_enabled,
       });
     }
   }, [settings]);
@@ -695,8 +746,11 @@ function SettingsTab() {
       particulars_format: form.particulars_format,
       payment_mode: form.payment_mode,
       airbnb_ical_url: form.airbnb_ical_url || null,
+      google_calendar_ical_url: form.google_calendar_ical_url || null,
+      google_calendar_id: form.google_calendar_id || null,
+      combined_ical_export_enabled: form.combined_ical_export_enabled,
       updated_at: new Date().toISOString(),
-    }).eq("id", 1);
+    } as unknown as Database["public"]["Tables"]["payment_settings"]["Update"]).eq("id", 1);
     setSaving(false);
     if (error) {
       setSavedMsg(`Error: ${error.message}`);
@@ -706,6 +760,15 @@ function SettingsTab() {
       setTimeout(() => setSavedMsg(null), 3000);
     }
   }
+
+  async function runSync(fn: string, label: string) {
+    setSyncMsg(`Syncing ${label}…`);
+    const { error } = await supabase.functions.invoke(fn, { body: {} });
+    setSyncMsg(error ? `Sync failed: ${error.message}` : `${label} synced.`);
+    setTimeout(() => setSyncMsg(null), 4000);
+  }
+
+  const icalExportUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ical-export`;
 
   if (isLoading) return <p className="text-sm text-muted-foreground">Loading settings…</p>;
 
@@ -750,6 +813,41 @@ function SettingsTab() {
             Paste your Airbnb iCal export URL to sync blocked dates. Bookings from this site take priority.
           </p>
         </div>
+      </div>
+
+      <div className="border-t border-border pt-8">
+        <p className="eyebrow">Google Calendar</p>
+        <div className="mt-4 grid gap-6 sm:grid-cols-2">
+          <Field label="Google Calendar iCal URL (read)">
+            <input value={form.google_calendar_ical_url} onChange={(e) => setForm(f => ({ ...f, google_calendar_ical_url: e.target.value }))} className="input" placeholder="https://calendar.google.com/calendar/ical/…/basic.ics" />
+          </Field>
+          <Field label="Google Calendar ID (write)">
+            <input value={form.google_calendar_id} onChange={(e) => setForm(f => ({ ...f, google_calendar_id: e.target.value }))} className="input" placeholder="primary" />
+          </Field>
+        </div>
+        <label className="mt-4 flex items-center gap-3 text-sm text-muted-foreground">
+          <input type="checkbox" checked={form.combined_ical_export_enabled} onChange={(e) => setForm(f => ({ ...f, combined_ical_export_enabled: e.target.checked }))} />
+          Export combined iCal feed (for Airbnb import)
+        </label>
+      </div>
+
+      <div className="border-t border-border pt-8">
+        <p className="eyebrow">Calendar sync &amp; export</p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button type="button" onClick={() => runSync("ical-fetch", "Airbnb calendar")} className="border border-ink px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-ink hover:bg-ink hover:text-cream transition-colors">
+            Sync Airbnb now
+          </button>
+          <button type="button" onClick={() => runSync("google-calendar-read", "Google Calendar")} className="border border-ink px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-ink hover:bg-ink hover:text-cream transition-colors">
+            Sync Google now
+          </button>
+          <a href={icalExportUrl} target="_blank" rel="noreferrer" className="border border-ink bg-ink px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-cream hover:bg-saddle transition-colors">
+            Open iCal export
+          </a>
+        </div>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          Paste this URL into Airbnb → Calendar → Import to block booked dates: <span className="font-mono break-all">{icalExportUrl}</span>
+        </p>
+        {syncMsg && <p className="mt-3 text-sm text-emerald-700">{syncMsg}</p>}
       </div>
 
       {savedMsg && (

@@ -1,0 +1,17 @@
+{
+  "name": "ahuriri-notion-host-template",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Builds the AirBnB-host style Notion template (Properties, Booking, Guest, Task, Inventory, Finance, Vendor) in your Notion workspace using the official Notion SDK.",
+  "scripts": {
+    "build": "node build-template.mjs",
+    "dry-run": "node build-template.mjs --dry-run"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15"
+  }
+}

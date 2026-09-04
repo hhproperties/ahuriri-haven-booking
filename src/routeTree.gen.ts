@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LocationRouteImport } from './routes/location'
 import { Route as HostsRouteImport } from './routes/hosts'
@@ -21,6 +22,8 @@ import { Route as ApartmentRouteImport } from './routes/apartment'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookSuccessRouteImport } from './routes/book.success'
+import { Route as BookCancelRouteImport } from './routes/book.cancel'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const TermsRoute = TermsRouteImport.update({
@@ -31,6 +34,11 @@ const TermsRoute = TermsRouteImport.update({
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -83,6 +91,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookSuccessRoute = BookSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => BookRoute,
+} as any)
+const BookCancelRoute = BookCancelRouteImport.update({
+  id: '/cancel',
+  path: '/cancel',
+  getParentRoute: () => BookRoute,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -95,14 +113,17 @@ export interface FileRoutesByFullPath {
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
-  '/book': typeof BookRoute
+  '/book': typeof BookRouteWithChildren
   '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/book/cancel': typeof BookCancelRoute
+  '/book/success': typeof BookSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,14 +131,17 @@ export interface FileRoutesByTo {
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
-  '/book': typeof BookRoute
+  '/book': typeof BookRouteWithChildren
   '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/book/cancel': typeof BookCancelRoute
+  '/book/success': typeof BookSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,14 +150,17 @@ export interface FileRoutesById {
   '/amenities': typeof AmenitiesRoute
   '/apartment': typeof ApartmentRoute
   '/blog': typeof BlogRouteWithChildren
-  '/book': typeof BookRoute
+  '/book': typeof BookRouteWithChildren
   '/cancellation': typeof CancellationRoute
   '/hosts': typeof HostsRoute
   '/location': typeof LocationRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/book/cancel': typeof BookCancelRoute
+  '/book/success': typeof BookSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -148,9 +175,12 @@ export interface FileRouteTypes {
     | '/hosts'
     | '/location'
     | '/privacy'
+    | '/reset-password'
     | '/reviews'
     | '/terms'
     | '/blog/$slug'
+    | '/book/cancel'
+    | '/book/success'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,9 +193,12 @@ export interface FileRouteTypes {
     | '/hosts'
     | '/location'
     | '/privacy'
+    | '/reset-password'
     | '/reviews'
     | '/terms'
     | '/blog/$slug'
+    | '/book/cancel'
+    | '/book/success'
   id:
     | '__root__'
     | '/'
@@ -178,9 +211,12 @@ export interface FileRouteTypes {
     | '/hosts'
     | '/location'
     | '/privacy'
+    | '/reset-password'
     | '/reviews'
     | '/terms'
     | '/blog/$slug'
+    | '/book/cancel'
+    | '/book/success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,11 +225,12 @@ export interface RootRouteChildren {
   AmenitiesRoute: typeof AmenitiesRoute
   ApartmentRoute: typeof ApartmentRoute
   BlogRoute: typeof BlogRouteWithChildren
-  BookRoute: typeof BookRoute
+  BookRoute: typeof BookRouteWithChildren
   CancellationRoute: typeof CancellationRoute
   HostsRoute: typeof HostsRoute
   LocationRoute: typeof LocationRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ReviewsRoute: typeof ReviewsRoute
   TermsRoute: typeof TermsRoute
 }
@@ -212,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/reviews'
       fullPath: '/reviews'
       preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -284,6 +328,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book/success': {
+      id: '/book/success'
+      path: '/success'
+      fullPath: '/book/success'
+      preLoaderRoute: typeof BookSuccessRouteImport
+      parentRoute: typeof BookRoute
+    }
+    '/book/cancel': {
+      id: '/book/cancel'
+      path: '/cancel'
+      fullPath: '/book/cancel'
+      preLoaderRoute: typeof BookCancelRouteImport
+      parentRoute: typeof BookRoute
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -304,17 +362,30 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface BookRouteChildren {
+  BookCancelRoute: typeof BookCancelRoute
+  BookSuccessRoute: typeof BookSuccessRoute
+}
+
+const BookRouteChildren: BookRouteChildren = {
+  BookCancelRoute: BookCancelRoute,
+  BookSuccessRoute: BookSuccessRoute,
+}
+
+const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AmenitiesRoute: AmenitiesRoute,
   ApartmentRoute: ApartmentRoute,
   BlogRoute: BlogRouteWithChildren,
-  BookRoute: BookRoute,
+  BookRoute: BookRouteWithChildren,
   CancellationRoute: CancellationRoute,
   HostsRoute: HostsRoute,
   LocationRoute: LocationRoute,
   PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ReviewsRoute: ReviewsRoute,
   TermsRoute: TermsRoute,
 }
