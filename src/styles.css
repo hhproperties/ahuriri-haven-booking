@@ -624,6 +624,18 @@
   will-change: auto;
 }
 
+.sr-fade {
+  opacity: 0;
+  transition: opacity var(--motion-base) var(--ease-out);
+  transition-delay: var(--sr-delay, 0ms);
+  will-change: opacity;
+}
+
+.sr-fade[data-in-view="true"] {
+  opacity: 1;
+  will-change: auto;
+}
+
 /* ── Reduced-motion safety net ───────────────────────────────────────────
    Backstop for any component that forgets to call usePrefersReducedMotion().
    Kept outside @layer so it wins on specificity regardless of layer order. */
@@ -638,7 +650,8 @@
   }
 
   /* Content must still land in its final state, never trapped mid-reveal. */
-  .sr-reveal {
+  .sr-reveal,
+  .sr-fade {
     opacity: 1 !important;
     transform: none !important;
     transition-delay: 0ms !important;
@@ -649,6 +662,44 @@
 /* ── Spacing scale utilities (P2.1) ─────────────────────────────────────── */
 .section-y { padding-top: var(--section-y); padding-bottom: var(--section-y); }
 .section-y-tight { padding-top: var(--section-y-tight); padding-bottom: var(--section-y-tight); }
+.section-y-top { padding-top: var(--section-y); }
+
+/* ── Reviews — editorial multi-column masonry ───────────────────────────
+   CSS columns so variable quote heights become a feature. The column rules
+   do all the separating — no card chrome. */
+.reviews-grid {
+  columns: 3;
+  column-gap: 56px;
+  column-rule: 1px solid rgba(74, 55, 40, 0.12);
+}
+.reviews-grid > * {
+  break-inside: avoid;
+  margin-bottom: 56px;
+}
+
+/* Curly quotes are supplied by CSS, not the data — they can't drift. */
+.review-quote::before { content: "\201C"; }
+.review-quote::after { content: "\201D"; }
+
+@media (max-width: 1023px) {
+  .reviews-grid { columns: 2; }
+}
+
+@media (max-width: 767px) {
+  .reviews-grid {
+    columns: 1;
+    column-rule: none;
+  }
+  .reviews-grid > * {
+    margin-bottom: 0;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(74, 55, 40, 0.12);
+  }
+  .reviews-grid > *:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
 .stack-lg { margin-top: var(--stack-lg); }
 .stack-md { margin-top: var(--stack-md); }
 
