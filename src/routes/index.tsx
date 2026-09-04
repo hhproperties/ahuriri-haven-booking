@@ -210,7 +210,7 @@ function CountingMoment() {
           {[
             { target: "2", label: "Bedrooms" },
             { target: "4", label: "Guests" },
-            { target: "5", label: "Min walk to beach" },
+            { target: "5", label: "Walk to beach" },
             { target: "100", label: "5-Star Reviews" },
           ].map((s, i) => (
             <div key={s.label} className={`reveal-up reveal-stagger-${i + 1} text-center`}>
@@ -218,7 +218,7 @@ function CountingMoment() {
                 <span className="count-up" data-target={s.target}>0</span>
                 {s.label.includes("Min") || s.label.includes("%") ? "" : ""}
               </p>
-              {s.label.includes("Min") && <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num"> min</span>}
+              {s.label === "Walk to beach" && <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num"> min</span>}
               {s.label.includes("%") || s.label === "5-Star Reviews" ? <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num">%</span> : null}
               {s.label !== "5-Star Reviews" && (
                 <p className="mt-1 sm:mt-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
