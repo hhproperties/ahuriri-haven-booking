@@ -71,6 +71,22 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --reveal-distance: 16px;
+
+  /* Spacing scale. Every section uses these — no one-off py-* values.
+     See design-system/the-vulcan/MASTER.md. Mobile first, desktop at md. */
+  --section-y: 72px;
+  --section-y-tight: 56px;
+  --stack-lg: 32px;
+  --stack-md: 20px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-y: 140px;
+    --section-y-tight: 96px;
+    --stack-lg: 48px;
+    --stack-md: 24px;
+  }
 }
 
 /* ── Brand utilities ─────────────────────────────────────────────────── */
@@ -624,3 +640,26 @@
     transition-delay: 0ms !important;
   }
 }
+
+
+/* ── Spacing scale utilities (P2.1) ─────────────────────────────────────── */
+.section-y { padding-top: var(--section-y); padding-bottom: var(--section-y); }
+.section-y-tight { padding-top: var(--section-y-tight); padding-bottom: var(--section-y-tight); }
+.stack-lg { margin-top: var(--stack-lg); }
+.stack-md { margin-top: var(--stack-md); }
+
+/* ── Light → dark boundary (P2.3) ───────────────────────────────────────────
+   One treatment, used for every cream→matte boundary on the site: a 96px
+   vertical gradient. Not a decorative divider graphic. */
+.to-dark::before {
+  content: "";
+  display: block;
+  height: 96px;
+  margin-top: calc(var(--section-y) * -1);
+  background: linear-gradient(180deg, #EFE8DA 0%, #17181A 100%);
+}
+
+/* Display headings balance; body copy uses pretty. Both are progressive
+   enhancements — the layout must hold where they are unsupported. */
+.display-balance { text-wrap: balance; }
+.body-pretty { text-wrap: pretty; }

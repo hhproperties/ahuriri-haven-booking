@@ -58,7 +58,7 @@ function ApartmentPage() {
       </section>
 
       {/* Content */}
-      <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-32">
+      <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-5xl space-y-10 sm:space-y-12">
           {/* Description */}
           <div className="grid gap-6 sm:gap-12 lg:grid-cols-2">

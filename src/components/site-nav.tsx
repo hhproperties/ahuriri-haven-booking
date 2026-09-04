@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logoImg from "@/assets/vulcan-retreat-logo.png";
+import logoLightImg from "@/assets/vulcan-retreat-logo-dark.png";
 
 const links = [
   { to: "/apartment", label: "Apartment" },
@@ -11,7 +12,14 @@ const links = [
   { to: "/blog", label: "Blog" },
 ];
 
-export function SiteNav() {
+/**
+ * @param overlay Render transparent over a full-bleed hero instead of in a solid
+ *   cream band. Past 80px of scroll the cream surface and walnut link colour
+ *   fade in. Book Now stays solid walnut in both states so it never loses
+ *   prominence. Pages using this must own the top of their own layout — no
+ *   spacer is rendered.
+ */
+export function SiteNav({ overlay = false }: { overlay?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const prevScrollY = useRef(0);
@@ -42,7 +50,7 @@ export function SiteNav() {
       }
       // Book Now gains a surface once past the hero. Surface only — no size or
       // position change, so nothing in the nav reflows.
-      setPastHero(y > window.innerHeight * 0.85);
+      setPastHero(y > 80);
       prevScrollY.current = y;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -52,11 +60,15 @@ export function SiteNav() {
   return (
     <>
       {/* ── Fixed cream header ── */}
-      <header className="fixed inset-x-0 top-0 z-50 bg-[#EFE8DA]">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-[var(--motion-base)] ${
+          overlay && !pastHero ? "bg-transparent" : "bg-[#EFE8DA]"
+        }`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2.5 sm:px-8 lg:px-10 lg:py-3">
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img
-              src={logoImg}
+              src={overlay && !pastHero ? logoLightImg : logoImg}
               alt="The Vulcan, Ahuriri"
               className="h-12 w-auto sm:h-14 lg:h-20"
               width={120}
@@ -69,7 +81,11 @@ export function SiteNav() {
               <Link
                 key={l.to}
                 to={l.to}
-                className={`wood-underline text-[11px] uppercase tracking-[0.24em] text-[#17181A] transition-colors hover:text-[#6B4630] tap-target inline-flex items-center ${
+                className={`wood-underline text-[11px] uppercase tracking-[0.24em] transition-colors tap-target inline-flex items-center ${
+                  overlay && !pastHero
+                    ? "text-[#EFE8DA] hover:text-[#E8D5BC]"
+                    : "text-[#17181A] hover:text-[#6B4630]"
+                } ${
                   location.pathname === l.to || (l.to !== "/" && location.pathname.startsWith(l.to))
                     ? "is-active"
                     : ""
@@ -171,8 +187,9 @@ export function SiteNav() {
         </div>
       )}
 
-      {/* Spacer to push content below fixed header + ticker */}
-      <div className="h-[76px] sm:h-[88px]" />
+      {/* Spacer to push content below the fixed header. Not rendered when the
+          nav overlays a hero — that page owns the top of its own layout. */}
+      {!overlay && <div className="h-[76px] sm:h-[88px]" />}
     </>
   );
 }
