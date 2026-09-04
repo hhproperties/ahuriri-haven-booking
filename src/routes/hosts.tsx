@@ -52,7 +52,7 @@ function HostsPage() {
       </section>
 
       {/* Dark band content */}
-      <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-32">
+      <section className="bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-5xl space-y-14 sm:space-y-20">
           {/* Bio */}
           <div className="grid gap-8 sm:gap-12 lg:grid-cols-5 lg:items-center">
@@ -65,10 +65,10 @@ function HostsPage() {
               </div>
             </div>
             <div className="reveal-up reveal-stagger-1 lg:col-span-3">
-              <p className="text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
+              <p className="text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/75">
                 We're Leah and Wayne — we've spent years travelling the world, from Ahuriri to the pyramids, staying in other people's homes. Now we love doing the same for guests in ours.
               </p>
-              <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/75">
                 The Vulcan is the apartment beneath us: five minutes from the beach, walking distance to our favourite local restaurants, and set up exactly how we'd want to stay ourselves. The courtyard is the bit we're proudest of. We're usually just upstairs if you need anything, and always happy to point you toward the best flat white in town.
               </p>
               <blockquote className="mt-6 sm:mt-10 border-l-2 border-[#BD8A5E] pl-4 sm:pl-6 font-[Fraunces] text-lg sm:text-2xl italic leading-snug text-[#BD8A5E]">
@@ -87,7 +87,7 @@ function HostsPage() {
             ].map((item, i) => (
               <div key={item.title} className={`reveal-up reveal-stagger-${i + 1}`}>
                 <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E] mb-3 sm:mb-4">{item.title}</p>
-                <p className="text-xs sm:text-sm leading-relaxed font-[Archivo] text-[#EFE8DA]/60">{item.body}</p>
+                <p className="text-xs sm:text-sm leading-relaxed font-[Archivo] text-[#EFE8DA]/75">{item.body}</p>
               </div>
             ))}
           </div>

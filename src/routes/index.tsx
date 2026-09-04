@@ -1,6 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import {
+  BedDouble,
+  CarFront,
+  CookingPot,
+  DoorOpen,
+  Flame,
+  Footprints,
+  KeyRound,
+  ShowerHead,
+  Sofa,
+  Trees,
+  Users,
+  Wifi,
+} from "lucide-react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,18 +46,18 @@ export const Route = createFileRoute("/")({
 });
 
 const amenities = [
-  { title: "Two queen bedrooms", sub: "Both open to the garden" },
-  { title: "One bathroom", sub: "Walk-in corner shower" },
-  { title: "Fully self-contained", sub: "Private entrance" },
-  { title: "Kitchenette", sub: "Two-hob cooktop · microwave · fridge" },
-  { title: "Open-plan living", sub: "Smart TV, dining for four" },
-  { title: "Covered patio & BBQ", sub: "Weber barbecue, table for six" },
-  { title: "Private courtyard garden", sub: "Palms, water feature, lounge seating" },
-  { title: "Sleeps 4 · max occupancy", sub: "Fresh linen & towels" },
-  { title: "Free off-street parking", sub: "Right at the door" },
-  { title: "Walk everywhere", sub: "Beach & restaurants · five min" },
-  { title: "Wifi & Smart TV", sub: "Heating throughout" },
-  { title: "Contactless entry", sub: "Digital keypad" },
+  { Icon: BedDouble, title: "Two queen bedrooms", sub: "Both open to the garden" },
+  { Icon: ShowerHead, title: "One bathroom", sub: "Walk-in corner shower" },
+  { Icon: DoorOpen, title: "Fully self-contained", sub: "Private entrance" },
+  { Icon: CookingPot, title: "Kitchenette", sub: "Two-hob cooktop · microwave · fridge" },
+  { Icon: Sofa, title: "Open-plan living", sub: "Smart TV, dining for four" },
+  { Icon: Flame, title: "Covered patio & BBQ", sub: "Weber barbecue, table for six" },
+  { Icon: Trees, title: "Private courtyard garden", sub: "Palms, water feature, lounge seating" },
+  { Icon: Users, title: "Sleeps 4 · max occupancy", sub: "Fresh linen & towels" },
+  { Icon: CarFront, title: "Free off-street parking", sub: "Right at the door" },
+  { Icon: Footprints, title: "Walk everywhere", sub: "Beach & restaurants · five min" },
+  { Icon: Wifi, title: "Wifi & Smart TV", sub: "Heating throughout" },
+  { Icon: KeyRound, title: "Contactless entry", sub: "Digital keypad" },
 ];
 
 const nearby = [
@@ -61,7 +75,7 @@ const nearby = [
 function Index() {
   return (
     <div className="min-h-screen bg-[#EFE8DA] pb-[76px] md:pb-0">
-      <SiteNav />
+      <SiteNav overlay />
       <Hero />
       <CountingMoment />
       <IntroSection />
@@ -96,24 +110,28 @@ function Hero() {
           decoding="async"
         />
       </div>
-      {/* Directional gradient scrim (bottom-heavy) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/80 via-[#17181A]/35 to-transparent" />
+      {/* Scrim. The headline and paragraph sit over brightly lit weatherboard on
+          the left of this frame, so the darkening is directional: strong at the
+          left edge, gone by 65% width, which leaves the sunset — the reason this
+          photo works — untouched on the right. The second gradient lifts the
+          bottom for the CTA row. */}
+      <div aria-hidden="true" className="hero-scrim absolute inset-0" />
       {/* Warm veil — wood/cream wash */}
       <div className="absolute inset-0 warm-veil" />
       <div className="grain absolute inset-0" />
 
       <div className="relative z-10 mx-auto flex h-full min-h-[85vh] min-h-screen-safe max-w-7xl flex-col justify-end px-5 pb-16 sm:px-8 sm:pb-20 lg:px-10 lg:pb-32">
-        <p className="font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#BD8A5E]">
+        <p className="font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#F4E7D6]">
           The Vulcan · Ahuriri
         </p>
 
         {/* Spectacle headline — the LCP element. Deliberately not animated:
             it must be painted at first frame, and it renders without JS. */}
-        <h1 className="mt-4 sm:mt-6 max-w-5xl font-[Fraunces] font-optical-sizing-auto leading-[0.92] text-[#EFE8DA] text-[clamp(2.8rem,10vw,9rem)] tracking-[-0.02em] text-balance text-shadow-overlay">
+        <h1 className="mt-4 sm:mt-6 max-w-5xl font-[Fraunces] font-optical-sizing-auto leading-[1.05] text-[#EFE8DA] text-[clamp(3rem,7vw,6.5rem)] tracking-[-0.02em] text-balance text-shadow-overlay">
           Your harbourside home <span className="word-champagne">in Ahuriri.</span>
         </h1>
 
-        <p className="mt-5 sm:mt-8 max-w-xl text-sm sm:text-base lg:text-lg leading-relaxed font-[Archivo] text-[#EFE8DA]/80">
+        <p className="mt-5 sm:mt-8 max-w-xl text-sm sm:text-base lg:text-lg leading-relaxed font-[Archivo] text-[#EFE8DA] text-pretty">
           A self-contained two-bedroom apartment beneath our home, opening onto its own courtyard
           garden — five minutes from the beach and Ahuriri's best cafés.
         </p>
@@ -121,7 +139,7 @@ function Hero() {
         <div className="mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6">
           <Link
             to="/book"
-            className="btn-outline-light text-xs group tap-target inline-flex items-center"
+            className="btn-primary group text-xs tap-target inline-flex cursor-pointer items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EFE8DA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17181A]"
           >
             Check Availability
             <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
@@ -130,7 +148,7 @@ function Hero() {
           </Link>
           <Link
             to="/apartment"
-            className="wood-underline inline-flex items-center text-xs uppercase tracking-[0.24em] font-[Archivo] text-[#EFE8DA] tap-target"
+            className="inline-flex cursor-pointer items-center text-xs uppercase tracking-[0.24em] font-[Archivo] text-[#EFE8DA] underline decoration-[#E8D5BC] decoration-1 underline-offset-4 transition-[text-decoration-thickness] duration-[var(--motion-fast)] hover:decoration-2 tap-target focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EFE8DA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17181A]"
           >
             Explore the apartment
           </Link>
@@ -173,8 +191,11 @@ function CountingMoment() {
   }, []);
 
   return (
-    <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+    <section className="bg-[#EFE8DA] section-y-tight px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-5xl">
+        {/* Hairline above the row so the band reads as a deliberate summary
+            strip closing the hero, not as an orphaned block of cream. */}
+        <div className="mb-10 h-px w-full bg-[rgba(74,55,40,0.15)]" />
         <div className="grid grid-cols-2 gap-8 sm:gap-12 md:grid-cols-4">
           {[
             { target: "2", suffix: "", label: "Bedrooms" },
@@ -208,19 +229,19 @@ function CountingMoment() {
 function IntroSection() {
   useReveal();
   return (
-    <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-5xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
           Private courtyard
         </p>
-        <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(1.8rem,5vw,4.5rem)] sm:text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
+        <h2 className="reveal-up reveal-stagger-1 mx-auto max-w-[28ch] mt-6 sm:mt-10 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
           A private, self-contained <span className="word-wood-light">retreat</span> beneath our
           home.
         </h2>
-        <h2 className="reveal-up reveal-stagger-2 mt-4 sm:mt-8 font-[Fraunces] text-[clamp(1.5rem,4vw,4rem)] sm:text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
+        <h2 className="reveal-up reveal-stagger-2 mx-auto max-w-[28ch] mt-4 sm:mt-8 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
           Two queen bedrooms. One bathroom. <span className="word-wood-light">Room for four.</span>
         </h2>
-        <p className="reveal-up reveal-stagger-3 mx-auto mt-8 sm:mt-12 max-w-2xl text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
+        <p className="reveal-up reveal-stagger-3 mx-auto mt-8 sm:mt-12 max-w-[52ch] text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/75 body-pretty">
           Minutes from the sand, the cafés, and Napier's Art Deco heart — a quiet lane in Ahuriri,
           with a fenced tropical courtyard of your own.
         </p>
@@ -243,15 +264,18 @@ function ApartmentGallery() {
   ];
 
   return (
-    <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div>
           <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
             The apartment
           </p>
-          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
+          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
             Every corner, <span className="word-wood">considered.</span>
           </h2>
+          <p className="stack-md max-w-[46ch] text-sm leading-relaxed font-[Archivo] text-[#17181A]/70 body-pretty sm:text-base">
+            Six rooms, photographed as they are. Tap any frame to see it full size.
+          </p>
         </div>
         <PropertyGallery items={items} className="mt-10 sm:mt-16" />
       </div>
@@ -263,24 +287,26 @@ function ApartmentGallery() {
 function DarkAmenities() {
   useReveal();
   return (
-    <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
             Amenities
           </p>
-          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
+          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
             Everything you need for a <span className="word-wood-light">relaxed stay.</span>
           </h2>
         </div>
-        <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid gap-x-6 sm:gap-x-10 gap-y-8 sm:gap-y-12 grid-cols-2 lg:grid-cols-4">
+        <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-10 sm:gap-y-14 lg:grid-cols-4">
           <div className="wood-divider col-span-full mb-2 sm:mb-4" />
-          {amenities.map((a, i) => (
+          {amenities.map((a) => (
             <div key={a.title}>
-              <h3 className="font-[Fraunces] text-base sm:text-xl text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
+              {/* Icons are lucide SVG at 20px in the gold accent. Never emoji. */}
+              <a.Icon aria-hidden="true" strokeWidth={1.25} className="h-5 w-5 text-[#BD8A5E]" />
+              <h3 className="mt-3 font-[Fraunces] text-base sm:text-xl text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
                 {a.title}
               </h3>
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-[Archivo] text-[#EFE8DA]/50">
+              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-[Archivo] text-[#EFE8DA]/75">
                 {a.sub}
               </p>
             </div>
@@ -302,14 +328,14 @@ function DarkAmenities() {
 function CreamLocation() {
   useReveal();
   return (
-    <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 sm:gap-16 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
               Location
             </p>
-            <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
+            <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
               1 Vulcan Lane, <span className="word-wood">Ahuriri.</span>
             </h2>
             <p className="reveal-up reveal-stagger-2 mt-5 sm:mt-8 max-w-lg text-sm sm:text-base leading-relaxed font-[Archivo] text-[#17181A]/60">
@@ -356,7 +382,7 @@ function CreamLocation() {
 function DarkHosts() {
   useReveal();
   return (
-    <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 sm:gap-16 lg:grid-cols-5 lg:items-center">
         {/* Image first on mobile (always above text) */}
         <div className="reveal-up lg:col-span-2">
@@ -382,7 +408,7 @@ function DarkHosts() {
           <h2 className="mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
             Leah <span className="word-wood-light">&</span> Wayne.
           </h2>
-          <p className="mt-5 sm:mt-8 max-w-lg text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60 mx-auto lg:mx-0">
+          <p className="mt-5 sm:mt-8 max-w-lg text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/75 mx-auto lg:mx-0">
             We've spent years travelling the world and staying in other people's homes — now we love
             doing the same for guests in ours. The Vulcan is our own slice of Ahuriri: five minutes
             from the beach, walking distance to our favourite restaurants, and set up exactly how
@@ -421,13 +447,13 @@ function ReviewsSection() {
   });
 
   return (
-    <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
+    <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
             Reviews
           </p>
-          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
+          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
             What guests <span className="word-wood">say.</span>
           </h2>
         </div>
@@ -471,23 +497,23 @@ function ReviewsSection() {
 function SpectacleBookingCTA() {
   useReveal();
   return (
-    <section className="relative overflow-hidden bg-[#17181A] px-5 py-20 sm:px-8 sm:py-28 lg:px-10 lg:py-48">
+    <section className="to-dark relative overflow-hidden bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="grain absolute inset-0" />
       <div className="relative mx-auto max-w-3xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
           Ready when you are
         </p>
-        <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(2.2rem,6vw,6rem)] leading-[0.95] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
+        <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[0.95] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
           Come and <span className="word-champagne">stay</span> with us.
         </h2>
-        <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-sm sm:text-lg font-[Archivo] text-[#EFE8DA]/60">
+        <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-sm sm:text-lg font-[Archivo] text-[#EFE8DA]/75">
           From NZ$220/night. Two queen bedrooms, sleeps four. Private courtyard, barbecue, free
           parking, and everything within walking distance.
         </p>
         <div className="mt-8 sm:mt-12">
           <Link
             to="/book"
-            className="btn-outline-light group text-xs tap-target inline-flex items-center"
+            className="btn-primary group text-xs tap-target inline-flex cursor-pointer items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EFE8DA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17181A]"
           >
             Check Availability
             <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">

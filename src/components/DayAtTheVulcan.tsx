@@ -91,17 +91,17 @@ export function DayAtTheVulcan() {
   return (
     <section
       aria-labelledby="day-at-the-vulcan"
-      className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-32"
+      className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10"
     >
       <div className="mx-auto max-w-7xl">
-        <ScrollReveal>
+        {/* Heading is in flow on mobile. On md+ it moves into the sticky
+            column (below) so the left column opens straight onto the first
+            step instead of leaving a several-hundred-pixel void. */}
+        <ScrollReveal className="md:hidden">
           <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
             A day here
           </p>
-          <h2
-            id="day-at-the-vulcan"
-            className="mt-3 sm:mt-4 max-w-3xl font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]"
-          >
+          <h2 className="mt-3 max-w-3xl font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em] display-balance">
             A day at <span className="word-wood">The Vulcan.</span>
           </h2>
         </ScrollReveal>
@@ -130,7 +130,7 @@ export function DayAtTheVulcan() {
         </div>
 
         {/* ── md+: text in flow, sticky cross-fading image frame ── */}
-        <div className="mt-16 hidden gap-12 md:grid md:grid-cols-2 lg:gap-20">
+        <div className="hidden gap-12 md:grid md:grid-cols-2 lg:gap-20">
           <div>
             {STEPS.map((step, i) => (
               <div
@@ -138,15 +138,24 @@ export function DayAtTheVulcan() {
                 ref={(el) => {
                   stepRefs.current[i] = el;
                 }}
-                className="flex min-h-[70vh] flex-col justify-center"
+                className="flex min-h-[62vh] flex-col justify-center"
               >
                 <p
-                  className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#6B4630] transition-opacity"
+                  className="flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] font-[Archivo] transition-opacity"
                   style={{
                     transitionDuration: "var(--motion-base)",
-                    opacity: reduced || active === i ? 1 : 0.35,
+                    opacity: reduced || active === i ? 1 : 0.45,
+                    color: active === i ? "var(--sage)" : "#6B4630",
                   }}
                 >
+                  <span
+                    aria-hidden="true"
+                    className="h-px transition-all duration-[var(--motion-base)]"
+                    style={{
+                      width: active === i ? "28px" : "12px",
+                      background: active === i ? "var(--sage)" : "#6B4630",
+                    }}
+                  />
                   {step.label}
                 </p>
                 <p
@@ -162,9 +171,20 @@ export function DayAtTheVulcan() {
             ))}
           </div>
 
-          <div aria-hidden="true" className="relative">
-            <div className="sticky top-0 flex h-screen items-center">
-              <div className="relative aspect-[4/5] w-full overflow-hidden">
+          <div className="relative">
+            <div className="sticky top-0 flex h-screen flex-col justify-center">
+              <div className="hidden md:block">
+                <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
+                  A day here
+                </p>
+                <h2
+                  id="day-at-the-vulcan"
+                  className="mt-3 mb-6 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em] display-balance"
+                >
+                  A day at <span className="word-wood">The Vulcan.</span>
+                </h2>
+              </div>
+              <div aria-hidden="true" className="relative aspect-[4/5] w-full overflow-hidden">
                 {STEPS.map((step, i) => (
                   <img
                     key={step.id}

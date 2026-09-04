@@ -62,6 +62,10 @@
   --wood-light: oklch(0.65 0.055 60);  /* #BD8A5E */
   --matte: oklch(0.19 0.005 260);      /* #17181A */
   --gloss: oklch(0.12 0.003 260);      /* #0A0A0A */
+  /* Tertiary accent (P5). Deep sage, pulled from the courtyard planting in the
+     photography. Three uses only: the active scrollytelling step indicator, the
+     walk-timeline fill, and link hover on cream. Not a fourth brand colour. */
+  --sage: #4A5D4E;
 
   /* Motion tokens — mirrored in src/lib/motion.ts. Nothing in the critical
      path may exceed --motion-slow. See design-system/the-vulcan/MASTER.md. */
@@ -71,6 +75,22 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --reveal-distance: 16px;
+
+  /* Spacing scale. Every section uses these — no one-off py-* values.
+     See design-system/the-vulcan/MASTER.md. Mobile first, desktop at md. */
+  --section-y: 72px;
+  --section-y-tight: 56px;
+  --stack-lg: 32px;
+  --stack-md: 20px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-y: 140px;
+    --section-y-tight: 96px;
+    --stack-lg: 48px;
+    --stack-md: 24px;
+  }
 }
 
 /* ── Brand utilities ─────────────────────────────────────────────────── */
@@ -575,7 +595,7 @@
     .ken-burns { animation: none; }
     .ken-burns-mobile { animation: none; }
     .reveal-up { opacity: 1; transform: none; transition: none; }
-    .marquee-scroll { animation: none; }
+    .marquee-scroll { animation-play-state: paused; animation: none; }
     .wood-underline::after { display: none; }
     .arch-frame:hover { transform: none; }
     html { scroll-behavior: auto; }
@@ -622,5 +642,70 @@
     opacity: 1 !important;
     transform: none !important;
     transition-delay: 0ms !important;
+  }
+}
+
+
+/* ── Spacing scale utilities (P2.1) ─────────────────────────────────────── */
+.section-y { padding-top: var(--section-y); padding-bottom: var(--section-y); }
+.section-y-tight { padding-top: var(--section-y-tight); padding-bottom: var(--section-y-tight); }
+.stack-lg { margin-top: var(--stack-lg); }
+.stack-md { margin-top: var(--stack-md); }
+
+/* ── Light → dark boundary (P2.3) ───────────────────────────────────────────
+   One treatment, used for every cream→matte boundary on the site: a 96px
+   vertical gradient. Not a decorative divider graphic. */
+.to-dark { position: relative; }
+.to-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  background: linear-gradient(180deg, #EFE8DA 0%, #17181A 100%);
+  pointer-events: none;
+}
+
+/* Display headings balance; body copy uses pretty. Both are progressive
+   enhancements — the layout must hold where they are unsupported. */
+.display-balance { text-wrap: balance; }
+.body-pretty { text-wrap: pretty; }
+
+/* ── Hero scrim ──────────────────────────────────────────────────────────────
+   Two different problems at two different crops, so two different scrims.
+
+   Below md the text runs the full width of a narrow viewport, so a
+   left-to-right gradient leaves the right end of every line sitting on bright
+   sky. There the scrim is bottom-up and covers more height.
+
+   At md+ the text occupies the left half, so the scrim is directional: strong
+   at the left edge, gone by 74%, which leaves the sunset — the reason this
+   photograph works — untouched on the right. */
+.hero-scrim {
+  background: linear-gradient(
+    0deg,
+    rgba(26, 22, 20, 0.92) 0%,
+    rgba(26, 22, 20, 0.82) 34%,
+    rgba(26, 22, 20, 0.55) 58%,
+    rgba(26, 22, 20, 0.12) 82%,
+    rgba(26, 22, 20, 0) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-scrim {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(26, 22, 20, 0.86) 0%,
+        rgba(26, 22, 20, 0.78) 38%,
+        rgba(26, 22, 20, 0.45) 58%,
+        rgba(26, 22, 20, 0) 74%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(26, 22, 20, 0.8) 0%,
+        rgba(26, 22, 20, 0.42) 32%,
+        rgba(26, 22, 20, 0) 60%
+      );
   }
 }

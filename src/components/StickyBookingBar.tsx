@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+
+// react-day-picker is ~60KB gzipped. Fetched on tap, not on page load.
+const BookingDatePicker = lazy(() => import("@/components/BookingDatePicker"));
 
 const NIGHTLY_FROM = "NZ$220";
 
@@ -93,25 +95,15 @@ export function StickyBookingBar() {
             side="top"
             className="w-auto border-[#6B4630]/20 bg-[#EFE8DA] p-0"
           >
-            <Calendar
-              mode="range"
-              selected={range}
-              onSelect={setRange}
-              numberOfMonths={1}
-              disabled={{ before: new Date() }}
-              autoFocus
-            />
-            <div className="flex items-center justify-between gap-2 border-t border-[#6B4630]/20 p-3">
-              <span className="text-[10px] uppercase tracking-[0.18em] font-[Archivo] text-[#17181A]/60">
-                {range?.from && range?.to ? "Dates selected" : "Pick your dates"}
-              </span>
-              <Button
-                onClick={confirm}
-                className="h-9 cursor-pointer bg-[#17181A] px-4 text-[10px] uppercase tracking-[0.18em] font-[Archivo] text-[#EFE8DA] hover:bg-[#6B4630]"
-              >
-                Continue
-              </Button>
-            </div>
+            <Suspense
+              fallback={
+                <div className="flex h-[22rem] w-[18rem] items-center justify-center text-[10px] uppercase tracking-[0.18em] font-[Archivo] text-[#17181A]/50">
+                  Loading dates…
+                </div>
+              }
+            >
+              <BookingDatePicker range={range} onRangeChange={setRange} onConfirm={confirm} />
+            </Suspense>
           </PopoverContent>
         </Popover>
       </div>

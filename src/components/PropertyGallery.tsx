@@ -16,6 +16,8 @@ export type GalleryItem = {
   src: string;
   label: string;
   alt?: string;
+  /** object-position override, for photos whose subject is off-centre. */
+  position?: string;
 };
 
 /**
@@ -97,13 +99,14 @@ export function PropertyGallery({
                 aria-label={`View ${item.label} full size`}
                 className="group relative block w-full cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B4630] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EFE8DA]"
               >
-                <AspectRatio ratio={4 / 5}>
+                <AspectRatio ratio={3 / 2}>
                   <Skeleton className="absolute inset-0 h-full w-full rounded-none bg-[#17181A]/5" />
                   <img
                     src={item.src}
                     alt={item.alt ?? item.label}
                     loading="lazy"
                     decoding="async"
+                    style={item.position ? { objectPosition: item.position } : undefined}
                     className="relative h-full w-full object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--ease-out)] group-hover:scale-[1.03]"
                   />
                 </AspectRatio>

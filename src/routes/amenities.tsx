@@ -106,7 +106,7 @@ function AmenitiesPage() {
       </section>
 
       {/* Cream band */}
-      <section className="bg-[#EFE8DA] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-32">
+      <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-5xl">
           <div className="wood-divider mb-10 sm:mb-16" />
           <div className="grid gap-8 sm:gap-16 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

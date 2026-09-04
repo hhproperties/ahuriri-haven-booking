@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import logoImg from "@/assets/vulcan-retreat-logo.png";
+import logoLightImg from "@/assets/vulcan-retreat-logo-dark.png";
 
 const links = [
   { to: "/apartment", label: "Apartment" },
@@ -11,7 +12,14 @@ const links = [
   { to: "/blog", label: "Blog" },
 ];
 
-export function SiteNav() {
+/**
+ * @param overlay Render transparent over a full-bleed hero instead of in a solid
+ *   cream band. Past 80px of scroll the cream surface and walnut link colour
+ *   fade in. Book Now stays solid walnut in both states so it never loses
+ *   prominence. Pages using this must own the top of their own layout — no
+ *   spacer is rendered.
+ */
+export function SiteNav({ overlay = false }: { overlay?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const prevScrollY = useRef(0);
@@ -42,7 +50,7 @@ export function SiteNav() {
       }
       // Book Now gains a surface once past the hero. Surface only — no size or
       // position change, so nothing in the nav reflows.
-      setPastHero(y > window.innerHeight * 0.85);
+      setPastHero(y > 80);
       prevScrollY.current = y;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -52,13 +60,21 @@ export function SiteNav() {
   return (
     <>
       {/* ── Fixed cream header ── */}
-      <header className="fixed inset-x-0 top-0 z-50 bg-[#EFE8DA]">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2.5 sm:px-8 lg:px-10 lg:py-3">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-[var(--motion-base)] ${
+          overlay && !pastHero ? "bg-transparent" : "bg-[#EFE8DA]"
+        }`}
+      >
+        <div
+          className={`mx-auto flex max-w-7xl items-center justify-between px-5 transition-[padding] duration-[var(--motion-base)] sm:px-8 lg:px-10 ${
+            pastHero ? "py-1.5 lg:py-2" : "py-2.5 lg:py-3"
+          }`}
+        >
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img
-              src={logoImg}
+              src={overlay && !pastHero ? logoLightImg : logoImg}
               alt="The Vulcan, Ahuriri"
-              className="h-12 w-auto sm:h-14 lg:h-20"
+              className={`w-auto transition-[height] duration-[var(--motion-base)] ${pastHero ? "h-10 sm:h-11 lg:h-14" : "h-12 sm:h-14 lg:h-20"}`}
               width={120}
               height={56}
             />
@@ -69,7 +85,11 @@ export function SiteNav() {
               <Link
                 key={l.to}
                 to={l.to}
-                className={`wood-underline text-[11px] uppercase tracking-[0.24em] text-[#17181A] transition-colors hover:text-[#6B4630] tap-target inline-flex items-center ${
+                className={`wood-underline text-[11px] uppercase tracking-[0.24em] transition-colors tap-target inline-flex items-center ${
+                  overlay && !pastHero
+                    ? "text-[#EFE8DA] hover:text-[#E8D5BC]"
+                    : "text-[#17181A] hover:text-[#6B4630]"
+                } ${
                   location.pathname === l.to || (l.to !== "/" && location.pathname.startsWith(l.to))
                     ? "is-active"
                     : ""
@@ -108,10 +128,16 @@ export function SiteNav() {
 
       {/* ── Wood-textured marquee ticker ── */}
       <div
-        className={`fixed inset-x-0 z-40 transition-transform duration-400 ${
+        className={`fixed inset-x-0 z-40 hidden transition-[transform,opacity] duration-[var(--motion-base)] sm:block ${
           tickerHidden ? "-translate-y-full" : "translate-y-0"
+        } ${
+          // The old solid cream header hid this strip when it translated up.
+          // With a transparent header there is nothing to hide behind, so over
+          // a hero it is faded out and taken out of the layer entirely.
+          overlay && !pastHero ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         style={{ top: "52px" }}
+        aria-hidden="true"
       >
         <div className="marquee-track wood-texture h-7 sm:h-8">
           <div className="marquee-scroll items-center gap-8 px-4 sm:gap-12 sm:px-6">
@@ -171,8 +197,9 @@ export function SiteNav() {
         </div>
       )}
 
-      {/* Spacer to push content below fixed header + ticker */}
-      <div className="h-[76px] sm:h-[88px]" />
+      {/* Spacer to push content below the fixed header. Not rendered when the
+          nav overlays a hero — that page owns the top of its own layout. */}
+      {!overlay && <div className="h-[76px] sm:h-[88px]" />}
     </>
   );
 }

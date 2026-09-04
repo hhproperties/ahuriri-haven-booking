@@ -219,3 +219,48 @@ Before delivering any UI code, verify:
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
 - [ ] No horizontal scroll on mobile
+
+---
+
+## Spacing scale (binding)
+
+Defined once as custom properties in `src/styles.css`. Every section uses them
+via `.section-y` / `.section-y-tight`. **No one-off `py-*` values on sections.**
+
+| Token | Desktop (md+) | Mobile | Use |
+|---|---|---|---|
+| `--section-y` | 140px | 72px | vertical padding on every section |
+| `--section-y-tight` | 96px | 56px | stats band, footer |
+| `--stack-lg` | 48px | 32px | heading → content |
+| `--stack-md` | 24px | 20px | between related blocks |
+
+## Alignment rule (binding)
+
+**Statement sections centre. Content sections left-align.**
+
+A statement section makes one short claim and gets out of the way — the intro
+band, the closing CTA. Everything a guest reads to make a decision — galleries,
+room detail, amenities, location, reviews — is a content section and left-aligns.
+
+Centred text also takes a measure: display lines cap at 28ch, body at 52ch.
+Centring a 90-character serif sentence is what this rule exists to prevent.
+
+## Light → dark boundary (binding)
+
+One treatment sitewide: `.to-dark`, a 96px cream-to-matte vertical gradient at
+the top of the dark section. Not a decorative divider graphic, and not a hard cut.
+
+## Tertiary accent
+
+`--sage: #4A5D4E`, pulled from the courtyard planting. **Three uses only:** the
+active scrollytelling step indicator, the walk-timeline fill, and its dot markers.
+It is not a fourth brand colour and does not belong on buttons or headings.
+
+## Display type ceiling
+
+- Hero: `clamp(3rem, 7vw, 6.5rem)`
+- Section headings: `clamp(2.25rem, 4.5vw, 4rem)`
+- Display `line-height: 1.05` — needed for italic descender clearance on Fraunces
+  at the top of the clamp.
+- `text-wrap: balance` on display, `pretty` on body. Both are progressive
+  enhancements: the layout must still hold where they are unsupported.
