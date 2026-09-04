@@ -1,12 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BlogHeader } from "@/components/blog-header";
-import { BlogBody, ImageHeader } from "@/components/blog/content";
+import { BlogBody } from "@/components/blog/content";
 import { Reveal, WoodDivider } from "@/components/blog/motion";
 import type { JournalPost } from "@/components/blog/types";
 import { supabase } from "@/integrations/supabase/client";
 
-// ── Static image map ──
+// ── Hero image map ──
 
 import imgRestaurant from "@/assets/blog-restaurant.jpg";
 import imgWeekend from "@/assets/blog-weekend.jpg";
@@ -30,6 +30,8 @@ const heroImages: Record<string, { src: string; alt: string }> = {
   "hawkes-bay-wine-country-guide": { src: imgWine, alt: "Vineyard landscape in Hawke's Bay wine country" },
 };
 
+const fallbackHero = { src: imgRestaurant, alt: "Ahuriri waterfront" };
+
 const eyebrowMap: Record<string, string> = {
   "where-to-eat-in-ahuriri": "ISSUE 001 · DINING",
   "weekend-in-hawkes-bay": "ISSUE 002 · WEEKENDS",
@@ -42,33 +44,38 @@ const eyebrowMap: Record<string, string> = {
   "hawkes-bay-wine-country-guide": "ISSUE 009 · WINE",
 };
 
-const creditMap: Record<string, string> = {
-  "where-to-eat-in-ahuriri": "PHOTOGRAPHED ON LOCATION · AHURIRI WATERFRONT",
-  "weekend-in-hawkes-bay": "PHOTOGRAPHED ON LOCATION · HAWKE'S BAY",
-  "family-friendly-hawkes-bay": "PHOTOGRAPHED ON LOCATION · AHURIRI BEACH",
-  "girls-getaway-ahuriri": "PHOTOGRAPHED ON LOCATION · AHURIRI WATERFRONT",
-  "art-deco-napier-walking-tour": "PHOTOGRAPHED ON LOCATION · NAPIER CBD",
-  "what-to-do-with-kids-hawkes-bay": "PHOTOGRAPHED ON LOCATION · AHURIRI BEACH",
-  "best-coffee-in-ahuriri": "PHOTOGRAPHED ON LOCATION · AHURIRI VILLAGE",
-  "cycling-hawkes-bay-trails": "PHOTOGRAPHED ON LOCATION · HAWKE'S BAY TRAILS",
-  "hawkes-bay-wine-country-guide": "PHOTOGRAPHED ON LOCATION · HAWKE'S BAY",
+// ── Supporting imagery (inserted partway through the body) ──
+
+import imgAhuririCoffee from "@/assets/ahuriri-coffee.jpg";
+import imgAhuririDining from "@/assets/ahuriri-dining.jpg";
+import imgAhuririWaterfront from "@/assets/ahuriri-waterfront.jpg";
+import imgPatioDining from "@/assets/patio-dining.jpg";
+import imgPathway from "@/assets/pathway.jpg";
+
+const supportingImages: Record<string, { src: string; alt: string; caption: string }> = {
+  "where-to-eat-in-ahuriri": { src: imgAhuririDining, alt: "Waterfront dining in Ahuriri", caption: "Dinner by the water · Ahuriri" },
+  "weekend-in-hawkes-bay": { src: imgAhuririWaterfront, alt: "The Ahuriri waterfront", caption: "The Ahuriri waterfront" },
+  "family-friendly-hawkes-bay": { src: imgAhuririWaterfront, alt: "Calm water at Ahuriri Beach", caption: "Ahuriri Beach" },
+  "girls-getaway-ahuriri": { src: imgPatioDining, alt: "Outdoor dining at The Vulcan", caption: "Evening on the patio" },
+  "art-deco-napier-walking-tour": { src: imgAhuririWaterfront, alt: "Looking across to Napier's waterfront", caption: "A short drive from Napier's Art Deco quarter" },
+  "what-to-do-with-kids-hawkes-bay": { src: imgAhuririWaterfront, alt: "Ahuriri Beach", caption: "Ahuriri Beach" },
+  "best-coffee-in-ahuriri": { src: imgAhuririCoffee, alt: "Morning coffee in Ahuriri", caption: "Morning coffee · Ahuriri" },
+  "cycling-hawkes-bay-trails": { src: imgPathway, alt: "The coastal pathway from Ahuriri", caption: "The pathway from Ahuriri" },
+  "hawkes-bay-wine-country-guide": { src: imgPatioDining, alt: "A long lunch on the patio", caption: "The long-lunch life" },
 };
 
-const fallbackHero = { src: imgRestaurant, alt: "Ahuriri waterfront" };
+// ── Helpers ──
 
-// ── Accent word map ──
+function readTimeMinutes(body: string): number {
+  const words = body.trim().split(/\s+/).length;
+  return Math.max(1, Math.round(words / 200));
+}
 
-const accentWordMap: Record<string, string> = {
-  "where-to-eat-in-ahuriri": "Restaurant",
-  "weekend-in-hawkes-bay": "Weekend",
-  "family-friendly-hawkes-bay": "Family-Friendly",
-  "girls-getaway-ahuriri": "Girls'",
-  "art-deco-napier-walking-tour": "Art Deco",
-  "what-to-do-with-kids-hawkes-bay": "Kids",
-  "best-coffee-in-ahuriri": "Coffee",
-  "cycling-hawkes-bay-trails": "Cycling",
-  "hawkes-bay-wine-country-guide": "Wine",
-};
+function formatPublishDate(iso: string | null | undefined): string {
+  const d = iso ? new Date(iso) : new Date();
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric" });
+}
 
 // ── Route ──
 
@@ -83,6 +90,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPost() {
   const { slug } = Route.useParams();
+
   const { data: post, isLoading } = useQuery({
     queryKey: ["blog_post", slug],
     queryFn: async () => {
@@ -96,223 +104,125 @@ function BlogPost() {
     },
   });
 
+  const { data: allPosts = [] } = useQuery({
+    queryKey: ["blog_posts_related"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("slug, title, excerpt")
+        .eq("published", true)
+        .order("published_at", { ascending: false });
+      return (data ?? []) as { slug: string; title: string; excerpt: string | null }[];
+    },
+  });
+
   if (!isLoading && !post) throw notFound();
 
   const hero = heroImages[slug] ?? fallbackHero;
   const eyebrow = eyebrowMap[slug] ?? "ISSUE · BLOG";
-  const credit = creditMap[slug];
-  const variant = post?.variant ?? 1;
-  const accentWord = accentWordMap[slug] ?? "";
+  const supporting = supportingImages[slug];
+  const related = allPosts.filter((p) => p.slug !== slug).slice(0, 3);
+  const dateStr = post ? formatPublishDate(post.published_at ?? post.created_at) : "";
+  const readTime = post ? readTimeMinutes(post.body) : 1;
 
   return (
     <>
-      {/* ── Header per variant ── */}
+      <BlogHeader src={hero.src} alt={hero.alt} eyebrow={eyebrow} title={post?.title ?? ""} credit={undefined} />
 
-      {/* Variant 9 — Statement Opener: no image, full-viewport matte band */}
-      {variant === 9 && (
-        <section className="relative min-h-screen flex items-center bg-[#17181A] px-5 sm:px-8 lg:px-10 pt-24 sm:pt-28 lg:pt-32 pb-16 sm:pb-20">
-          <div className="mx-auto max-w-3xl w-full">
-            <Reveal>
-              <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">{eyebrow}</p>
-            </Reveal>
-            <Reveal delay={100}>
-              <h1 className="mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.2rem,7vw,6rem)] leading-[1.05] text-[#BD8A5E] tracking-[-0.02em] text-wrap-balance text-shadow-overlay">
-                {accentWord && post?.title?.includes(accentWord)
-                  ? post.title.split(accentWord).map((part: string, i: number, arr: string[]) => (
-                      <span key={i}>{part}{i < arr.length - 1 ? <span className="word-wood">{accentWord}</span> : ""}</span>
-                    ))
-                  : post?.title}
-              </h1>
-            </Reveal>
-            {post?.excerpt && (
-              <Reveal delay={200}>
-                <p className="mt-4 sm:mt-6 font-[Fraunces] text-lg sm:text-xl italic leading-relaxed text-cream/70 max-w-[52ch]">
-                  {post.excerpt}
-                </p>
-              </Reveal>
-            )}
-          </div>
-        </section>
-      )}
+      {/* Back link */}
+      <div className="bg-[#EFE8DA] pt-8 sm:pt-10">
+        <div className="mx-auto max-w-[45rem] px-6 sm:px-8">
+          <Link
+            to="/blog"
+            className="group inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630] tap-target"
+          >
+            <span className="transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true">←</span>
+            <span className="wood-underline">Back to Blog</span>
+          </Link>
+        </div>
+      </div>
 
-      {/* Variant 2 — Split Hero */}
-      {variant === 2 && (
-        <div className="min-h-screen flex flex-col lg:flex-row lg:min-h-[70vh]">
-          {/* Left: title + standfirst */}
-          <div className="flex items-center bg-[#EFE8DA] px-5 sm:px-8 lg:px-10 pt-28 lg:pt-0 pb-10 lg:pb-0 lg:w-1/2">
-            <div className="max-w-lg">
-              <Reveal>
-                <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">{eyebrow}</p>
-              </Reveal>
-              <Reveal delay={100}>
-                <h1 className="mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] tracking-[-0.02em] text-wrap-balance">
-                  {accentWord && post?.title?.includes(accentWord)
-                    ? post.title.split(accentWord).map((part: string, i: number, arr: string[]) => (
-                        <span key={i}>{part}{i < arr.length - 1 ? <span className="word-wood">{accentWord}</span> : ""}</span>
-                      ))
-                    : post?.title}
-                </h1>
-              </Reveal>
-              {post?.excerpt && (
-                <Reveal delay={200}>
-                  <p className="mt-4 sm:mt-6 font-[Fraunces] text-lg sm:text-xl italic leading-relaxed text-[#17181A]/70 max-w-[52ch]">
-                    {post.excerpt}
-                  </p>
-                </Reveal>
+      {/* Byline / meta row */}
+      {post && (
+        <div className="bg-[#EFE8DA] pt-6 sm:pt-8">
+          <div className="mx-auto max-w-[45rem] px-6 sm:px-8">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] sm:text-xs uppercase tracking-[0.14em] font-[Archivo] text-[#17181A]/60">
+              <span>Written by Leah &amp; Wayne</span>
+              {dateStr && (
+                <>
+                  <span className="text-[#B9985A]" aria-hidden="true">·</span>
+                  <span>{dateStr}</span>
+                </>
               )}
+              <span className="text-[#B9985A]" aria-hidden="true">·</span>
+              <span>{readTime} min read</span>
             </div>
-          </div>
-          {/* Right: image pinned */}
-          <div className="lg:w-1/2 lg:min-h-[70vh] overflow-hidden relative">
-            <div className="absolute inset-0 hero-image-grade">
-              <img
-                src={hero.src}
-                alt={hero.alt}
-                className="h-full w-full object-cover"
-                style={{
-                  animation: "ken-burns 20s ease-in-out infinite",
-                }}
-              />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/30 to-transparent" />
-            <div className="absolute inset-0 warm-veil" />
-            {/* Photo credit tab */}
-            {credit && (
-              <div className="absolute bottom-0 left-0 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-cream bg-[#6B4630]">
-                {credit}
-              </div>
-            )}
+            <WoodDivider className="mt-6 sm:mt-8" />
           </div>
         </div>
       )}
 
-      {/* V3 uses ImageHeader (Framed Portrait) */}
-      {variant === 3 && (
-        <ImageHeader
-          src={hero.src}
-          alt={hero.alt}
-          variant={3}
-          title={(post?.title ?? "")}
-          accentWord={accentWord}
-          standfirst={post?.excerpt ?? ""}
-          credit={credit}
-        />
-      )}
-
-      {/* V6 uses ImageHeader (Field Notes) */}
-      {variant === 6 && (
-        <ImageHeader
-          src={hero.src}
-          alt={hero.alt}
-          variant={6}
-          title={(post?.title ?? "")}
-          accentWord={accentWord}
-          standfirst={post?.excerpt ?? ""}
-          credit={credit}
-        />
-      )}
-
-      {/* V8 uses ImageHeader (Postcard) */}
-      {variant === 8 && (
-        <ImageHeader
-          src={hero.src}
-          alt={hero.alt}
-          variant={8}
-          title={(post?.title ?? "")}
-          accentWord={accentWord}
-          standfirst={post?.excerpt ?? ""}
-          credit={credit}
-        />
-      )}
-
-      {/* Variant 4 — Overline Slab (BlogHeader but 70vh) */}
-      {variant === 4 && (
-        <BlogHeader
-          src={hero.src}
-          alt={hero.alt}
-          eyebrow={eyebrow}
-          title={post?.title ?? "Loading..."}
-          credit={credit}
-        />
-      )}
-
-      {/* Variant 1, 5, 7 — standard BlogHeader */}
-      {([1, 5, 7].includes(variant) && variant !== 4) && (
-        <BlogHeader
-          src={hero.src}
-          alt={hero.alt}
-          eyebrow={eyebrow}
-          title={post?.title ?? "Loading..."}
-          credit={credit}
-        />
-      )}
-
-      {/* ── Body content ── */}
-
+      {/* Body */}
       {post && (
-        <>
-          {/* Back link */}
-          <div className="pt-10 sm:pt-14 lg:pt-16">
-            <div className={`mx-auto ${[3, 6, 8].includes(variant) ? "max-w-3xl" : "max-w-[65ch]"} px-5 sm:px-6 lg:px-10`}>
-              <Reveal delay={50}>
-                <Link to="/blog" className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630] wood-underline inline-flex items-center tap-target">
-                  ← Back to Blog
-                </Link>
-              </Reveal>
-            </div>
-          </div>
-
-          {/* BlogBody handles all variant-specific body rendering */}
-          <BlogBody
-            rawBody={post.body}
-            variant={variant}
-            post={post}
-            accentWord={accentWord}
-          />
-
-          {/* Variant 9 — delayed hero image after first body block */}
-          {variant === 9 && (
-            <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-10 pb-10 sm:pb-14">
-              <Reveal delay={300}>
-                <div className="relative overflow-hidden aspect-[16/9] hero-image-grade">
-                  <img
-                    src={hero.src}
-                    alt={hero.alt}
-                    className="h-full w-full object-cover"
-                    style={{
-                      animation: "ken-burns 20s ease-in-out infinite",
-                    }}
-                  />
-                </div>
-                <div className="absolute inset-0 warm-veil" />
-                {credit && (
-                  <p className="mt-2 font-[Fraunces] italic text-sm text-[#6B4630]/60 text-right">{credit}</p>
-                )}
-              </Reveal>
-            </div>
-          )}
-
-          {/* CTA section */}
-          <div className="mx-auto max-w-[65ch] px-5 sm:px-6 lg:px-10 pb-16 sm:pb-20 lg:pb-24">
-            <Reveal delay={500}>
-              <WoodDivider />
-              <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
-                Stay with us
-              </p>
-              <p className="mt-3 sm:mt-4 font-[Fraunces] text-xl sm:text-2xl lg:text-3xl text-[#17181A] tracking-[-0.02em]">
-                Book The Vulcan, Ahuriri.
-              </p>
-              <Link
-                to="/book"
-                className="mt-5 sm:mt-6 inline-flex items-center border border-[#17181A] bg-[#17181A] px-6 sm:px-8 py-3 sm:py-4 text-[10px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.24em] text-[#EFE8DA] hover:bg-[#6B4630] hover:border-[#6B4630] transition-colors duration-400 tap-target"
-              >
-                Check availability →
-              </Link>
-            </Reveal>
-          </div>
-        </>
+        <BlogBody rawBody={post.body} excerpt={post.excerpt} supportingImage={supporting} />
       )}
 
+      {/* Continue reading */}
+      {related.length > 0 && (
+        <section className="bg-[#EFE8DA] pb-20 sm:pb-24">
+          <div className="mx-auto max-w-[45rem] px-6 sm:px-8">
+            <Reveal>
+              <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
+                Continue reading
+              </p>
+            </Reveal>
+            <div className="mt-6 sm:mt-8 grid gap-6 sm:gap-8 sm:grid-cols-3">
+              {related.map((p) => (
+                <Reveal key={p.slug}>
+                  <Link to="/blog/$slug" params={{ slug: p.slug }} className="group block">
+                    <div className="aspect-[4/3] w-full overflow-hidden bg-[#E8E0D0]">
+                      <img
+                        src={heroImages[p.slug]?.src ?? fallbackHero.src}
+                        alt={p.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        style={{ filter: "saturate(0.92) contrast(1.05) sepia(0.08) brightness(0.96)" }}
+                      />
+                    </div>
+                    <h3 className="mt-3 font-[Fraunces] text-base sm:text-lg leading-tight text-[#17181A] transition-colors group-hover:text-[#6B4630]">
+                      {p.title}
+                    </h3>
+                    {p.excerpt && (
+                      <p className="mt-1.5 text-xs leading-relaxed text-[#17181A]/60 line-clamp-2">{p.excerpt}</p>
+                    )}
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      {post && (
+        <section className="bg-[#17181A] px-6 py-16 sm:px-8 sm:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
+              Stay with us
+            </p>
+            <h2 className="mt-3 font-[Fraunces] text-2xl sm:text-3xl lg:text-4xl text-[#EFE8DA] tracking-[-0.02em]">
+              Book The Vulcan, Ahuriri.
+            </h2>
+            <Link
+              to="/book"
+              className="mt-6 inline-flex items-center gap-3 border border-[#B9985A] bg-[#B9985A] px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-[#17181A] hover:bg-[#a8824a] transition-colors tap-target"
+            >
+              Check availability →
+            </Link>
+          </div>
+        </section>
+      )}
     </>
   );
 }
