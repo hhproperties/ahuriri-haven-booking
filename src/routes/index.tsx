@@ -244,7 +244,7 @@ function CountingMoment() {
 function IntroSection() {
   useReveal();
   return (
-    <section className="bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-5xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
           Private courtyard
@@ -288,6 +288,9 @@ function ApartmentGallery() {
           <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
             Every corner, <span className="word-wood">considered.</span>
           </h2>
+          <p className="stack-md max-w-[46ch] text-sm leading-relaxed font-[Archivo] text-[#17181A]/70 body-pretty sm:text-base">
+            Six rooms, photographed as they are. Tap any frame to see it full size.
+          </p>
         </div>
         <PropertyGallery items={items} className="mt-10 sm:mt-16" />
       </div>
@@ -299,7 +302,7 @@ function ApartmentGallery() {
 function DarkAmenities() {
   useReveal();
   return (
-    <section className="bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
@@ -394,7 +397,7 @@ function CreamLocation() {
 function DarkHosts() {
   useReveal();
   return (
-    <section className="bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
+    <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 sm:gap-16 lg:grid-cols-5 lg:items-center">
         {/* Image first on mobile (always above text) */}
         <div className="reveal-up lg:col-span-2">
@@ -509,7 +512,7 @@ function ReviewsSection() {
 function SpectacleBookingCTA() {
   useReveal();
   return (
-    <section className="relative overflow-hidden bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
+    <section className="to-dark relative overflow-hidden bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
       <div className="grain absolute inset-0" />
       <div className="relative mx-auto max-w-3xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">

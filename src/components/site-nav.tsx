@@ -65,12 +65,16 @@ export function SiteNav({ overlay = false }: { overlay?: boolean } = {}) {
           overlay && !pastHero ? "bg-transparent" : "bg-[#EFE8DA]"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2.5 sm:px-8 lg:px-10 lg:py-3">
+        <div
+          className={`mx-auto flex max-w-7xl items-center justify-between px-5 transition-[padding] duration-[var(--motion-base)] sm:px-8 lg:px-10 ${
+            pastHero ? "py-1.5 lg:py-2" : "py-2.5 lg:py-3"
+          }`}
+        >
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img
               src={overlay && !pastHero ? logoLightImg : logoImg}
               alt="The Vulcan, Ahuriri"
-              className="h-12 w-auto sm:h-14 lg:h-20"
+              className={`w-auto transition-[height] duration-[var(--motion-base)] ${pastHero ? "h-10 sm:h-11 lg:h-14" : "h-12 sm:h-14 lg:h-20"}`}
               width={120}
               height={56}
             />
@@ -124,10 +128,16 @@ export function SiteNav({ overlay = false }: { overlay?: boolean } = {}) {
 
       {/* ── Wood-textured marquee ticker ── */}
       <div
-        className={`fixed inset-x-0 z-40 transition-transform duration-400 ${
+        className={`fixed inset-x-0 z-40 hidden transition-[transform,opacity] duration-[var(--motion-base)] sm:block ${
           tickerHidden ? "-translate-y-full" : "translate-y-0"
+        } ${
+          // The old solid cream header hid this strip when it translated up.
+          // With a transparent header there is nothing to hide behind, so over
+          // a hero it is faded out and taken out of the layer entirely.
+          overlay && !pastHero ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         style={{ top: "52px" }}
+        aria-hidden="true"
       >
         <div className="marquee-track wood-texture h-7 sm:h-8">
           <div className="marquee-scroll items-center gap-8 px-4 sm:gap-12 sm:px-6">

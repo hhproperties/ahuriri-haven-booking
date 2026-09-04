@@ -141,12 +141,21 @@ export function DayAtTheVulcan() {
                 className="flex min-h-[62vh] flex-col justify-center"
               >
                 <p
-                  className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#6B4630] transition-opacity"
+                  className="flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] font-[Archivo] transition-opacity"
                   style={{
                     transitionDuration: "var(--motion-base)",
-                    opacity: reduced || active === i ? 1 : 0.35,
+                    opacity: reduced || active === i ? 1 : 0.45,
+                    color: active === i ? "var(--sage)" : "#6B4630",
                   }}
                 >
+                  <span
+                    aria-hidden="true"
+                    className="h-px transition-all duration-[var(--motion-base)]"
+                    style={{
+                      width: active === i ? "28px" : "12px",
+                      background: active === i ? "var(--sage)" : "#6B4630",
+                    }}
+                  />
                   {step.label}
                 </p>
                 <p

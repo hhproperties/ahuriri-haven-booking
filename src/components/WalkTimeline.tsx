@@ -24,8 +24,9 @@ export function WalkTimeline({ items }: { items: Destination[] }) {
       {/* The filling line. Decorative: the list is already a list. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -left-px top-0 w-px origin-top bg-[#6B4630]"
+        className="pointer-events-none absolute -left-px top-0 w-px origin-top"
         style={{
+          background: "var(--sage)",
           height: "100%",
           transform: reduced ? "scaleY(1)" : "scaleY(var(--walk-progress, 0))",
         }}
@@ -34,7 +35,8 @@ export function WalkTimeline({ items }: { items: Destination[] }) {
         <ScrollReveal as="li" key={n.name} index={i} className="relative pb-7 last:pb-0">
           <span
             aria-hidden="true"
-            className="absolute -left-[38px] top-1.5 h-2 w-2 rounded-full bg-[#6B4630] ring-4 ring-[#EFE8DA]"
+            className="absolute -left-[38px] top-1.5 h-2 w-2 rounded-full ring-4 ring-[#EFE8DA]"
+            style={{ background: "var(--sage)" }}
           />
           <div className="flex items-baseline justify-between gap-4">
             <span className="font-[Fraunces] text-base text-[#17181A] sm:text-lg">{n.name}</span>

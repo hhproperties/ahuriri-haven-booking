@@ -62,6 +62,10 @@
   --wood-light: oklch(0.65 0.055 60);  /* #BD8A5E */
   --matte: oklch(0.19 0.005 260);      /* #17181A */
   --gloss: oklch(0.12 0.003 260);      /* #0A0A0A */
+  /* Tertiary accent (P5). Deep sage, pulled from the courtyard planting in the
+     photography. Three uses only: the active scrollytelling step indicator, the
+     walk-timeline fill, and link hover on cream. Not a fourth brand colour. */
+  --sage: #4A5D4E;
 
   /* Motion tokens — mirrored in src/lib/motion.ts. Nothing in the critical
      path may exceed --motion-slow. See design-system/the-vulcan/MASTER.md. */
@@ -591,7 +595,7 @@
     .ken-burns { animation: none; }
     .ken-burns-mobile { animation: none; }
     .reveal-up { opacity: 1; transform: none; transition: none; }
-    .marquee-scroll { animation: none; }
+    .marquee-scroll { animation-play-state: paused; animation: none; }
     .wood-underline::after { display: none; }
     .arch-frame:hover { transform: none; }
     html { scroll-behavior: auto; }
@@ -651,12 +655,14 @@
 /* ── Light → dark boundary (P2.3) ───────────────────────────────────────────
    One treatment, used for every cream→matte boundary on the site: a 96px
    vertical gradient. Not a decorative divider graphic. */
+.to-dark { position: relative; }
 .to-dark::before {
   content: "";
-  display: block;
+  position: absolute;
+  inset: 0 0 auto 0;
   height: 96px;
-  margin-top: calc(var(--section-y) * -1);
   background: linear-gradient(180deg, #EFE8DA 0%, #17181A 100%);
+  pointer-events: none;
 }
 
 /* Display headings balance; body copy uses pretty. Both are progressive
