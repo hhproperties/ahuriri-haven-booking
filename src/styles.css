@@ -407,9 +407,10 @@
   /* Scroll reveals — one-shot */
   .reveal-up {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
-                transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(var(--reveal-distance));
+    transition:
+      opacity var(--motion-base) var(--ease-out),
+      transform var(--motion-base) var(--ease-out);
   }
   .reveal-up.is-visible {
     opacity: 1;
@@ -417,14 +418,17 @@
   }
 
   /* Staggered reveal delays */
-  .reveal-stagger-1 { transition-delay: 100ms; }
-  .reveal-stagger-2 { transition-delay: 200ms; }
-  .reveal-stagger-3 { transition-delay: 300ms; }
-  .reveal-stagger-4 { transition-delay: 400ms; }
-  .reveal-stagger-5 { transition-delay: 500ms; }
-  .reveal-stagger-6 { transition-delay: 600ms; }
-  .reveal-stagger-7 { transition-delay: 700ms; }
-  .reveal-stagger-8 { transition-delay: 800ms; }
+  /* Capped at 4 x 60ms — see staggerDelay() in src/lib/motion.ts. Past the
+     fourth item every remaining one shares the last delay, so a fast scroller
+     never waits on a chain of twelve. */
+  .reveal-stagger-1 { transition-delay: 0ms; }
+  .reveal-stagger-2 { transition-delay: 60ms; }
+  .reveal-stagger-3 { transition-delay: 120ms; }
+  .reveal-stagger-4,
+  .reveal-stagger-5,
+  .reveal-stagger-6,
+  .reveal-stagger-7,
+  .reveal-stagger-8 { transition-delay: 180ms; }
 
   /* Arched portrait frames */
   .arch-frame {
