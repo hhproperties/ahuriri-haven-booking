@@ -18,9 +18,7 @@ export function SiteFooter() {
               height={52}
             />
             <p className="mt-6 max-w-xs text-sm leading-relaxed opacity-60 font-[Archivo] mx-auto sm:mx-0">
-              A private, self-contained 2-bedroom retreat in Ahuriri,
-              walking distance to the beach, waterfront restaurants, and
-              Napier's Art Deco heart.
+              A private, self-contained 2-bedroom retreat in Ahuriri with its own courtyard and barbecue patio — walking distance to the beach, waterfront restaurants, and Napier's Art Deco heart.
             </p>
           </div>
 

@@ -1,17 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useRevealSection as useReveal } from "@/hooks/use-reveal";
+import { DayAtTheVulcan } from "@/components/DayAtTheVulcan";
+import { PropertyGallery } from "@/components/PropertyGallery";
+import { StickyBookingBar } from "@/components/StickyBookingBar";
 import heroImg from "@/assets/hero-exterior.jpg";
-import gardenImg from "@/assets/garden_courtyard.jpg";
+import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
 import bedroomOne from "@/assets/bedroom1.jpg";
 import bedroomTwo from "@/assets/bedroom2.jpg";
-import hostsImg from "@/assets/leahandwayne.jpg";
-import bathroomImg from "@/assets/bathroom.jpg";
-import patioImg from "@/assets/outdoorpatio1.jpg";
+import hostsImg from "@/assets/leah-and-wayne.jpg";
+import patioBbqImg from "@/assets/patio-bbq.jpg";
+import patioDiningImg from "@/assets/patio-dining.jpg";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -21,17 +25,21 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Your harbourside home in Ahuriri — a self-contained 2-bedroom apartment beneath our own home, steps from beaches, restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri — a self-contained 2-bedroom apartment with a private courtyard and BBQ patio, steps from beaches, restaurants, and Napier's Art Deco quarter.",
       },
     ],
   }),
 });
 
 const amenities = [
-  { title: "Two queen bedrooms", sub: "Sleeps 4 · max occupancy" },
-  { title: "One bathroom", sub: "Fresh linen & towels" },
+  { title: "Two queen bedrooms", sub: "Both open to the garden" },
+  { title: "One bathroom", sub: "Walk-in corner shower" },
   { title: "Fully self-contained", sub: "Private entrance" },
-  { title: "Kitchen", sub: "Microwave · two-hob cooktop" },
+  { title: "Kitchenette", sub: "Two-hob cooktop · microwave · fridge" },
+  { title: "Open-plan living", sub: "Smart TV, dining for four" },
+  { title: "Covered patio & BBQ", sub: "Weber barbecue, table for six" },
+  { title: "Private courtyard garden", sub: "Palms, water feature, lounge seating" },
+  { title: "Sleeps 4 · max occupancy", sub: "Fresh linen & towels" },
   { title: "Free off-street parking", sub: "Right at the door" },
   { title: "Walk everywhere", sub: "Beach & restaurants · five min" },
   { title: "Wifi & Smart TV", sub: "Heating throughout" },
@@ -47,47 +55,32 @@ const nearby = [
 ];
 
 /* ── Scroll reveal hook ── */
-function useReveal() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("is-visible");
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-}
 
 /* ── Components ── */
 
 function Index() {
   return (
-    <div className="min-h-screen bg-[#EFE8DA]">
+    <div className="min-h-screen bg-[#EFE8DA] pb-[76px] md:pb-0">
       <SiteNav />
       <Hero />
       <CountingMoment />
       <IntroSection />
       <ApartmentGallery />
+      <DayAtTheVulcan />
       <DarkAmenities />
       <CreamLocation />
       <DarkHosts />
       <ReviewsSection />
       <SpectacleBookingCTA />
       <SiteFooter />
+      <StickyBookingBar />
     </div>
   );
 }
 
 /* ── Hero ── */
 function Hero() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
   useReveal();
-  const words = "Your harbourside home".split(" ");
 
   return (
     <section className="relative min-h-[85vh] min-h-screen-safe w-full overflow-hidden bg-[#17181A]">
@@ -99,6 +92,8 @@ function Hero() {
           className="h-full w-full object-cover hero-image-grade"
           width={1920}
           height={1280}
+          fetchPriority="high"
+          decoding="async"
         />
       </div>
       {/* Directional gradient scrim (bottom-heavy) */}
@@ -108,59 +103,30 @@ function Hero() {
       <div className="grain absolute inset-0" />
 
       <div className="relative z-10 mx-auto flex h-full min-h-[85vh] min-h-screen-safe max-w-7xl flex-col justify-end px-5 pb-16 sm:px-8 sm:pb-20 lg:px-10 lg:pb-32">
-        <p
-          className={`font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#BD8A5E] transition-all duration-1000 ${
-            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
+        <p className="font-[Archivo] text-[11px] uppercase tracking-[0.24em] text-[#BD8A5E]">
           The Vulcan · Ahuriri
         </p>
 
-        {/* Spectacle headline */}
+        {/* Spectacle headline — the LCP element. Deliberately not animated:
+            it must be painted at first frame, and it renders without JS. */}
         <h1 className="mt-4 sm:mt-6 max-w-5xl font-[Fraunces] font-optical-sizing-auto leading-[0.92] text-[#EFE8DA] text-[clamp(2.8rem,10vw,9rem)] tracking-[-0.02em] text-balance text-shadow-overlay">
-          {words.map((w, i) => (
-            <span
-              key={i}
-              className="mr-3 sm:mr-4 inline-block transition-all duration-800"
-              style={{
-                transitionDelay: `${200 + i * 100}ms`,
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? "translateY(0)" : "translateY(30px)",
-              }}
-            >
-              {w}
-            </span>
-          ))}{" "}
-          <span
-            className="word-champagne inline-block transition-all duration-1000"
-            style={{
-              transitionDelay: "500ms",
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? "translateY(0)" : "translateY(30px)",
-            }}
-          >
-            in Ahuriri.
-          </span>
+          Your harbourside home <span className="word-champagne">in Ahuriri.</span>
         </h1>
 
-        <p
-          className="mt-5 sm:mt-8 max-w-xl text-sm sm:text-base lg:text-lg leading-relaxed font-[Archivo] text-[#EFE8DA]/80 transition-all duration-1000"
-          style={{ transitionDelay: "800ms", opacity: mounted ? 1 : 0 }}
-        >
-          A self-contained two-bedroom apartment beneath our home — five minutes
-          from the beach and Ahuriri's best cafés.
+        <p className="mt-5 sm:mt-8 max-w-xl text-sm sm:text-base lg:text-lg leading-relaxed font-[Archivo] text-[#EFE8DA]/80">
+          A self-contained two-bedroom apartment beneath our home, opening onto its own courtyard
+          garden — five minutes from the beach and Ahuriri's best cafés.
         </p>
 
-        <div
-          className="mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6 transition-all duration-1000"
-          style={{ transitionDelay: "1000ms", opacity: mounted ? 1 : 0 }}
-        >
+        <div className="mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6">
           <Link
             to="/book"
             className="btn-outline-light text-xs group tap-target inline-flex items-center"
           >
             Check Availability
-            <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">→</span>
+            <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
+              →
+            </span>
           </Link>
           <Link
             to="/apartment"
@@ -190,14 +156,17 @@ function CountingMoment() {
             const step = Math.ceil(target / 60);
             const interval = setInterval(() => {
               current += step;
-              if (current >= target) { current = target; clearInterval(interval); }
+              if (current >= target) {
+                current = target;
+                clearInterval(interval);
+              }
               el.textContent = current.toString();
             }, 25);
             observer.unobserve(el);
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
     counters.forEach((c) => observer.observe(c));
     return () => observer.disconnect();
@@ -208,23 +177,25 @@ function CountingMoment() {
       <div className="mx-auto max-w-5xl">
         <div className="grid grid-cols-2 gap-8 sm:gap-12 md:grid-cols-4">
           {[
-            { target: "2", label: "Bedrooms" },
-            { target: "4", label: "Guests" },
-            { target: "5", label: "Walk to beach" },
-            { target: "100", label: "5-Star Reviews" },
+            { target: "2", suffix: "", label: "Bedrooms" },
+            { target: "4", suffix: "", label: "Guests" },
+            { target: "5", suffix: " min", label: "Walk to beach" },
+            { target: "100", suffix: "%", label: "5-Star Reviews" },
           ].map((s, i) => (
             <div key={s.label} className={`reveal-up reveal-stagger-${i + 1} text-center`}>
               <p className="font-[Fraunces] text-[clamp(2.5rem,8vw,4rem)] md:text-5xl lg:text-6xl font-[300] italic text-[#6B4630] counter-num leading-none">
-                <span className="count-up" data-target={s.target}>0</span>
-                {s.label.includes("Min") || s.label.includes("%") ? "" : ""}
+                <span className="count-up" data-target={s.target}>
+                  0
+                </span>
+                {s.suffix && (
+                  <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num">
+                    {s.suffix}
+                  </span>
+                )}
               </p>
-              {s.label === "Walk to beach" && <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num"> min</span>}
-              {s.label.includes("%") || s.label === "5-Star Reviews" ? <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num">%</span> : null}
-              {s.label !== "5-Star Reviews" && (
-                <p className="mt-1 sm:mt-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
-                  {s.label.replace("5-Star Reviews", "").replace("Bedrooms", "").replace("Guests", "").trim() || s.label}
-                </p>
-              )}
+              <p className="mt-1 sm:mt-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
@@ -240,19 +211,18 @@ function IntroSection() {
     <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
       <div className="mx-auto max-w-5xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
-          A quiet arrival
+          Private courtyard
         </p>
         <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(1.8rem,5vw,4.5rem)] sm:text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
-          A private, self-contained{" "}
-          <span className="word-wood-light">retreat</span> beneath our home.
+          A private, self-contained <span className="word-wood-light">retreat</span> beneath our
+          home.
         </h2>
         <h2 className="reveal-up reveal-stagger-2 mt-4 sm:mt-8 font-[Fraunces] text-[clamp(1.5rem,4vw,4rem)] sm:text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
-          Two queen bedrooms. One bathroom.{" "}
-          <span className="word-wood-light">Room for four.</span>
+          Two queen bedrooms. One bathroom. <span className="word-wood-light">Room for four.</span>
         </h2>
         <p className="reveal-up reveal-stagger-3 mx-auto mt-8 sm:mt-12 max-w-2xl text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
-          Minutes from the sand, the cafés, and Napier's Art Deco heart — a
-          quiet lane in Ahuriri, set up exactly as we'd want to stay ourselves.
+          Minutes from the sand, the cafés, and Napier's Art Deco heart — a quiet lane in Ahuriri,
+          with a fenced tropical courtyard of your own.
         </p>
         <div className="wood-divider mx-auto mt-12 sm:mt-16 max-w-xs" />
       </div>
@@ -267,9 +237,9 @@ function ApartmentGallery() {
     { src: bedroomOne, label: "Queen Bedroom One" },
     { src: bedroomTwo, label: "Queen Bedroom Two" },
     { src: livingImg, label: "Living & Kitchen" },
-    { src: bathroomImg, label: "Bathroom" },
+    { src: patioBbqImg, label: "Covered Patio & BBQ" },
+    { src: patioDiningImg, label: "Outdoor Dining" },
     { src: gardenImg, label: "Garden Courtyard" },
-    { src: patioImg, label: "Outdoor Patio" },
   ];
 
   return (
@@ -280,29 +250,10 @@ function ApartmentGallery() {
             The apartment
           </p>
           <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
-            Every corner,{" "}
-            <span className="word-wood">considered.</span>
+            Every corner, <span className="word-wood">considered.</span>
           </h2>
         </div>
-        <div className="mt-10 sm:mt-16 grid gap-4 sm:gap-6 md:grid-cols-2">
-          {items.map((it, i) => (
-            <figure key={it.label} className={`reveal-up reveal-stagger-${i + 1} group relative aspect-[4/5] overflow-hidden`}>
-              <img
-                src={it.src}
-                alt={it.label}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover hero-image-grade transition-transform duration-[1200ms] ease-out hover:scale-105"
-              />
-              <figcaption className="absolute bottom-0 left-0 right-0 flex items-center gap-3 bg-[#EFE8DA] px-4 py-2.5 sm:px-5 sm:py-3">
-                <span className="h-px w-6 sm:w-8 bg-[#6B4630]" />
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]">
-                  {it.label}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <PropertyGallery items={items} className="mt-10 sm:mt-16" />
       </div>
     </section>
   );
@@ -319,8 +270,7 @@ function DarkAmenities() {
             Amenities
           </p>
           <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
-            Everything you need for a{" "}
-            <span className="word-wood-light">relaxed stay.</span>
+            Everything you need for a <span className="word-wood-light">relaxed stay.</span>
           </h2>
         </div>
         <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid gap-x-6 sm:gap-x-10 gap-y-8 sm:gap-y-12 grid-cols-2 lg:grid-cols-4">
@@ -330,7 +280,9 @@ function DarkAmenities() {
               <h3 className="font-[Fraunces] text-base sm:text-xl text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
                 {a.title}
               </h3>
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-[Archivo] text-[#EFE8DA]/50">{a.sub}</p>
+              <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-[Archivo] text-[#EFE8DA]/50">
+                {a.sub}
+              </p>
             </div>
           ))}
         </div>
@@ -358,13 +310,12 @@ function CreamLocation() {
               Location
             </p>
             <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
-              1 Vulcan Lane,{" "}
-              <span className="word-wood">Ahuriri.</span>
+              1 Vulcan Lane, <span className="word-wood">Ahuriri.</span>
             </h2>
             <p className="reveal-up reveal-stagger-2 mt-5 sm:mt-8 max-w-lg text-sm sm:text-base leading-relaxed font-[Archivo] text-[#17181A]/60">
-              A quiet street a short walk from Ahuriri's waterfront village —
-              a cluster of restaurants, cafés, and the harbour. Napier's Marine
-              Parade and Art Deco quarter are an easy stroll away.
+              A quiet street a short walk from Ahuriri's waterfront village — a cluster of
+              restaurants, cafés, and the harbour. Napier's Marine Parade and Art Deco quarter are
+              an easy stroll away.
             </p>
           </div>
           <div className="reveal-up reveal-stagger-2">
@@ -389,7 +340,9 @@ function CreamLocation() {
             {nearby.map((n) => (
               <div key={n.name} className="flex items-baseline gap-2 sm:gap-3">
                 <span className="font-[Fraunces] text-sm sm:text-lg text-[#17181A]">{n.name}</span>
-                <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] font-[Archivo] text-[#6B4630]">{n.distance}</span>
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] font-[Archivo] text-[#6B4630]">
+                  {n.distance}
+                </span>
               </div>
             ))}
           </div>
@@ -430,15 +383,14 @@ function DarkHosts() {
             Leah <span className="word-wood-light">&</span> Wayne.
           </h2>
           <p className="mt-5 sm:mt-8 max-w-lg text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60 mx-auto lg:mx-0">
-            We've spent years travelling the world and staying in other people's
-            homes — now we love doing the same for guests in ours. The Vulcan is
-            our own slice of Ahuriri: five minutes from the beach, walking
-            distance to our favourite restaurants, and set up exactly how we'd
-            want to stay ourselves.
+            We've spent years travelling the world and staying in other people's homes — now we love
+            doing the same for guests in ours. The Vulcan is our own slice of Ahuriri: five minutes
+            from the beach, walking distance to our favourite restaurants, and set up exactly how
+            we'd want to stay ourselves.
           </p>
           <blockquote className="mt-8 sm:mt-10 border-l-2 border-[#BD8A5E] pl-4 sm:pl-6 font-[Fraunces] text-lg sm:text-2xl italic leading-snug text-[#BD8A5E] text-left">
-            "We host the way we like to be hosted — quietly, warmly, and out of the
-            way unless you need us."
+            "We host the way we like to be hosted — quietly, warmly, and out of the way unless you
+            need us."
           </blockquote>
         </div>
       </div>
@@ -449,14 +401,21 @@ function DarkHosts() {
 /* ── Reviews ── */
 function ReviewsSection() {
   useReveal();
-  const { data: reviews = [] } = useQuery({
+  const {
+    data: reviews = [],
+    isPending,
+    error,
+  } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error: queryError } = await supabase
         .from("reviews")
         .select("*")
         .eq("published", true)
         .order("sort_order");
+      // Discarding this error is why the section went blank silently: a failed
+      // request resolved as an empty success and React Query reported no problem.
+      if (queryError) throw queryError;
       return data ?? [];
     },
   });
@@ -469,13 +428,24 @@ function ReviewsSection() {
             Reviews
           </p>
           <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(1.8rem,5vw,4rem)] leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
-            What guests{" "}
-            <span className="word-wood">say.</span>
+            What guests <span className="word-wood">say.</span>
           </h2>
         </div>
+        {!isPending && (error || !reviews.length) && (
+          <p className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 max-w-xl text-sm leading-relaxed font-[Archivo] text-[#17181A]/60">
+            Guest reviews are unavailable right now.{" "}
+            <Link to="/reviews" className="underline underline-offset-4 hover:text-[#6B4630]">
+              Read them on the reviews page
+            </Link>
+            .
+          </p>
+        )}
         <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((r, i) => (
-            <figure key={r.id} className="flex h-full flex-col justify-between border border-[#6B4630]/10 bg-white/60 p-5 sm:p-8">
+            <figure
+              key={r.id}
+              className="flex h-full flex-col justify-between border border-[#6B4630]/10 bg-white/60 p-5 sm:p-8"
+            >
               <div>
                 <div className="flex gap-1 text-[#6B4630] text-sm">
                   {Array.from({ length: r.rating }).map((_, k) => (
@@ -508,20 +478,21 @@ function SpectacleBookingCTA() {
           Ready when you are
         </p>
         <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(2.2rem,6vw,6rem)] leading-[0.95] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
-          Come and{" "}
-          <span className="word-champagne">stay</span> with us.
+          Come and <span className="word-champagne">stay</span> with us.
         </h2>
-        <p className="reveal-up reveal-stagger-2 mx-auto mt-6 sm:mt-8 max-w-xl text-sm sm:text-lg font-[Archivo] text-[#EFE8DA]/60">
-          From NZ$220/night. Two bedrooms, sleeps four. Free parking, walking
-          distance to everything.
+        <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-sm sm:text-lg font-[Archivo] text-[#EFE8DA]/60">
+          From NZ$220/night. Two queen bedrooms, sleeps four. Private courtyard, barbecue, free
+          parking, and everything within walking distance.
         </p>
-        <div className="reveal-up reveal-stagger-3 mt-8 sm:mt-12">
+        <div className="mt-8 sm:mt-12">
           <Link
             to="/book"
             className="btn-outline-light group text-xs tap-target inline-flex items-center"
           >
             Check Availability
-            <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">→</span>
+            <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
+              →
+            </span>
           </Link>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import hostsImg from "@/assets/leahandwayne.jpg";
+import hostsImg from "@/assets/leah-and-wayne.jpg";
 import heroImg from "@/assets/hero-exterior.jpg";
 import { OG_IMAGE } from "@/lib/site";
 
@@ -60,22 +60,16 @@ function HostsPage() {
               <div className="arch-frame-group relative inline-block mx-auto">
                 <div className="arch-accent" />
                 <div className="arch-frame max-w-[280px] mx-auto lg:max-w-full">
-                  <img src={hostsImg} alt="Leah and Wayne" loading="lazy" decoding="async" className="h-full w-full object-cover" width={800} height={1067} />
+                  <img src={hostsImg} alt="Leah and Wayne, your hosts, travelling in Egypt" loading="lazy" decoding="async" className="h-full w-full object-cover" width={800} height={1067} />
                 </div>
               </div>
             </div>
             <div className="reveal-up reveal-stagger-1 lg:col-span-3">
               <p className="text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
-                We're Leah and Wayne — we've spent years travelling the world and
-                staying in other people's homes, and now we love doing the same for
-                guests in ours.
+                We're Leah and Wayne — we've spent years travelling the world, from Ahuriri to the pyramids, staying in other people's homes. Now we love doing the same for guests in ours.
               </p>
               <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
-                The Vulcan is our own slice of Ahuriri: five minutes from the beach,
-                walking distance to our favourite local restaurants, and set up
-                exactly how we'd want to stay ourselves. We're usually just upstairs
-                if you need anything, and always happy to point you toward the best
-                flat white in town.
+                The Vulcan is the apartment beneath us: five minutes from the beach, walking distance to our favourite local restaurants, and set up exactly how we'd want to stay ourselves. The courtyard is the bit we're proudest of. We're usually just upstairs if you need anything, and always happy to point you toward the best flat white in town.
               </p>
               <blockquote className="mt-6 sm:mt-10 border-l-2 border-[#BD8A5E] pl-4 sm:pl-6 font-[Fraunces] text-lg sm:text-2xl italic leading-snug text-[#BD8A5E]">
                 "We host the way we like to be hosted — quietly, warmly, and out of

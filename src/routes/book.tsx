@@ -5,8 +5,29 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 
+/** Dates deep-linked from the sticky booking bar, so they are not re-entered. */
+type BookSearch = { checkIn?: string; checkOut?: string; guests?: number };
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 export const Route = createFileRoute("/book")({
   component: BookPage,
+  validateSearch: (search: Record<string, unknown>): BookSearch => {
+    const checkIn =
+      typeof search.checkIn === "string" && ISO_DATE.test(search.checkIn)
+        ? search.checkIn
+        : undefined;
+    const checkOut =
+      typeof search.checkOut === "string" && ISO_DATE.test(search.checkOut)
+        ? search.checkOut
+        : undefined;
+    const guests = Number(search.guests);
+    return {
+      checkIn,
+      checkOut,
+      guests: Number.isInteger(guests) && guests >= 1 && guests <= 4 ? guests : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Book The Vulcan, Ahuriri — Check availability" },
@@ -50,8 +71,8 @@ function BookPage() {
           <p className="eyebrow">Reserve your stay</p>
           <h1 className="mt-4 font-display text-5xl text-ink md:text-6xl">Book The Vulcan.</h1>
           <p className="mt-6 max-w-2xl text-base text-muted-foreground md:text-lg">
-            Two queen bedrooms, sleeps four. Check-in from 2:00pm · Check-out by 10:00am.
-            Full refund if cancelled more than 30 days before check-in.
+            Two queen bedrooms, sleeps four. Check-in from 2:00pm · Check-out by 10:00am. Full
+            refund if cancelled more than 30 days before check-in.
           </p>
           <BookingForm />
         </div>
@@ -65,7 +86,11 @@ function BookingForm() {
   const { data: settings } = useQuery({
     queryKey: ["payment_settings"],
     queryFn: async () => {
-      const { data } = await supabase.from("payment_settings").select("*").eq("id", 1).maybeSingle();
+      const { data } = await supabase
+        .from("payment_settings")
+        .select("*")
+        .eq("id", 1)
+        .maybeSingle();
       return data as Settings | null;
     },
   });
@@ -86,9 +111,12 @@ function BookingForm() {
     },
   });
 
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(2);
+  // Seeded from the query string when someone arrives from the sticky booking
+  // bar's date picker, so the dates they already chose are not re-entered.
+  const search = Route.useSearch();
+  const [checkIn, setCheckIn] = useState(search.checkIn ?? "");
+  const [checkOut, setCheckOut] = useState(search.checkOut ?? "");
+  const [guests, setGuests] = useState(search.guests ?? 2);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -165,8 +193,8 @@ function BookingForm() {
         <p className="eyebrow">Booking received</p>
         <h2 className="mt-4 font-display text-4xl text-ink">Thanks — we're holding your dates.</h2>
         <p className="mt-6 max-w-2xl text-base text-muted-foreground">
-          Please complete the bank transfer below within <strong>48 hours</strong> to
-          secure your stay. We'll email a confirmation once payment is received.
+          Please complete the bank transfer below within <strong>48 hours</strong> to secure your
+          stay. We'll email a confirmation once payment is received.
         </p>
         <dl className="mt-10 grid gap-6 border-t border-border pt-8 sm:grid-cols-2">
           <div>
@@ -187,7 +215,10 @@ function BookingForm() {
           </div>
         </dl>
         <div className="mt-10 flex gap-4">
-          <Link to="/" className="border border-ink px-6 py-3 text-xs uppercase tracking-[0.22em] text-ink hover:bg-ink hover:text-cream transition-colors">
+          <Link
+            to="/"
+            className="border border-ink px-6 py-3 text-xs uppercase tracking-[0.22em] text-ink hover:bg-ink hover:text-cream transition-colors"
+          >
             Back home
           </Link>
         </div>
@@ -222,7 +253,11 @@ function BookingForm() {
         </div>
 
         <Field label="Guests (max 4)">
-          <select value={guests} onChange={(e) => setGuests(Number(e.target.value))} className="input">
+          <select
+            value={guests}
+            onChange={(e) => setGuests(Number(e.target.value))}
+            className="input"
+          >
             <option value={1}>1 guest — 1 bedroom</option>
             <option value={2}>2 guests — 1 bedroom</option>
             <option value={3}>3 guests — 2 bedrooms</option>
@@ -232,15 +267,32 @@ function BookingForm() {
 
         <div className="grid gap-6 sm:grid-cols-2">
           <Field label="Your name">
-            <input value={name} onChange={(e) => setName(e.target.value)} required className="input" />
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="input"
+            />
           </Field>
           <Field label="Email">
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="input"
+            />
           </Field>
         </div>
 
         <Field label="Cellphone (last 4 digits become your door code)">
-          <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required className="input" />
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            className="input"
+          />
         </Field>
 
         {conflictsWithBlocked && (
@@ -254,7 +306,10 @@ function BookingForm() {
       <aside className="h-fit border border-border bg-cream p-8 lg:sticky lg:top-32">
         <p className="eyebrow">Your stay</p>
         <div className="mt-6 space-y-3 border-b border-border pb-6 text-sm">
-          <Row label={`1 Bedroom (up to 2 guests, cleaning incl.)`} value={`${formatNZD(baseRate)}/night`} />
+          <Row
+            label={`1 Bedroom (up to 2 guests, cleaning incl.)`}
+            value={`${formatNZD(baseRate)}/night`}
+          />
           {bedrooms === 2 && (
             <Row label="Second Bedroom add-on" value={`+${formatNZD(secondRate)}/night`} />
           )}
@@ -272,8 +327,8 @@ function BookingForm() {
           {submitting ? "Sending…" : "Request booking"}
         </button>
         <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
-          Full refund if cancelled more than 30 days before check-in. No refund
-          within 30 days. Rates in NZD, GST-inclusive.
+          Full refund if cancelled more than 30 days before check-in. No refund within 30 days.
+          Rates in NZD, GST-inclusive.
         </p>
       </aside>
     </form>

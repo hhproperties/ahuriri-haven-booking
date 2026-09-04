@@ -16,14 +16,19 @@ export function SiteNav() {
   const location = useLocation();
   const prevScrollY = useRef(0);
   const [tickerHidden, setTickerHidden] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
 
   // Close mobile sheet on route change
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   // Lock body scroll when mobile sheet is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   // Hide ticker on scroll-down (mobile), show on scroll-up
@@ -35,6 +40,9 @@ export function SiteNav() {
       } else {
         setTickerHidden(false);
       }
+      // Book Now gains a surface once past the hero. Surface only — no size or
+      // position change, so nothing in the nav reflows.
+      setPastHero(y > window.innerHeight * 0.85);
       prevScrollY.current = y;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -70,7 +78,12 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
-            <Link to="/book" className="btn-primary text-[11px] tap-target inline-flex items-center">
+            <Link
+              to="/book"
+              className={`btn-primary text-[11px] tap-target inline-flex items-center transition-shadow duration-[var(--motion-fast)] ${
+                pastHero ? "shadow-[0_2px_14px_rgba(23,24,26,0.18)]" : "shadow-none"
+              }`}
+            >
               Book Now
             </Link>
           </nav>
@@ -80,9 +93,15 @@ export function SiteNav() {
             className="relative z-50 flex flex-col gap-1.5 p-2 tap-target lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
           >
-            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "opacity-0" : ""}`} />
-            <span className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+            <span
+              className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "translate-y-2 rotate-45" : ""}`}
+            />
+            <span
+              className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`h-px w-6 bg-[#17181A] transition-all duration-400 ${open ? "-translate-y-2 -rotate-45" : ""}`}
+            />
           </button>
         </div>
       </header>

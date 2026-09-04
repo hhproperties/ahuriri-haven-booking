@@ -1,11 +1,22 @@
-import { useReveal } from "@/hooks/use-reveal";
 import type { ReactNode } from "react";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
-export function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const ref = useReveal<HTMLDivElement>();
+/**
+ * Thin alias kept so existing call sites keep working. New code should use
+ * <ScrollReveal> directly — it takes an `index` prop that caps the stagger.
+ */
+export function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
   return (
-    <div ref={ref} className={`reveal-up ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+    <ScrollReveal className={className} delay={delay}>
       {children}
-    </div>
+    </ScrollReveal>
   );
 }

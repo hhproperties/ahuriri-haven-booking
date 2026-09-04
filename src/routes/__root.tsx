@@ -87,19 +87,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment with a private courtyard and BBQ patio — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
       },
       { name: "author", content: "H&H Property Group Limited" },
       { property: "og:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
       {
         property: "og:description",
         content:
-          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment with a private courtyard and BBQ patio — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },
-      { name: "twitter:description", content: "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter." },
+      { name: "twitter:description", content: "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment with a private courtyard and BBQ patio — walking distance to the beach, restaurants, and Napier's Art Deco quarter." },
       { property: "og:image", content: OG_IMAGE },
       { property: "og:image:width", content: OG_IMAGE_WIDTH },
       { property: "og:image:height", content: OG_IMAGE_HEIGHT },

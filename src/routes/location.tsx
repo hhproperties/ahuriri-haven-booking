@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import heroImg from "@/assets/hero-exterior.jpg";
+import heroImg from "@/assets/ahuriri-waterfront.jpg";
 import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/location")({
@@ -51,7 +51,7 @@ function LocationPage() {
       {/* Hero */}
       <section className="relative min-h-[35vh] min-h-half-screen-safe overflow-hidden bg-[#17181A]">
         <div className="absolute inset-0 ken-burns">
-          <img src={heroImg} alt="Ahuriri waterfront" className="h-full w-full object-cover hero-image-grade" />
+          <img src={heroImg} alt="Ahuriri waterfront at sunset" className="h-full w-full object-cover hero-image-grade" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#17181A]/80 via-[#17181A]/30 to-transparent" />
         <div className="absolute inset-0 warm-veil" />
