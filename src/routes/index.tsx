@@ -22,6 +22,7 @@ import { useRevealSection as useReveal } from "@/hooks/use-reveal";
 import { DayAtTheVulcan } from "@/components/DayAtTheVulcan";
 import { PropertyGallery } from "@/components/PropertyGallery";
 import { StickyBookingBar } from "@/components/StickyBookingBar";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import heroImg from "@/assets/hero-exterior.jpg";
 import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
@@ -425,13 +426,38 @@ function DarkHosts() {
 }
 
 /* ── Reviews ── */
+
+type Review = {
+  id: string;
+  author_name: string;
+  rating: number;
+  body: string;
+  /** Optional provenance — month/year of stay. Rendered only when present. */
+  date?: string | null;
+  /** Optional provenance — review source (e.g. "Airbnb"). Rendered only when present. */
+  source?: string | null;
+};
+
+const FEATURED_AUTHOR = "Priya K.";
+
+/* Theme chips are derived from the review text — never invented. A chip only
+   renders when its signal appears in at least two reviews. */
+const THEME_CHIPS: { label: string; signal: RegExp }[] = [
+  { label: "Spotless", signal: /spotless|immaculate|clean/i },
+  { label: "Walkable", signal: /\bwalk/i },
+  { label: "Easy hosts", signal: /hosts?\b|leah|wayne/i },
+];
+
+function Stars({ rating, className = "" }: { rating: number; className?: string }) {
+  return (
+    <span aria-hidden="true" className={className}>
+      {"★".repeat(rating)}
+    </span>
+  );
+}
+
 function ReviewsSection() {
-  useReveal();
-  const {
-    data: reviews = [],
-    isPending,
-    error,
-  } = useQuery({
+  const { data: reviews = [], isPending, error } = useQuery<Review[]>({
     queryKey: ["reviews"],
     queryFn: async () => {
       const { data, error: queryError } = await supabase
@@ -442,54 +468,146 @@ function ReviewsSection() {
       // Discarding this error is why the section went blank silently: a failed
       // request resolved as an empty success and React Query reported no problem.
       if (queryError) throw queryError;
-      return data ?? [];
+      return (data ?? []) as Review[];
     },
   });
 
+  const count = reviews.length;
+  const average = count ? reviews.reduce((sum, r) => sum + r.rating, 0) / count : 0;
+  const averageLabel = average.toFixed(1);
+  const aggregateRating = Math.round(average);
+
+  const featured = reviews.find((r) => r.author_name === FEATURED_AUTHOR) ?? reviews[0];
+  const rest = featured ? reviews.filter((r) => r.id !== featured.id) : [];
+
+  const chips = THEME_CHIPS
+    .filter((chip) => reviews.filter((r) => chip.signal.test(r.body)).length >= 2)
+    .map((chip) => chip.label);
+
+  const itemsPerColumn = Math.ceil(rest.length / 3) || 1;
+  const columnDelay = (i: number) => Math.floor(i / itemsPerColumn) * 60;
+
   return (
-    <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
-      <div className="mx-auto max-w-7xl">
-        <div className="max-w-2xl">
-          <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
-            Reviews
-          </p>
-          <h2 className="reveal-up reveal-stagger-1 mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
-            What guests <span className="word-wood">say.</span>
-          </h2>
+    <>
+      {/* Heading + aggregate — cream */}
+      <section className="bg-[#EFE8DA] section-y-top px-5 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-2xl">
+            <p className="text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#6B4630]">
+              Reviews
+            </p>
+            <h2 className="mt-3 sm:mt-4 font-[Fraunces] text-[clamp(2.25rem,4.5vw,4rem)] display-balance leading-[1.05] text-[#17181A] font-optical-sizing-auto tracking-[-0.02em]">
+              What guests <span className="word-wood">say.</span>
+            </h2>
+          </div>
+
+          {!isPending && count > 0 && (
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-3">
+              <span aria-hidden="true">
+                <Stars rating={aggregateRating} className="text-[16px] tracking-[0.3em] text-[#6B4630]" />
+                <span className="ml-4 text-[16px] font-[Archivo] text-[#17181A]">
+                  <span className="font-semibold">{averageLabel}</span>
+                  <span className="text-[#17181A]/55">
+                    {" "}· {count} review{count === 1 ? "" : "s"}
+                  </span>
+                </span>
+              </span>
+              <span className="sr-only">
+                Rated {averageLabel} out of 5 from {count} review{count === 1 ? "" : "s"}
+              </span>
+            </div>
+          )}
+
+          {chips.length > 0 && (
+            <ul aria-label="Common themes" className="mt-5 sm:mt-6 flex flex-wrap gap-x-3 gap-y-2">
+              {chips.map((chip) => (
+                <li
+                  key={chip}
+                  className="rounded-full border border-[#6B4630]/20 px-4 py-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-[Archivo] text-[#6B4630]"
+                >
+                  {chip}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {!isPending && (error || count === 0) && (
+            <p className="mt-10 sm:mt-16 max-w-xl text-sm leading-relaxed font-[Archivo] text-[#17181A]/60">
+              Guest reviews are unavailable right now.{" "}
+              <Link to="/reviews" className="underline underline-offset-4 hover:text-[#6B4630]">
+                Read them on the reviews page
+              </Link>
+              .
+            </p>
+          )}
         </div>
-        {!isPending && (error || !reviews.length) && (
-          <p className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 max-w-xl text-sm leading-relaxed font-[Archivo] text-[#17181A]/60">
-            Guest reviews are unavailable right now.{" "}
-            <Link to="/reviews" className="underline underline-offset-4 hover:text-[#6B4630]">
-              Read them on the reviews page
-            </Link>
-            .
-          </p>
-        )}
-        <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {reviews.map((r, i) => (
-            <figure
-              key={r.id}
-              className="flex h-full flex-col justify-between border border-[#6B4630]/10 bg-white/60 p-5 sm:p-8"
-            >
-              <div>
-                <div className="flex gap-1 text-[#6B4630] text-sm">
-                  {Array.from({ length: r.rating }).map((_, k) => (
-                    <span key={k}>★</span>
-                  ))}
-                </div>
-                <blockquote className="mt-4 sm:mt-6 font-[Fraunces] text-base sm:text-lg leading-snug text-[#17181A]">
-                  "{r.body}"
+      </section>
+
+      {/* Featured — dark band */}
+      {featured && (
+        <section className="to-dark bg-[#17181A] section-y px-5 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl">
+            <ScrollReveal fade>
+              <figure className="relative mx-auto max-w-[22ch] text-center">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none select-none absolute -left-3 -top-10 leading-none text-[#BD8A5E] opacity-30 sm:-left-6"
+                  style={{ fontSize: "clamp(5rem, 12vw, 9rem)" }}
+                >
+                  {"\u201C"}
+                </span>
+                <blockquote className="relative font-[Fraunces] text-[clamp(1.75rem,3.5vw,2.75rem)] leading-[1.15] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em] text-balance">
+                  {featured.body}
                 </blockquote>
-              </div>
-              <figcaption className="mt-6 sm:mt-8 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.22em] font-[Archivo] text-[#6B4630]">
-                — {r.author_name}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
+                <Stars
+                  rating={featured.rating}
+                  className="mt-6 sm:mt-8 block text-sm tracking-[0.3em] text-[#BD8A5E]"
+                />
+                <figcaption className="mt-3 sm:mt-4 text-[11px] uppercase tracking-[0.24em] font-[Archivo] text-[#BD8A5E]">
+                  — {featured.author_name}
+                </figcaption>
+              </figure>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
+
+      {/* Grid — cream masonry */}
+      {rest.length > 0 && (
+        <section className="bg-[#EFE8DA] section-y px-5 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl">
+            <div className="reviews-grid">
+              {rest.map((r, i) => (
+                <ScrollReveal key={r.id} delay={columnDelay(i)}>
+                  <figure>
+                    {r.rating !== aggregateRating && (
+                      <span
+                        role="img"
+                        aria-label={`Rated ${r.rating} out of 5`}
+                        className="mb-3 block text-sm tracking-[0.3em] text-[#6B4630]"
+                      >
+                        {"★".repeat(r.rating)}
+                      </span>
+                    )}
+                    <blockquote className="review-quote max-w-[42ch] font-[Fraunces] text-[17px] leading-[1.6] text-[#17181A]">
+                      {r.body}
+                    </blockquote>
+                    <figcaption className="mt-5 sm:mt-6 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.22em] font-[Archivo] text-[#6B4630]">
+                      — {r.author_name}
+                      {(r.date || r.source) && (
+                        <span className="mt-1 block text-[#17181A]/50">
+                          {[r.date, r.source].filter(Boolean).join(" · ")}
+                        </span>
+                      )}
+                    </figcaption>
+                  </figure>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 

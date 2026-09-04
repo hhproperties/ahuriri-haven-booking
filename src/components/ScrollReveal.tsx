@@ -16,6 +16,8 @@ type ScrollRevealProps = {
   delay?: number;
   /** Render as something other than a div — e.g. "li" inside a list. */
   as?: ElementType;
+  /** Fade-only reveal (opacity, no translate) for featured pull-quotes. */
+  fade?: boolean;
 };
 
 /**
@@ -38,6 +40,7 @@ export function ScrollReveal({
   index,
   delay,
   as: Tag = "div",
+  fade = false,
 }: ScrollRevealProps) {
   const reduced = usePrefersReducedMotion();
   const { ref, inView } = useInView<HTMLDivElement>();
@@ -51,7 +54,7 @@ export function ScrollReveal({
   return (
     <Tag
       ref={ref}
-      className={cn("sr-reveal", className)}
+      className={cn(fade ? "sr-fade" : "sr-reveal", className)}
       data-in-view={inView ? "true" : "false"}
       style={ms ? ({ "--sr-delay": `${ms}ms` } as React.CSSProperties) : undefined}
     >
