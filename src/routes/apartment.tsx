@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/site-footer";
 import livingImg from "@/assets/living-room.jpg";
 import bedroomOne from "@/assets/bedroom1.jpg";
 import bedroomTwo from "@/assets/bedroom2.jpg";
-import gardenImg from "@/assets/garden_courtyard.jpg";
+import gardenImg from "@/assets/garden-courtyard.jpg";
 import bathroomImg from "@/assets/bathroom.jpg";
-import patioImg from "@/assets/outdoorpatio2.jpg";
+import patioBbqImg from "@/assets/patio-bbq.jpg";
+import patioDiningImg from "@/assets/patio-dining.jpg";
 import pathwayImg from "@/assets/pathway.jpg";
 import heroImg from "@/assets/hero-exterior.jpg";
 import { OG_IMAGE } from "@/lib/site";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/apartment")({
       { title: "The Apartment — The Vulcan, Ahuriri" },
       { name: "description", content: "A self-contained 2-bedroom apartment beneath our home in Ahuriri, Napier. Two queen bedrooms, one bathroom, kitchenette, courtyard — sleeping four." },
       { property: "og:title", content: "The Apartment — The Vulcan, Ahuriri" },
-      { property: "og:description", content: "Two queen bedrooms, one bathroom, private courtyard — a boutique harbourside retreat in Ahuriri, Napier." },
+      { property: "og:description", content: "Two queen bedrooms, one bathroom, private courtyard and BBQ patio — a boutique harbourside retreat in Ahuriri, Napier." },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
     ],
@@ -63,10 +64,7 @@ function ApartmentPage() {
           <div className="grid gap-6 sm:gap-12 lg:grid-cols-2">
             <div className="reveal-up">
               <p className="text-sm sm:text-base leading-relaxed font-[Archivo] text-[#17181A]/70">
-                Warm, tactile, and considered — The Vulcan is a two-bedroom apartment
-                sitting quietly beneath our own home. Boucle sofas, velvet headboards,
-                a highland cow watching over the room. Everything set up exactly the
-                way we'd want to stay ourselves.
+                Warm, tactile, and considered — The Vulcan is a two-bedroom apartment sitting quietly beneath our own home. Boucle sofas, tufted headboards, and doors that open straight onto a tropical courtyard. Everything set up exactly the way we'd want to stay ourselves.
               </p>
             </div>
             <div className="reveal-up reveal-stagger-1">
@@ -83,12 +81,13 @@ function ApartmentPage() {
           {/* Room by room */}
           <div className="grid gap-10 sm:gap-16">
             {[
-              { img: bedroomOne, label: "Bedroom One", desc: "Cream tufted queen bed with velvet headboard. Plenty of built-in storage, reading lamps, and a window that catches the morning sun through the garden foliage." },
-              { img: bedroomTwo, label: "Bedroom Two", desc: "Navy velvet queen bed with matching linens. A quiet room tucked at the back of the apartment — dark, cool, and perfectly still for a good night's sleep." },
-              { img: livingImg, label: "Living & Kitchen", desc: "Open-plan living with a boucle sofa, smart TV, and a kitchenette with microwave, two-hob cooktop, fridge, and everything you need for a relaxed self-catered stay." },
-              { img: bathroomImg, label: "Bathroom", desc: "A bright, tiled bathroom with a corner glass shower, vanity storage, and frosted window light. Fresh towels and toiletries are laid out for your arrival." },
-              { img: gardenImg, label: "Courtyard Garden", desc: "A private, sun-dappled courtyard with tropical plantings — the perfect spot for an afternoon read or a glass of Hawke's Bay Syrah before heading out for dinner." },
-              { img: patioImg, label: "Outdoor Patio", desc: "A sheltered patio off the living room with a solid timber table, bench seating, and the barbecue — long summer dinners without leaving home." },
+              { img: bedroomOne, label: "Bedroom One", desc: "Cream tufted queen bed with a wall-mounted TV and an arched brass mirror. Sliding doors open onto the palms and planting of the courtyard, with sheer curtains that soften the morning light." },
+              { img: bedroomTwo, label: "Bedroom Two", desc: "Charcoal diamond-tufted queen bed beneath an original landscape work, with a carved timber mirror and warm bedside lamps. A quiet room at the back of the apartment, sheltered and still for a good night's sleep." },
+              { img: livingImg, label: "Living & Kitchen", desc: "Open-plan living with a deep boucle sofa, large smart TV, and a round leather ottoman. A glass dining table seats four, and the kitchenette has a microwave, two-hob cooktop, fridge and everything you need for a relaxed self-catered stay. Sliding doors open straight onto the patio." },
+              { img: bathroomImg, label: "Bathroom", desc: "Bright and freshly tiled, with a walk-in corner shower, a wide vanity with storage, and a heated towel ladder. Frosted window, so it stays private and full of daylight. No bath." },
+              { img: patioBbqImg, label: "Covered Patio", desc: "Sliding doors open onto a sheltered patio with a Weber barbecue and two deep lounge chairs. It catches the last of the afternoon sun and stays dry when the weather turns — the part of the apartment guests end up using most." },
+              { img: patioDiningImg, label: "Outdoor Dining", desc: "A long timber table seats six under cover, with a built-in bench along one side. Easy for a barbecue dinner at home when you don't feel like walking down to the village." },
+              { img: gardenImg, label: "Courtyard Garden", desc: "A fully fenced courtyard of palms, ferns and bird-of-paradise, with a wall fountain and two deep lounge chairs. The perfect spot for an afternoon read or a glass of Hawke's Bay Syrah before heading out for dinner." },
               { img: pathwayImg, label: "Garden Pathway", desc: "Pavers and river stone wind past the palms to your own entrance, with a bench tucked at the end to catch the last of the evening sun." },
             ].map((room, i) => (
               <div key={room.label} className={`reveal-up reveal-stagger-${i + 1} grid gap-6 sm:gap-8 lg:grid-cols-2 lg:items-center`}>

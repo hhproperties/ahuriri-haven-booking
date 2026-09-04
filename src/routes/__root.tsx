@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment beneath our own home — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri. A self-contained 2-bedroom apartment with a private courtyard and BBQ patio — walking distance to the beach, restaurants, and Napier's Art Deco quarter.",
       },
       { name: "author", content: "H&H Property Group Limited" },
       { property: "og:title", content: "The Vulcan, Ahuriri — Boutique 2-bedroom retreat in Napier" },

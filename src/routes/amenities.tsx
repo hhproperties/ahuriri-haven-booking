@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import gardenImg from "@/assets/garden_courtyard.jpg";
+import gardenImg from "@/assets/garden-courtyard.jpg";
 import { OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/amenities")({
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/amenities")({
       { title: "Amenities — The Vulcan, Ahuriri" },
       { name: "description", content: "Everything you need for a relaxed stay — two queen bedrooms, kitchenette, free parking, wifi, smart TV, courtyard garden, digital entry." },
       { property: "og:title", content: "Amenities — The Vulcan, Ahuriri" },
-      { property: "og:description", content: "Two queen bedrooms, kitchenette, free off-street parking, wifi, smart TV, and a private courtyard garden." },
+      { property: "og:description", content: "Two queen bedrooms, kitchenette, BBQ patio, free off-street parking, wifi, smart TV, and a private courtyard garden." },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:image", content: OG_IMAGE },
     ],
@@ -25,8 +25,8 @@ const categories = [
     items: [
       "Two queen bedrooms with storage",
       "Premium linens and towels provided",
-      "Velvet headboards, reading lamps",
-      "Blackout curtains for deep sleep",
+      "Tufted headboards, bedside reading lamps",
+      "Lined and sheer curtains on every window",
     ],
   },
   {
@@ -41,7 +41,7 @@ const categories = [
   {
     label: "Bathroom",
     items: [
-      "One bathroom with walk-in shower",
+      "One bathroom with walk-in corner shower (no bath)",
       "Fresh towels, hand soap, toiletries",
       "Hair dryer provided",
     ],
@@ -50,8 +50,8 @@ const categories = [
     label: "Outdoor",
     items: [
       "Private courtyard garden",
-      "Tropical plantings, sun-dappled",
-      "Outdoor seating for two",
+      "Outdoor dining table seating six",
+      "Weber barbecue on the covered patio",
       "Five minutes to the beach",
     ],
   },

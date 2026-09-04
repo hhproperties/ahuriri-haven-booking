@@ -5,13 +5,13 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-exterior.jpg";
-import gardenImg from "@/assets/garden_courtyard.jpg";
+import gardenImg from "@/assets/garden-courtyard.jpg";
 import livingImg from "@/assets/living-room.jpg";
 import bedroomOne from "@/assets/bedroom1.jpg";
 import bedroomTwo from "@/assets/bedroom2.jpg";
-import hostsImg from "@/assets/leahandwayne.jpg";
-import bathroomImg from "@/assets/bathroom.jpg";
-import patioImg from "@/assets/outdoorpatio1.jpg";
+import hostsImg from "@/assets/leah-and-wayne.jpg";
+import patioBbqImg from "@/assets/patio-bbq.jpg";
+import patioDiningImg from "@/assets/patio-dining.jpg";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -21,17 +21,21 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Your harbourside home in Ahuriri — a self-contained 2-bedroom apartment beneath our own home, steps from beaches, restaurants, and Napier's Art Deco quarter.",
+          "Your harbourside home in Ahuriri — a self-contained 2-bedroom apartment with a private courtyard and BBQ patio, steps from beaches, restaurants, and Napier's Art Deco quarter.",
       },
     ],
   }),
 });
 
 const amenities = [
-  { title: "Two queen bedrooms", sub: "Sleeps 4 · max occupancy" },
-  { title: "One bathroom", sub: "Fresh linen & towels" },
+  { title: "Two queen bedrooms", sub: "Both open to the garden" },
+  { title: "One bathroom", sub: "Walk-in corner shower" },
   { title: "Fully self-contained", sub: "Private entrance" },
-  { title: "Kitchen", sub: "Microwave · two-hob cooktop" },
+  { title: "Kitchenette", sub: "Two-hob cooktop · microwave · fridge" },
+  { title: "Open-plan living", sub: "Smart TV, dining for four" },
+  { title: "Covered patio & BBQ", sub: "Weber barbecue, table for six" },
+  { title: "Private courtyard garden", sub: "Palms, water feature, lounge seating" },
+  { title: "Sleeps 4 · max occupancy", sub: "Fresh linen & towels" },
   { title: "Free off-street parking", sub: "Right at the door" },
   { title: "Walk everywhere", sub: "Beach & restaurants · five min" },
   { title: "Wifi & Smart TV", sub: "Heating throughout" },
@@ -147,8 +151,7 @@ function Hero() {
           className="mt-5 sm:mt-8 max-w-xl text-sm sm:text-base lg:text-lg leading-relaxed font-[Archivo] text-[#EFE8DA]/80 transition-all duration-1000"
           style={{ transitionDelay: "800ms", opacity: mounted ? 1 : 0 }}
         >
-          A self-contained two-bedroom apartment beneath our home — five minutes
-          from the beach and Ahuriri's best cafés.
+          A self-contained two-bedroom apartment beneath our home, opening onto its own courtyard garden — five minutes from the beach and Ahuriri's best cafés.
         </p>
 
         <div
@@ -208,23 +211,23 @@ function CountingMoment() {
       <div className="mx-auto max-w-5xl">
         <div className="grid grid-cols-2 gap-8 sm:gap-12 md:grid-cols-4">
           {[
-            { target: "2", label: "Bedrooms" },
-            { target: "4", label: "Guests" },
-            { target: "5", label: "Min walk to beach" },
-            { target: "100", label: "5-Star Reviews" },
+            { target: "2", suffix: "", label: "Bedrooms" },
+            { target: "4", suffix: "", label: "Guests" },
+            { target: "5", suffix: " min", label: "Walk to beach" },
+            { target: "100", suffix: "%", label: "5-Star Reviews" },
           ].map((s, i) => (
             <div key={s.label} className={`reveal-up reveal-stagger-${i + 1} text-center`}>
               <p className="font-[Fraunces] text-[clamp(2.5rem,8vw,4rem)] md:text-5xl lg:text-6xl font-[300] italic text-[#6B4630] counter-num leading-none">
                 <span className="count-up" data-target={s.target}>0</span>
-                {s.label.includes("Min") || s.label.includes("%") ? "" : ""}
+                {s.suffix && (
+                  <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num">
+                    {s.suffix}
+                  </span>
+                )}
               </p>
-              {s.label.includes("Min") && <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num"> min</span>}
-              {s.label.includes("%") || s.label === "5-Star Reviews" ? <span className="font-[Fraunces] text-[clamp(1.25rem,4vw,2rem)] font-[300] italic text-[#6B4630] counter-num">%</span> : null}
-              {s.label !== "5-Star Reviews" && (
-                <p className="mt-1 sm:mt-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
-                  {s.label.replace("5-Star Reviews", "").replace("Bedrooms", "").replace("Guests", "").trim() || s.label}
-                </p>
-              )}
+              <p className="mt-1 sm:mt-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] font-[Archivo] text-[#17181A]/60">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
@@ -240,7 +243,7 @@ function IntroSection() {
     <section className="bg-[#17181A] px-5 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-40">
       <div className="mx-auto max-w-5xl text-center">
         <p className="reveal-up text-[11px] uppercase tracking-[0.24em] font-[Archivo] font-medium text-[#BD8A5E]">
-          A quiet arrival
+          Private courtyard
         </p>
         <h2 className="reveal-up reveal-stagger-1 mt-6 sm:mt-10 font-[Fraunces] text-[clamp(1.8rem,5vw,4.5rem)] sm:text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-[#EFE8DA] font-optical-sizing-auto tracking-[-0.02em]">
           A private, self-contained{" "}
@@ -251,8 +254,7 @@ function IntroSection() {
           <span className="word-wood-light">Room for four.</span>
         </h2>
         <p className="reveal-up reveal-stagger-3 mx-auto mt-8 sm:mt-12 max-w-2xl text-sm sm:text-base leading-relaxed font-[Archivo] text-[#EFE8DA]/60">
-          Minutes from the sand, the cafés, and Napier's Art Deco heart — a
-          quiet lane in Ahuriri, set up exactly as we'd want to stay ourselves.
+          Minutes from the sand, the cafés, and Napier's Art Deco heart — a quiet lane in Ahuriri, with a fenced tropical courtyard of your own.
         </p>
         <div className="wood-divider mx-auto mt-12 sm:mt-16 max-w-xs" />
       </div>
@@ -267,9 +269,9 @@ function ApartmentGallery() {
     { src: bedroomOne, label: "Queen Bedroom One" },
     { src: bedroomTwo, label: "Queen Bedroom Two" },
     { src: livingImg, label: "Living & Kitchen" },
-    { src: bathroomImg, label: "Bathroom" },
+    { src: patioBbqImg, label: "Covered Patio & BBQ" },
+    { src: patioDiningImg, label: "Outdoor Dining" },
     { src: gardenImg, label: "Garden Courtyard" },
-    { src: patioImg, label: "Outdoor Patio" },
   ];
 
   return (
@@ -449,14 +451,21 @@ function DarkHosts() {
 /* ── Reviews ── */
 function ReviewsSection() {
   useReveal();
-  const { data: reviews = [] } = useQuery({
+  const {
+    data: reviews = [],
+    isPending,
+    error,
+  } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error: queryError } = await supabase
         .from("reviews")
         .select("*")
         .eq("published", true)
         .order("sort_order");
+      // Discarding this error is why the section went blank silently: a failed
+      // request resolved as an empty success and React Query reported no problem.
+      if (queryError) throw queryError;
       return data ?? [];
     },
   });
@@ -473,6 +482,15 @@ function ReviewsSection() {
             <span className="word-wood">say.</span>
           </h2>
         </div>
+        {!isPending && (error || !reviews.length) && (
+          <p className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 max-w-xl text-sm leading-relaxed font-[Archivo] text-[#17181A]/60">
+            Guest reviews are unavailable right now.{" "}
+            <Link to="/reviews" className="underline underline-offset-4 hover:text-[#6B4630]">
+              Read them on the reviews page
+            </Link>
+            .
+          </p>
+        )}
         <div className="reveal-up reveal-stagger-2 mt-10 sm:mt-16 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((r, i) => (
             <figure key={r.id} className="flex h-full flex-col justify-between border border-[#6B4630]/10 bg-white/60 p-5 sm:p-8">
@@ -512,8 +530,7 @@ function SpectacleBookingCTA() {
           <span className="word-champagne">stay</span> with us.
         </h2>
         <p className="reveal-up reveal-stagger-2 mx-auto mt-6 sm:mt-8 max-w-xl text-sm sm:text-lg font-[Archivo] text-[#EFE8DA]/60">
-          From NZ$220/night. Two bedrooms, sleeps four. Free parking, walking
-          distance to everything.
+          From NZ$220/night. Two queen bedrooms, sleeps four. Private courtyard, barbecue, free parking, and everything within walking distance.
         </p>
         <div className="reveal-up reveal-stagger-3 mt-8 sm:mt-12">
           <Link
